@@ -8,6 +8,7 @@ import ForgotPassword from "./UI/ForgotPassword";
 import ChangePassword from "./UI/ChangePassword";
 import AccountType from "./UI/AccountType";
 import PersonalAccount from "./UI/PersonalAccount";
+import BusinessAccount from "./UI/BusinessAccount";
 import { MaterialCommunityIcons, FontAwesome5 } from "@expo/vector-icons";
 import {
   NavigationContainer,
@@ -203,6 +204,11 @@ export default function App() {
           <Stack.Screen
             name="PersonalAccount"
             component={PersonalAccount}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="BusinessAccount"
+            component={BusinessAccount}
             options={{ headerShown: false }}
           />
         </Stack.Navigator>

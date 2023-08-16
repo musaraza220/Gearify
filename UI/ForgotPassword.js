@@ -230,6 +230,7 @@ export default function ForgotPassword(props) {
           </View>
 
           <TouchableOpacity
+            onPress={() => props.navigation.navigate("AccountType")}
             style={{ alignItems: "center", marginTop: height / 17 }}
             //onPress={() => props.navigation.navigate("SignupMain")}
           >
@@ -243,7 +244,15 @@ export default function ForgotPassword(props) {
           <Text
             style={[
               styles.textSize,
-              { textAlign: "center", marginTop: height / 70 },
+              { textAlign: "center", marginTop: height / 90 },
+            ]}
+          >
+            or
+          </Text>
+          <Text
+            style={[
+              styles.textSize,
+              { textAlign: "center", marginTop: height / 90 },
             ]}
           >
             Sign Up using
@@ -281,7 +290,7 @@ export default function ForgotPassword(props) {
             <Text
               style={[
                 styles.textSize,
-                { textAlign: "center", marginTop: height / 17 },
+                { textAlign: "center", marginTop: height / 14 },
               ]}
             >
               Continue as guest
@@ -293,7 +302,7 @@ export default function ForgotPassword(props) {
               flexDirection: "row",
               alignItems: "center",
               justifyContent: "center",
-              marginTop: height / 40,
+              marginTop: height / 45,
             }}
           >
             <TouchableOpacity style={{ marginEnd: width / 11 }}>

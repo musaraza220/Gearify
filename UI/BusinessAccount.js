@@ -17,19 +17,23 @@ import {
 } from "react-native";
 import { Text, useTheme, ActivityIndicator } from "react-native-paper";
 import { colors } from "../assets/colors";
+import { SERVER } from "./Server";
 import { MaterialIcons, MaterialCommunityIcons } from "@expo/vector-icons";
 // import AsyncStorage from "@react-native-async-storage/async-storage";
 // import { API } from "../PreferencesContext";
-import { PersonalAccountAPI } from "./APIs";
+import { BusinessAccountAPI, PersonalAccountAPI } from "./APIs";
+import axios from "axios";
 import * as Font from "expo-font";
 
-export default function PersonalAccount(props) {
+export default function BusinessAccount(props) {
   const [email, setEmail] = React.useState("");
   const [value, setValue] = React.useState("");
   const [phone, setPhone] = React.useState("");
   const [code, setCode] = React.useState("");
   const [firstname, setFirstname] = React.useState("");
   const [lastname, setLastname] = React.useState("");
+  const [idntify, setIdentify] = React.useState("");
+  const [businessName, setBusinessName] = React.useState("");
 
   const [password, setPassword] = React.useState("");
   const [error, setError] = React.useState("");
@@ -38,6 +42,8 @@ export default function PersonalAccount(props) {
   const [emailError, setEmailError] = React.useState("");
   const [phoneError, setPhoneError] = React.useState("");
   const [passwordError, setPasswordError] = React.useState("");
+  const [idenError, setIdenError] = React.useState("");
+  const [bNameError, setBnameError] = React.useState("");
 
   const [authError, setAuthError] = React.useState("");
   const [loading, setLoading] = React.useState(true);
@@ -85,6 +91,14 @@ export default function PersonalAccount(props) {
       setlNameError("Required field");
       return;
     }
+    if (!businessName.trim()) {
+      setBnameError("Required field");
+      return;
+    }
+    if (!idntify.trim()) {
+      setIdenError("Required field");
+      return;
+    }
 
     if (!email.trim()) {
       setEmailError("Required field");
@@ -110,6 +124,7 @@ export default function PersonalAccount(props) {
       return;
     }
 
+    // All validations passed, proceed with saving data
     setAuthLoading(true);
     setDisable(true);
     let data = {
@@ -118,8 +133,10 @@ export default function PersonalAccount(props) {
       email: email,
       phone: phone,
       password: password,
+      businessName: businessName,
+      tax: idntify,
     };
-    let record = await PersonalAccountAPI(data);
+    let record = await BusinessAccountAPI(data);
 
     if (record === "success") {
       Alert.alert(
@@ -135,6 +152,8 @@ export default function PersonalAccount(props) {
     setAuthLoading(false);
     setDisable(false);
   };
+
+  const validations = () => {};
 
   const handleVisibility = () => {
     if (secureEntry) {
@@ -170,7 +189,7 @@ export default function PersonalAccount(props) {
             style={{
               alignItems: "center",
               flexDirection: "row",
-              marginTop: height / 30,
+              marginTop: height / 55,
             }}
           >
             <View>
@@ -180,13 +199,13 @@ export default function PersonalAccount(props) {
                   fontFamily: "GlacialIndifference-Regular",
                 }}
               >
-                Personal Account Registration
+                Business Account Registration
               </Text>
             </View>
           </View>
-          {/* Check box -> use for authentication */}
+
           <View style={{ alignSelf: "center", marginTop: height / 90 }}>
-            <Text style={[styles.textSize, { color: "red" }]}>{authError}</Text>
+            <Text style={{ color: "red" }}>{authError}</Text>
           </View>
           <View
             style={[
@@ -249,7 +268,7 @@ export default function PersonalAccount(props) {
             style={[
               styles.txtView,
               {
-                marginTop: height / 35,
+                marginTop: height / 55,
                 borderWidth: lNameError !== "" ? 0.3 : 0,
                 borderColor: lNameError !== "" ? colors.MAIN : null,
               },
@@ -307,7 +326,125 @@ export default function PersonalAccount(props) {
             style={[
               styles.txtView,
               {
-                marginTop: height / 35,
+                marginTop: height / 55,
+                borderWidth: bNameError !== "" ? 0.3 : 0,
+                borderColor: bNameError !== "" ? colors.MAIN : null,
+              },
+            ]}
+          >
+            <TextInput
+              placeholder="Business Name"
+              placeholderTextColor={theme.colors.secondary}
+              style={[
+                styles.textSize,
+                {
+                  backgroundColor: colors.grays,
+                },
+              ]}
+              // right={
+              //   <TextInput.Icon
+              //     icon={rightIcon}
+              //     onPress={() => handleVisibility()}
+              //   />
+              // }
+              autoCorrect={false}
+              value={businessName}
+              onChangeText={(value) => [
+                setBusinessName(value),
+                setBnameError(""),
+              ]}
+              error={error}
+            />
+          </View>
+          <View
+            style={{
+              flexDirection: "row",
+              alignItems: "center",
+              justifyContent: "flex-end",
+              marginTop: 2,
+            }}
+          >
+            {bNameError !== "" ? (
+              <MaterialIcons size={height / 60} color={"red"} name="error" />
+            ) : null}
+            <Text
+              style={[
+                styles.textSize,
+                {
+                  color: "red",
+                  textAlign: "right",
+                  marginEnd: 3,
+                  marginStart: 2,
+                  fontSize: height / 80,
+                },
+              ]}
+            >
+              {bNameError}
+            </Text>
+          </View>
+
+          <View
+            style={[
+              styles.txtView,
+              {
+                marginTop: height / 55,
+                borderWidth: idenError !== "" ? 0.3 : 0,
+                borderColor: idenError !== "" ? colors.MAIN : null,
+              },
+            ]}
+          >
+            <TextInput
+              placeholder="Tax Identification No. (GST, PST, HST etc)"
+              placeholderTextColor={theme.colors.secondary}
+              style={[
+                styles.textSize,
+                {
+                  backgroundColor: colors.grays,
+                },
+              ]}
+              // right={
+              //   <TextInput.Icon
+              //     icon={rightIcon}
+              //     onPress={() => handleVisibility()}
+              //   />
+              // }
+              autoCorrect={false}
+              value={idntify}
+              onChangeText={(value) => [setIdentify(value), setIdenError("")]}
+              error={error}
+            />
+          </View>
+          <View
+            style={{
+              flexDirection: "row",
+              alignItems: "center",
+              justifyContent: "flex-end",
+              marginTop: 2,
+            }}
+          >
+            {idenError !== "" ? (
+              <MaterialIcons size={height / 60} color={"red"} name="error" />
+            ) : null}
+            <Text
+              style={[
+                styles.textSize,
+                {
+                  color: "red",
+                  textAlign: "right",
+                  marginEnd: 3,
+                  marginStart: 2,
+                  fontSize: height / 80,
+                },
+              ]}
+            >
+              {idenError}
+            </Text>
+          </View>
+          <View
+            style={[
+              styles.txtView,
+              {
+                marginTop: height / 55,
                 borderWidth: emailError !== "" ? 0.3 : 0,
                 borderColor: emailError !== "" ? colors.MAIN : null,
               },
@@ -365,7 +502,7 @@ export default function PersonalAccount(props) {
             style={[
               styles.txtView,
               {
-                marginTop: height / 35,
+                marginTop: height / 55,
                 padding: 0,
                 borderWidth: phoneError !== "" ? 0.3 : 0,
                 borderColor: phoneError !== "" ? colors.MAIN : null,
@@ -460,7 +597,7 @@ export default function PersonalAccount(props) {
             style={[
               styles.txtView,
               {
-                marginTop: height / 35,
+                marginTop: height / 55,
                 borderWidth: passwordError !== "" ? 0.3 : 0,
                 borderColor: passwordError !== "" ? colors.MAIN : null,
               },
@@ -519,11 +656,11 @@ export default function PersonalAccount(props) {
             </Text>
           </View>
 
-          <View style={{ marginTop: height / 20 }}>
+          <View>
             <TouchableOpacity
               disabled={disable}
               activeOpacity={0.7}
-              style={{ alignItems: "center", marginTop: height / 12 }}
+              style={{ alignItems: "center", marginTop: height / 50 }}
               onPress={() => saveData()}
             >
               <ImageBackground

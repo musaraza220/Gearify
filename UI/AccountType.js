@@ -162,7 +162,7 @@ export default function AccountType(props) {
                     color: colors.MAIN,
                     fontWeight: "bold",
                     fontSize: height / 65,
-                    fontFamily: "GlacialIndifference-Bold",
+                    fontFamily: "GlacialIndifference-Regular",
                   },
                 ]}
               >
@@ -203,7 +203,7 @@ export default function AccountType(props) {
               disabled={disable}
               activeOpacity={0.7}
               style={{ alignItems: "center", marginTop: height / 50 }}
-              onPress={() => props.navigation.navigate("Verification")}
+              onPress={() => props.navigation.navigate("BusinessAccount")}
             >
               <ImageBackground
                 source={require("../assets/button.png")}
