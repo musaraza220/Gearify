@@ -14,6 +14,7 @@ import {
   useWindowDimensions,
   ImageBackground,
   TextInput,
+  ScrollView,
 } from "react-native";
 import { Text, useTheme, ActivityIndicator } from "react-native-paper";
 import { colors } from "../assets/colors";
@@ -72,10 +73,8 @@ export default function PersonalAccount(props) {
     );
   };
   const saveData = async () => {
-    // Clear any previous errors
     setAuthError("");
 
-    // Basic field validations
     if (!firstname.trim()) {
       setfNameError("Required field");
       return;
@@ -185,231 +184,240 @@ export default function PersonalAccount(props) {
             </View>
           </View>
           {/* Check box -> use for authentication */}
-          <View style={{ alignSelf: "center", marginTop: height / 90 }}>
-            <Text style={[styles.textSize, { color: "red" }]}>{authError}</Text>
-          </View>
-          <View
-            style={[
-              styles.txtView,
-              {
-                borderWidth: fNameError !== "" ? 0.3 : 0,
-                borderColor: fNameError !== "" ? colors.MAIN : null,
-              },
-            ]}
-          >
-            <TextInput
-              placeholder="First Name"
-              placeholderTextColor={theme.colors.secondary}
+          <ScrollView showsVerticalScrollIndicator={false}>
+            <View style={{ alignSelf: "center", marginTop: height / 90 }}>
+              <Text style={[styles.textSize, { color: "red" }]}>
+                {authError}
+              </Text>
+            </View>
+            <View
               style={[
-                styles.textSize,
+                styles.txtView,
                 {
-                  backgroundColor: colors.grays,
-                },
-              ]}
-              // right={
-              //   <TextInput.Icon
-              //     icon={rightIcon}
-              //     onPress={() => handleVisibility()}
-              //   />
-              // }
-              autoCorrect={false}
-              value={firstname}
-              onChangeText={(value) => [setFirstname(value), setfNameError("")]}
-              error={error}
-            />
-          </View>
-          <View
-            style={{
-              flexDirection: "row",
-              alignItems: "center",
-              justifyContent: "flex-end",
-              marginTop: 2,
-            }}
-          >
-            {fNameError !== "" ? (
-              <MaterialIcons size={height / 60} color={"red"} name="error" />
-            ) : null}
-            <Text
-              style={[
-                styles.textSize,
-                {
-                  color: "red",
-                  textAlign: "right",
-                  marginEnd: 3,
-                  marginStart: 2,
-                  fontSize: height / 80,
+                  borderWidth: fNameError !== "" ? 0.3 : 0,
+                  borderColor: fNameError !== "" ? colors.MAIN : null,
                 },
               ]}
             >
-              {fNameError}
-            </Text>
-          </View>
+              <TextInput
+                placeholder="First Name"
+                placeholderTextColor={theme.colors.secondary}
+                style={[
+                  styles.textSize,
+                  {
+                    backgroundColor: colors.grays,
+                  },
+                ]}
+                // right={
+                //   <TextInput.Icon
+                //     icon={rightIcon}
+                //     onPress={() => handleVisibility()}
+                //   />
+                // }
+                autoCorrect={false}
+                value={firstname}
+                onChangeText={(value) => [
+                  setFirstname(value),
+                  setfNameError(""),
+                ]}
+                error={error}
+              />
+            </View>
+            <View
+              style={{
+                flexDirection: "row",
+                alignItems: "center",
+                justifyContent: "flex-end",
+                marginTop: 2,
+              }}
+            >
+              {fNameError !== "" ? (
+                <MaterialIcons size={height / 60} color={"red"} name="error" />
+              ) : null}
+              <Text
+                style={[
+                  styles.textSize,
+                  {
+                    color: "red",
+                    textAlign: "right",
+                    marginEnd: 3,
+                    marginStart: 2,
+                    fontSize: height / 80,
+                  },
+                ]}
+              >
+                {fNameError}
+              </Text>
+            </View>
 
-          <View
-            style={[
-              styles.txtView,
-              {
-                marginTop: height / 35,
-                borderWidth: lNameError !== "" ? 0.3 : 0,
-                borderColor: lNameError !== "" ? colors.MAIN : null,
-              },
-            ]}
-          >
-            <TextInput
-              placeholder="Last Name"
-              placeholderTextColor={theme.colors.secondary}
+            <View
               style={[
-                styles.textSize,
+                styles.txtView,
                 {
-                  backgroundColor: colors.grays,
-                },
-              ]}
-              // right={
-              //   <TextInput.Icon
-              //     icon={rightIcon}
-              //     onPress={() => handleVisibility()}
-              //   />
-              // }
-              autoCorrect={false}
-              value={lastname}
-              onChangeText={(value) => [setLastname(value), setlNameError("")]}
-              error={error}
-            />
-          </View>
-          <View
-            style={{
-              flexDirection: "row",
-              alignItems: "center",
-              justifyContent: "flex-end",
-              marginTop: 2,
-            }}
-          >
-            {lNameError !== "" ? (
-              <MaterialIcons size={height / 60} color={"red"} name="error" />
-            ) : null}
-            <Text
-              style={[
-                styles.textSize,
-                {
-                  color: "red",
-                  textAlign: "right",
-                  marginEnd: 3,
-                  marginStart: 2,
-                  fontSize: height / 80,
+                  marginTop: height / 35,
+                  borderWidth: lNameError !== "" ? 0.3 : 0,
+                  borderColor: lNameError !== "" ? colors.MAIN : null,
                 },
               ]}
             >
-              {lNameError}
-            </Text>
-          </View>
+              <TextInput
+                placeholder="Last Name"
+                placeholderTextColor={theme.colors.secondary}
+                style={[
+                  styles.textSize,
+                  {
+                    backgroundColor: colors.grays,
+                  },
+                ]}
+                // right={
+                //   <TextInput.Icon
+                //     icon={rightIcon}
+                //     onPress={() => handleVisibility()}
+                //   />
+                // }
+                autoCorrect={false}
+                value={lastname}
+                onChangeText={(value) => [
+                  setLastname(value),
+                  setlNameError(""),
+                ]}
+                error={error}
+              />
+            </View>
+            <View
+              style={{
+                flexDirection: "row",
+                alignItems: "center",
+                justifyContent: "flex-end",
+                marginTop: 2,
+              }}
+            >
+              {lNameError !== "" ? (
+                <MaterialIcons size={height / 60} color={"red"} name="error" />
+              ) : null}
+              <Text
+                style={[
+                  styles.textSize,
+                  {
+                    color: "red",
+                    textAlign: "right",
+                    marginEnd: 3,
+                    marginStart: 2,
+                    fontSize: height / 80,
+                  },
+                ]}
+              >
+                {lNameError}
+              </Text>
+            </View>
 
-          <View
-            style={[
-              styles.txtView,
-              {
-                marginTop: height / 35,
-                borderWidth: emailError !== "" ? 0.3 : 0,
-                borderColor: emailError !== "" ? colors.MAIN : null,
-              },
-            ]}
-          >
-            <TextInput
-              placeholder="Email Address"
-              placeholderTextColor={theme.colors.secondary}
+            <View
               style={[
-                styles.textSize,
+                styles.txtView,
                 {
-                  backgroundColor: colors.grays,
-                },
-              ]}
-              // right={
-              //   <TextInput.Icon
-              //     icon={rightIcon}
-              //     onPress={() => handleVisibility()}
-              //   />
-              // }
-              autoCorrect={false}
-              value={email}
-              onChangeText={(value) => [setEmail(value), setEmailError("")]}
-              error={error}
-            />
-          </View>
-          <View
-            style={{
-              flexDirection: "row",
-              alignItems: "center",
-              justifyContent: "flex-end",
-              marginTop: 2,
-            }}
-          >
-            {emailError !== "" ? (
-              <MaterialIcons size={height / 60} color={"red"} name="error" />
-            ) : null}
-            <Text
-              style={[
-                styles.textSize,
-                {
-                  color: "red",
-                  textAlign: "right",
-                  marginEnd: 3,
-                  marginStart: 2,
-                  fontSize: height / 80,
+                  marginTop: height / 35,
+                  borderWidth: emailError !== "" ? 0.3 : 0,
+                  borderColor: emailError !== "" ? colors.MAIN : null,
                 },
               ]}
             >
-              {emailError}
-            </Text>
-          </View>
+              <TextInput
+                placeholder="Email Address"
+                placeholderTextColor={theme.colors.secondary}
+                style={[
+                  styles.textSize,
+                  {
+                    backgroundColor: colors.grays,
+                  },
+                ]}
+                // right={
+                //   <TextInput.Icon
+                //     icon={rightIcon}
+                //     onPress={() => handleVisibility()}
+                //   />
+                // }
+                autoCorrect={false}
+                value={email}
+                onChangeText={(value) => [setEmail(value), setEmailError("")]}
+                error={error}
+              />
+            </View>
+            <View
+              style={{
+                flexDirection: "row",
+                alignItems: "center",
+                justifyContent: "flex-end",
+                marginTop: 2,
+              }}
+            >
+              {emailError !== "" ? (
+                <MaterialIcons size={height / 60} color={"red"} name="error" />
+              ) : null}
+              <Text
+                style={[
+                  styles.textSize,
+                  {
+                    color: "red",
+                    textAlign: "right",
+                    marginEnd: 3,
+                    marginStart: 2,
+                    fontSize: height / 80,
+                  },
+                ]}
+              >
+                {emailError}
+              </Text>
+            </View>
 
-          <View
-            style={[
-              styles.txtView,
-              {
-                marginTop: height / 35,
-                padding: 0,
-                borderWidth: phoneError !== "" ? 0.3 : 0,
-                borderColor: phoneError !== "" ? colors.MAIN : null,
-              },
-            ]}
-          >
-            <PhoneInput
-              defaultCode="CA"
-              layout="first"
-              defaultValue={value}
-              onChangeText={(text) => {
-                setValue(text);
-                setPhoneError("");
-              }}
-              onChangeFormattedText={(text) => {
-                setPhone(text);
-              }}
-              onChangeCountry={(text) => {
-                setCode(text.cca2);
-              }}
-              textInputStyle={{
-                color: theme.colors.secondary,
-                fontSize: height / 65,
-                height: height / 90,
-                padding: 0,
-                fontFamily: "GlacialIndifference-Regular",
-              }}
-              containerStyle={{
-                backgroundColor: theme.colors.backgroundColor,
-                padding: 0,
-                height: height / 19,
-              }}
-              textContainerStyle={{
-                backgroundColor: theme.colors.backgroundColor,
-              }}
-              codeTextStyle={{
-                color: theme.colors.secondary,
-                fontSize: height / 65,
-                height: height / 60,
-                fontFamily: "GlacialIndifference-Regular",
-              }}
-              flagButtonStyle={{ height: height / 20 }}
-            />
-            {/* <TextInput
+            <View
+              style={[
+                styles.txtView,
+                {
+                  marginTop: height / 35,
+                  padding: 0,
+                  borderWidth: phoneError !== "" ? 0.3 : 0,
+                  borderColor: phoneError !== "" ? colors.MAIN : null,
+                },
+              ]}
+            >
+              <PhoneInput
+                defaultCode="CA"
+                layout="first"
+                defaultValue={value}
+                onChangeText={(text) => {
+                  setValue(text);
+                  setPhoneError("");
+                }}
+                onChangeFormattedText={(text) => {
+                  setPhone(text);
+                }}
+                onChangeCountry={(text) => {
+                  setCode(text.cca2);
+                }}
+                textInputStyle={{
+                  color: theme.colors.secondary,
+                  fontSize: height / 65,
+                  height: height / 90,
+                  padding: 0,
+                  fontFamily: "GlacialIndifference-Regular",
+                }}
+                containerStyle={{
+                  backgroundColor: theme.colors.backgroundColor,
+                  padding: 0,
+                  height: height / 19,
+                }}
+                textContainerStyle={{
+                  backgroundColor: theme.colors.backgroundColor,
+                }}
+                codeTextStyle={{
+                  color: theme.colors.secondary,
+                  fontSize: height / 65,
+                  height: height / 60,
+                  fontFamily: "GlacialIndifference-Regular",
+                }}
+                flagButtonStyle={{ height: height / 20 }}
+              />
+              {/* <TextInput
               placeholder="Phone Number"
               placeholderTextColor={theme.colors.secondary}
               style={[
@@ -429,150 +437,160 @@ export default function PersonalAccount(props) {
               onChangeText={(value) => setPassword(value)}
               error={error}
             /> */}
-          </View>
-          <View
-            style={{
-              flexDirection: "row",
-              alignItems: "center",
-              justifyContent: "flex-end",
-              marginTop: 2,
-            }}
-          >
-            {phoneError !== "" ? (
-              <MaterialIcons size={height / 60} color={"red"} name="error" />
-            ) : null}
-            <Text
-              style={[
-                styles.textSize,
-                {
-                  color: "red",
-                  textAlign: "right",
-                  marginEnd: 3,
-                  marginStart: 2,
-                  fontSize: height / 80,
-                },
-              ]}
+            </View>
+            <View
+              style={{
+                flexDirection: "row",
+                alignItems: "center",
+                justifyContent: "flex-end",
+                marginTop: 2,
+              }}
             >
-              {phoneError}
-            </Text>
-          </View>
-          <View
-            style={[
-              styles.txtView,
-              {
-                marginTop: height / 35,
-                borderWidth: passwordError !== "" ? 0.3 : 0,
-                borderColor: passwordError !== "" ? colors.MAIN : null,
-              },
-            ]}
-          >
-            <TextInput
-              placeholder="Password"
-              placeholderTextColor={theme.colors.secondary}
-              style={[
-                styles.textSize,
-                {
-                  backgroundColor: colors.grays,
-                },
-              ]}
-              // right={
-              //   <TextInput.Icon
-              //     icon={rightIcon}
-              //     onPress={() => handleVisibility()}
-              //   />
-              // }
-              autoCorrect={false}
-              secureTextEntry={true}
-              value={password}
-              onChangeText={(value) => [
-                setPassword(value),
-                setPasswordError(""),
-              ]}
-              error={error}
-            />
-          </View>
-
-          <View
-            style={{
-              flexDirection: "row",
-              alignItems: "center",
-              justifyContent: "flex-end",
-              marginTop: 2,
-            }}
-          >
-            {passwordError !== "" ? (
-              <MaterialIcons size={height / 60} color={"red"} name="error" />
-            ) : null}
-            <Text
-              style={[
-                styles.textSize,
-                {
-                  color: "red",
-                  textAlign: "right",
-                  marginEnd: 3,
-                  marginStart: 2,
-                  fontSize: height / 80,
-                },
-              ]}
-            >
-              {passwordError}
-            </Text>
-          </View>
-
-          <View style={{ marginTop: height / 20 }}>
-            <TouchableOpacity
-              disabled={disable}
-              activeOpacity={0.7}
-              style={{ alignItems: "center", marginTop: height / 12 }}
-              onPress={() => saveData()}
-            >
-              <ImageBackground
-                source={require("../assets/button.png")}
-                style={styles.btnStyles}
-              >
-                <View>
-                  {authLoading ? (
-                    <ActivityIndicator size={"small"} color={colors.WHITE} />
-                  ) : (
-                    <Text
-                      style={[
-                        styles.centerText,
-                        { fontFamily: "GlacialIndifference-Regular" },
-                      ]}
-                    >
-                      Register
-                    </Text>
-                  )}
-                </View>
-              </ImageBackground>
-            </TouchableOpacity>
-
-            <TouchableOpacity
-              disabled={disable}
-              activeOpacity={0.7}
-              style={{ alignItems: "center", marginTop: height / 60 }}
-              onPress={() => props.navigation.goBack()}
-            >
-              <View
+              {phoneError !== "" ? (
+                <MaterialIcons size={height / 60} color={"red"} name="error" />
+              ) : null}
+              <Text
                 style={[
-                  styles.btnStyles,
-                  { borderWidth: 0.3, borderColor: colors.MAIN },
+                  styles.textSize,
+                  {
+                    color: "red",
+                    textAlign: "right",
+                    marginEnd: 3,
+                    marginStart: 2,
+                    fontSize: height / 80,
+                  },
                 ]}
               >
-                <Text
+                {phoneError}
+              </Text>
+            </View>
+            <View
+              style={[
+                styles.txtView,
+                {
+                  marginTop: height / 35,
+                  borderWidth: passwordError !== "" ? 0.3 : 0,
+                  borderColor: passwordError !== "" ? colors.MAIN : null,
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                },
+              ]}
+            >
+              <TextInput
+                placeholder="Password"
+                placeholderTextColor={theme.colors.secondary}
+                style={[
+                  styles.textSize,
+                  {
+                    backgroundColor: colors.grays,
+                    width: width / 1.4,
+                  },
+                ]}
+                // right={
+                //   <TextInput.Icon
+                //     icon={rightIcon}
+                //     onPress={() => handleVisibility()}
+                //   />
+                // }
+                autoCorrect={false}
+                secureTextEntry={secureEntry}
+                value={password}
+                onChangeText={(value) => [
+                  setPassword(value),
+                  setPasswordError(""),
+                ]}
+                error={error}
+              />
+              <TouchableOpacity
+                activeOpacity={0.6}
+                onPress={() => handleVisibility()}
+              >
+                <MaterialCommunityIcons size={height / 40} name={rightIcon} />
+              </TouchableOpacity>
+            </View>
+
+            <View
+              style={{
+                flexDirection: "row",
+                alignItems: "center",
+                justifyContent: "flex-end",
+                marginTop: 2,
+              }}
+            >
+              {passwordError !== "" ? (
+                <MaterialIcons size={height / 60} color={"red"} name="error" />
+              ) : null}
+              <Text
+                style={[
+                  styles.textSize,
+                  {
+                    color: "red",
+                    textAlign: "right",
+                    marginEnd: 3,
+                    marginStart: 2,
+                    fontSize: height / 80,
+                  },
+                ]}
+              >
+                {passwordError}
+              </Text>
+            </View>
+
+            <View style={{ marginTop: height / 20, paddingBottom: height / 4 }}>
+              <TouchableOpacity
+                disabled={disable}
+                activeOpacity={0.7}
+                style={{ alignItems: "center", marginTop: height / 12 }}
+                onPress={() => saveData()}
+              >
+                <ImageBackground
+                  source={require("../assets/button.png")}
+                  style={styles.btnStyles}
+                >
+                  <View>
+                    {authLoading ? (
+                      <ActivityIndicator size={"small"} color={colors.WHITE} />
+                    ) : (
+                      <Text
+                        style={[
+                          styles.centerText,
+                          { fontFamily: "GlacialIndifference-Regular" },
+                        ]}
+                      >
+                        Register
+                      </Text>
+                    )}
+                  </View>
+                </ImageBackground>
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                disabled={disable}
+                activeOpacity={0.7}
+                style={{ alignItems: "center", marginTop: height / 60 }}
+                onPress={() => props.navigation.goBack()}
+              >
+                <View
                   style={[
-                    styles.centerText,
-                    {
-                      fontFamily: "GlacialIndifference-Regular",
-                      color: colors.MAIN,
-                    },
+                    styles.btnStyles,
+                    { borderWidth: 0.3, borderColor: colors.MAIN },
                   ]}
                 >
-                  Cancel
-                </Text>
-              </View>
-            </TouchableOpacity>
-          </View>
+                  <Text
+                    style={[
+                      styles.centerText,
+                      {
+                        fontFamily: "GlacialIndifference-Regular",
+                        color: colors.MAIN,
+                      },
+                    ]}
+                  >
+                    Cancel
+                  </Text>
+                </View>
+              </TouchableOpacity>
+            </View>
+          </ScrollView>
         </View>
       )}
 
@@ -621,7 +639,7 @@ const useStyle = () => {
     btnStyles: {
       padding: 8,
 
-      width: width / 1.1,
+      width: width / 1.12,
       overflow: "hidden",
       resizeMode: "contain",
       borderRadius: 3,

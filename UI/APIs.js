@@ -40,3 +40,63 @@ export const BusinessAccountAPI = async (data) => {
 
   return finalVal;
 };
+
+export const checkUserByEmailAPI = async (data) => {
+  console.log(data);
+  var finalVal;
+  var config = {
+    method: "post",
+    url: `${SERVER}checkUserByEmail`,
+    headers: {
+      "Content-Type": "application/json",
+    },
+    data: JSON.stringify(data),
+  };
+  await axios(config)
+    .then((res) => {
+      finalVal = res.data;
+    })
+    .catch((e) => console.log(e));
+
+  return finalVal;
+};
+
+export const updatePasswordAPI = async (data) => {
+  console.log(data);
+  var finalVal;
+  var config = {
+    method: "post",
+    url: `${SERVER}updatePassword`,
+    headers: {
+      "Content-Type": "application/json",
+    },
+    data: JSON.stringify(data),
+  };
+  await axios(config)
+    .then((res) => {
+      finalVal = res.data;
+    })
+    .catch((e) => console.log(e));
+
+  return finalVal;
+};
+
+export const loginAPI = async (data) => {
+  console.log(data);
+  var finalVal;
+  var config = {
+    method: "post",
+    url: `${SERVER}login`,
+    headers: {
+      "Content-Type": "application/json",
+    },
+    data: JSON.stringify(data),
+  };
+  await axios(config)
+    .then((res) => {
+      finalVal = res.data;
+    })
+    .catch((e) => console.log(e));
+
+  return finalVal;
+};

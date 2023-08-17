@@ -8,27 +8,30 @@ import {
   Image,
   Alert,
   Dimensions,
-  ActivityIndicator,
   Platform,
   useWindowDimensions,
   ImageBackground,
   TextInput,
 } from "react-native";
-import { Text, useTheme } from "react-native-paper";
+import { Text, useTheme, ActivityIndicator } from "react-native-paper";
 import { colors } from "../assets/colors";
-import { MaterialCommunityIcons, FontAwesome5 } from "@expo/vector-icons";
+import { MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
 // import AsyncStorage from "@react-native-async-storage/async-storage";
 // import { API } from "../PreferencesContext";
 // import { Login } from "./apis";
 import axios from "axios";
 import * as Font from "expo-font";
+import { updatePasswordAPI } from "./APIs";
 
 export default function ChangePassword(props) {
-  const [email, setEmail] = React.useState("");
+  const [cPassword, setCpassword] = React.useState("");
+  const [cPWdError, setCPwdError] = React.useState("");
   const [password, setPassword] = React.useState("");
+  const [passwordError, setPasswordError] = React.useState("");
   const [error, setError] = React.useState("");
   const [authError, setAuthError] = React.useState("");
   const [loading, setLoading] = React.useState(true);
+  const [authLoading, setAuthLoading] = React.useState(false);
   const [disable, setDisable] = React.useState(false);
   const [secureEntry, setSecureEntry] = React.useState(true);
   const [rightIcon, setRightIcon] = React.useState("eye");
@@ -52,71 +55,54 @@ export default function ChangePassword(props) {
     console.log("Orientation changed. Width:", width, "Height:", height);
   }, [width, height]);
 
-  //   const validateEmail = (email) => {
-  //     return email.match(
-  //       /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-  //     );
-  //   };
-  //   const saveData = async () => {
-  //     setAuthError("");
-  //     setLoading(false);
-  //     setDisable(false);
-  //     if (!(email === "" || password === "")) {
-  //       if (validateEmail(email)) {
-  //         setLoading(true);
-  //         setDisable(true);
-  //         let data = {
-  //           email: email,
-  //           password: password,
-  //         };
-  //         await Login(data)
-  //           .then((res) => {
-  //             console.log(res);
-  //             if (res.result === "Success") {
-  //               setLoading(false);
-  //               setDisable(false);
-  //               AsyncStorage.setItem("@userData", JSON.stringify(res));
-  //               if (res.role === "Company") {
-  //                 console.log("company");
-  //                 props.navigation.reset({
-  //                   index: 0,
-  //                   routes: [{ name: "CompanyTabs" }],
-  //                 });
-  //               } else {
-  //                 props.navigation.reset({
-  //                   index: 0,
-  //                   routes: [{ name: "MyTabs" }],
-  //                 });
-  //               }
-  //             } else {
-  //               if (res === "* Your account is Deactived *") {
-  //                 setAuthError(
-  //                   "* Your admin has deactivated your account under the Team Plan. Please contact your admin for account access. *"
-  //                 );
-  //               } else {
-  //                 setAuthError("* Invalid Username or Password *");
-  //               }
-  //               setLoading(false);
-  //               setDisable(false);
-  //             }
-  //           })
-  //           .catch((e) => {
-  //             setAuthError("* Something Wrong *");
-  //             setLoading(false);
-  //             setDisable(false);
-  //           });
-  //       } else {
-  //         setAuthError("* Invalid Email Address *");
-  //       }
-  //       // await AsyncStorage.setItem('@userName', email)
-  //       // props.navigation.reset({
-  //       //     index: 0,
-  //       //     routes: [{ name: 'MyTabs' }]
-  //       // })
-  //     } else {
-  //       Alert.alert("All Fields Are Required", "Please fill all fields");
-  //     }
-  //   };
+  const validatePassword = () => {
+    setAuthError("");
+    if (!password) {
+      setPasswordError("Required field");
+      return;
+    } else if (password.length < 8) {
+      setPasswordError("Password must be at least 8 characters long");
+      return;
+    }
+
+    if (!cPassword) {
+      setCPwdError("Required field");
+      return;
+    } else if (cPassword.length < 8) {
+      setCPwdError("Password must be at least 8 characters long");
+      return;
+    }
+
+    if (password !== cPassword) {
+      // setPasswordError("Password don't match");
+      setCPwdError("Password don't match");
+      return;
+    }
+
+    saveData();
+  };
+  const saveData = async () => {
+    setAuthError("");
+    setDisable(true);
+    setAuthLoading(true);
+
+    let data = {
+      email: props.route.params.email,
+      password: password,
+    };
+    let record = await updatePasswordAPI(data);
+
+    if (record === "success") {
+      Alert.alert("Success", "Password has been changed successfully.");
+      props.navigation.navigate("Login");
+    } else {
+      setAuthError(record);
+    }
+    //console.log(record);
+
+    setAuthLoading(false);
+    setDisable(false);
+  };
 
   const handleVisibility = () => {
     if (secureEntry) {
@@ -178,19 +164,29 @@ export default function ChangePassword(props) {
             </View>
           </View>
 
-          <View style={{ alignSelf: "center", marginTop: height / 90 }}>
-            <Text style={{ color: "red" }}>{authError}</Text>
+          <View style={{ alignSelf: "center", marginTop: 2 }}>
+            <Text style={[styles.textSize, { color: "red" }]}>{authError}</Text>
           </View>
-          <View style={styles.txtView}>
+          <View
+            style={[
+              styles.txtView,
+              {
+                marginTop: height / 90,
+                borderWidth: passwordError !== "" ? 0.3 : 0,
+                borderColor: passwordError !== "" ? colors.MAIN : null,
+                flexDirection: "row",
+                justifyContent: "space-between",
+              },
+            ]}
+          >
             <TextInput
-              label="New Password"
-              placeholder="New Password"
+              placeholder="Password"
               placeholderTextColor={theme.colors.secondary}
-              secureTextEntry={secureEntry}
               style={[
                 styles.textSize,
                 {
                   backgroundColor: colors.grays,
+                  width: width / 1.4,
                 },
               ]}
               // right={
@@ -199,52 +195,126 @@ export default function ChangePassword(props) {
               //     onPress={() => handleVisibility()}
               //   />
               // }
-              outlineColor={colors.GRAY}
               autoCorrect={false}
+              secureTextEntry={secureEntry}
               value={password}
-              onChangeText={(value) => setPassword(value)}
+              onChangeText={(value) => [
+                setPassword(value),
+                setPasswordError(""),
+              ]}
               error={error}
             />
+            <TouchableOpacity
+              activeOpacity={0.6}
+              onPress={() => handleVisibility()}
+            >
+              <MaterialCommunityIcons size={height / 50} name={rightIcon} />
+            </TouchableOpacity>
           </View>
 
-          <View style={[styles.txtView, { marginTop: height / 30 }]}>
+          <View
+            style={{
+              flexDirection: "row",
+              alignItems: "center",
+              justifyContent: "flex-end",
+              marginTop: 2,
+            }}
+          >
+            {passwordError !== "" ? (
+              <MaterialIcons size={height / 60} color={"red"} name="error" />
+            ) : null}
+            <Text
+              style={[
+                styles.textSize,
+                {
+                  color: "red",
+                  textAlign: "right",
+                  marginEnd: 3,
+                  marginStart: 2,
+                  fontSize: height / 80,
+                },
+              ]}
+            >
+              {passwordError}
+            </Text>
+          </View>
+
+          <View
+            style={[
+              styles.txtView,
+              {
+                marginTop: height / 90,
+                borderWidth: cPWdError !== "" ? 0.3 : 0,
+                borderColor: cPWdError !== "" ? colors.MAIN : null,
+                flexDirection: "row",
+                justifyContent: "space-between",
+              },
+            ]}
+          >
             <TextInput
               placeholder="Re-type Password"
               placeholderTextColor={theme.colors.secondary}
-              secureTextEntry={secureEntry}
               style={[
                 styles.textSize,
                 {
                   backgroundColor: colors.grays,
+                  width: width / 1.4,
                 },
               ]}
-              // right={
-              //   <TextInput.Icon
-              //     icon={rightIcon}
-              //     onPress={() => handleVisibility()}
-              //   />
-              // }
-              outlineColor={colors.GRAY}
               autoCorrect={false}
-              value={password}
-              onChangeText={(value) => setPassword(value)}
+              secureTextEntry={secureEntry}
+              value={cPassword}
+              onChangeText={(value) => [setCpassword(value), setCPwdError("")]}
               error={error}
             />
+            <TouchableOpacity
+              activeOpacity={0.6}
+              onPress={() => handleVisibility()}
+            >
+              <MaterialCommunityIcons size={height / 50} name={rightIcon} />
+            </TouchableOpacity>
+          </View>
+
+          <View
+            style={{
+              flexDirection: "row",
+              alignItems: "center",
+              justifyContent: "flex-end",
+              marginTop: 2,
+            }}
+          >
+            {cPWdError !== "" ? (
+              <MaterialIcons size={height / 60} color={"red"} name="error" />
+            ) : null}
+            <Text
+              style={[
+                styles.textSize,
+                {
+                  color: "red",
+                  textAlign: "right",
+                  marginEnd: 3,
+                  marginStart: 2,
+                  fontSize: height / 80,
+                },
+              ]}
+            >
+              {cPWdError}
+            </Text>
           </View>
 
           <View>
             <TouchableOpacity
               disabled={disable}
               activeOpacity={0.7}
-              style={{ alignItems: "center", marginTop: height / 16 }}
-              onPress={() => props.navigation.navigate("Verification")}
+              style={{ alignItems: "center", marginTop: height / 20 }}
+              onPress={() => validatePassword()}
             >
               <ImageBackground
                 source={require("../assets/button.png")}
                 style={styles.btnStyles}
               >
                 <View>
-                  {loading ? (
+                  {authLoading ? (
                     <ActivityIndicator size={"small"} color={colors.WHITE} />
                   ) : (
                     <Text

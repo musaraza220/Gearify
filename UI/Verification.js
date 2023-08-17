@@ -16,7 +16,7 @@ import {
 } from "react-native";
 import { Text, useTheme } from "react-native-paper";
 import { colors } from "../assets/colors";
-import { MaterialCommunityIcons, FontAwesome5 } from "@expo/vector-icons";
+import { MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
 // import AsyncStorage from "@react-native-async-storage/async-storage";
 // import { API } from "../PreferencesContext";
 // import { Login } from "./apis";
@@ -24,18 +24,39 @@ import axios from "axios";
 import * as Font from "expo-font";
 
 export default function Verification(props) {
-  const [email, setEmail] = React.useState("");
-  const [password, setPassword] = React.useState("");
+  const [vCode, setVCode] = React.useState("");
+  const [resendCode, setResendCode] = React.useState(0);
   const [error, setError] = React.useState("");
   const [authError, setAuthError] = React.useState("");
   const [loading, setLoading] = React.useState(true);
-  const [disable, setDisable] = React.useState(false);
-  const [secureEntry, setSecureEntry] = React.useState(true);
-  const [rightIcon, setRightIcon] = React.useState("eye");
+
   const { styles } = useStyle();
   const { width, height } = useWindowDimensions();
+  const [timer, setTimer] = useState(60);
   let customFonts = {
     "GlacialIndifference-Regular": require("../assets/GlacialIndifference-Regular.otf"),
+  };
+
+  useEffect(() => {
+    let interval;
+
+    if (timer > 0) {
+      interval = setInterval(() => {
+        setTimer(timer - 1);
+      }, 1000);
+    }
+
+    return () => clearInterval(interval);
+  }, [timer]);
+
+  const handleResendOTP = () => {
+    if (timer === 0) {
+      var codes = Math.floor(Math.random() * 9000) + 1000;
+      console.log(codes);
+      sendEmail(codes);
+      setResendCode(codes);
+      setTimer(60);
+    }
   };
 
   useEffect(() => {
@@ -50,83 +71,45 @@ export default function Verification(props) {
   };
   useEffect(() => {
     console.log("Orientation changed. Width:", width, "Height:", height);
+    console.log(props.route.params.email.split("@")[1]);
   }, [width, height]);
 
-  //   const validateEmail = (email) => {
-  //     return email.match(
-  //       /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-  //     );
-  //   };
-  //   const saveData = async () => {
-  //     setAuthError("");
-  //     setLoading(false);
-  //     setDisable(false);
-  //     if (!(email === "" || password === "")) {
-  //       if (validateEmail(email)) {
-  //         setLoading(true);
-  //         setDisable(true);
-  //         let data = {
-  //           email: email,
-  //           password: password,
-  //         };
-  //         await Login(data)
-  //           .then((res) => {
-  //             console.log(res);
-  //             if (res.result === "Success") {
-  //               setLoading(false);
-  //               setDisable(false);
-  //               AsyncStorage.setItem("@userData", JSON.stringify(res));
-  //               if (res.role === "Company") {
-  //                 console.log("company");
-  //                 props.navigation.reset({
-  //                   index: 0,
-  //                   routes: [{ name: "CompanyTabs" }],
-  //                 });
-  //               } else {
-  //                 props.navigation.reset({
-  //                   index: 0,
-  //                   routes: [{ name: "MyTabs" }],
-  //                 });
-  //               }
-  //             } else {
-  //               if (res === "* Your account is Deactived *") {
-  //                 setAuthError(
-  //                   "* Your admin has deactivated your account under the Team Plan. Please contact your admin for account access. *"
-  //                 );
-  //               } else {
-  //                 setAuthError("* Invalid Username or Password *");
-  //               }
-  //               setLoading(false);
-  //               setDisable(false);
-  //             }
-  //           })
-  //           .catch((e) => {
-  //             setAuthError("* Something Wrong *");
-  //             setLoading(false);
-  //             setDisable(false);
-  //           });
-  //       } else {
-  //         setAuthError("* Invalid Email Address *");
-  //       }
-  //       // await AsyncStorage.setItem('@userName', email)
-  //       // props.navigation.reset({
-  //       //     index: 0,
-  //       //     routes: [{ name: 'MyTabs' }]
-  //       // })
-  //     } else {
-  //       Alert.alert("All Fields Are Required", "Please fill all fields");
-  //     }
-  //   };
-
-  const handleVisibility = () => {
-    if (secureEntry) {
-      setSecureEntry(false);
-      setRightIcon("eye-off");
-    } else {
-      setSecureEntry(true);
-      setRightIcon("eye");
-    }
+  const sendEmail = async (codes) => {
+    await axios
+      .post("https://allkourtapi.eleget.net/send_email_general", {
+        from: "donotreply@kloudupload.com",
+        to: props.route.params.email,
+        subject: "Password Reset Code",
+        message: `Hello,<br/>
+          We received a request for a password reset for your account in Gearify.<br/>
+          Please enter the code below to reset your password.<br/>
+          <b>${codes}</b> <br/><br/>
+         
+          Thank you!<br/>
+          Support<br/>
+          Gearify<br/><br/>
+          `,
+      })
+      .catch((e) => console.log(e));
   };
+
+  const saveData = async () => {
+    setError("");
+    let code = resendCode === 0 ? props.route.params.code : resendCode;
+    console.log(code);
+    if (!vCode.trim()) {
+      setError("Required field");
+      return;
+    } else if (parseInt(vCode, 10) !== code) {
+      setError("Enter correct code");
+      return;
+    }
+
+    props.navigation.navigate("ChangePassword", {
+      email: props.route.params.email,
+    });
+  };
+
   const theme = useTheme();
 
   return (
@@ -172,7 +155,8 @@ export default function Verification(props) {
                   },
                 ]}
               >
-                Please enter 4 digit code send to {`\n`}*****@gmail.com
+                Please enter 4 digit code send to {`\n`}*****@
+                {props.route.params.email.split("@")[1]}
               </Text>
             </View>
           </View>
@@ -180,7 +164,15 @@ export default function Verification(props) {
           <View style={{ alignSelf: "center", marginTop: height / 90 }}>
             <Text style={{ color: "red" }}>{authError}</Text>
           </View>
-          <View style={styles.txtView}>
+          <View
+            style={[
+              styles.txtView,
+              {
+                borderWidth: error !== "" ? 0.3 : 0,
+                borderColor: error !== "" ? colors.MAIN : null,
+              },
+            ]}
+          >
             <TextInput
               label="Code"
               placeholder="Code"
@@ -191,30 +183,55 @@ export default function Verification(props) {
                   backgroundColor: colors.grays,
                 },
               ]}
-              // right={<TextInput.Icon icon="email" />}
-              outlineColor={colors.GRAY}
               keyboardType="number-pad"
               autoCorrect={false}
-              value={email}
-              onChangeText={(value) => setEmail(value)}
-              error={error}
+              value={vCode}
+              onChangeText={(value) => [setVCode(value), setError("")]}
             />
+          </View>
+          <View
+            style={{
+              flexDirection: "row",
+              alignItems: "center",
+              justifyContent: "flex-end",
+              marginTop: 2,
+            }}
+          >
+            {error !== "" ? (
+              <MaterialIcons size={height / 60} color={"red"} name="error" />
+            ) : null}
+            <Text
+              style={[
+                styles.textSize,
+                {
+                  color: "red",
+                  textAlign: "right",
+                  marginEnd: 3,
+                  marginStart: 2,
+                  fontSize: height / 80,
+                },
+              ]}
+            >
+              {error}
+            </Text>
           </View>
 
           <TouchableOpacity
-            style={{ alignItems: "center", marginTop: height / 20 }}
-            //onPress={() => props.navigation.navigate("SignupMain")}
+            disabled={timer > 0 ? true : false}
+            style={{ alignItems: "center", marginTop: height / 25 }}
+            onPress={() => handleResendOTP()}
           >
             <View>
-              <Text style={styles.textSize}>Resend OTP</Text>
+              <Text style={styles.textSize}>
+                Resend OTP {timer > 0 ? "after 0:" + timer : ""}
+              </Text>
             </View>
           </TouchableOpacity>
           <View>
             <TouchableOpacity
-              disabled={disable}
               activeOpacity={0.7}
-              style={{ alignItems: "center", marginTop: height / 11 }}
-              onPress={() => props.navigation.navigate("ChangePassword")}
+              style={{ alignItems: "center", marginTop: height / 15 }}
+              onPress={() => saveData()}
             >
               <ImageBackground
                 source={require("../assets/button.png")}

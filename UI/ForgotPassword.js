@@ -8,27 +8,29 @@ import {
   Image,
   Alert,
   Dimensions,
-  ActivityIndicator,
   Platform,
   useWindowDimensions,
   ImageBackground,
   TextInput,
 } from "react-native";
-import { Text, useTheme } from "react-native-paper";
+import { Text, useTheme, ActivityIndicator } from "react-native-paper";
 import { colors } from "../assets/colors";
-import { MaterialCommunityIcons, FontAwesome5 } from "@expo/vector-icons";
+import { MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
 // import AsyncStorage from "@react-native-async-storage/async-storage";
 // import { API } from "../PreferencesContext";
 // import { Login } from "./apis";
 import axios from "axios";
 import * as Font from "expo-font";
+import { checkUserByEmailAPI } from "./APIs";
 
 export default function ForgotPassword(props) {
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
   const [error, setError] = React.useState("");
+  const [emailError, setEmailError] = React.useState("");
   const [authError, setAuthError] = React.useState("");
   const [loading, setLoading] = React.useState(true);
+  const [authLoading, setAuthLoading] = React.useState(false);
   const [disable, setDisable] = React.useState(false);
   const [secureEntry, setSecureEntry] = React.useState(true);
   const [rightIcon, setRightIcon] = React.useState("eye");
@@ -52,81 +54,64 @@ export default function ForgotPassword(props) {
     console.log("Orientation changed. Width:", width, "Height:", height);
   }, [width, height]);
 
-  //   const validateEmail = (email) => {
-  //     return email.match(
-  //       /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-  //     );
-  //   };
-  //   const saveData = async () => {
-  //     setAuthError("");
-  //     setLoading(false);
-  //     setDisable(false);
-  //     if (!(email === "" || password === "")) {
-  //       if (validateEmail(email)) {
-  //         setLoading(true);
-  //         setDisable(true);
-  //         let data = {
-  //           email: email,
-  //           password: password,
-  //         };
-  //         await Login(data)
-  //           .then((res) => {
-  //             console.log(res);
-  //             if (res.result === "Success") {
-  //               setLoading(false);
-  //               setDisable(false);
-  //               AsyncStorage.setItem("@userData", JSON.stringify(res));
-  //               if (res.role === "Company") {
-  //                 console.log("company");
-  //                 props.navigation.reset({
-  //                   index: 0,
-  //                   routes: [{ name: "CompanyTabs" }],
-  //                 });
-  //               } else {
-  //                 props.navigation.reset({
-  //                   index: 0,
-  //                   routes: [{ name: "MyTabs" }],
-  //                 });
-  //               }
-  //             } else {
-  //               if (res === "* Your account is Deactived *") {
-  //                 setAuthError(
-  //                   "* Your admin has deactivated your account under the Team Plan. Please contact your admin for account access. *"
-  //                 );
-  //               } else {
-  //                 setAuthError("* Invalid Username or Password *");
-  //               }
-  //               setLoading(false);
-  //               setDisable(false);
-  //             }
-  //           })
-  //           .catch((e) => {
-  //             setAuthError("* Something Wrong *");
-  //             setLoading(false);
-  //             setDisable(false);
-  //           });
-  //       } else {
-  //         setAuthError("* Invalid Email Address *");
-  //       }
-  //       // await AsyncStorage.setItem('@userName', email)
-  //       // props.navigation.reset({
-  //       //     index: 0,
-  //       //     routes: [{ name: 'MyTabs' }]
-  //       // })
-  //     } else {
-  //       Alert.alert("All Fields Are Required", "Please fill all fields");
-  //     }
-  //   };
-
-  const handleVisibility = () => {
-    if (secureEntry) {
-      setSecureEntry(false);
-      setRightIcon("eye-off");
-    } else {
-      setSecureEntry(true);
-      setRightIcon("eye");
-    }
+  const validateEmail = (email) => {
+    return email.match(
+      /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+    );
   };
+
+  const sendEmail = async (codes) => {
+    await axios
+      .post("https://allkourtapi.eleget.net/send_email_general", {
+        from: "donotreply@kloudupload.com",
+        to: email,
+        subject: "Password Reset Code",
+        message: `Hello,<br/>
+          We received a request for a password reset for your account in Gearify.<br/>
+          Please enter the code below to reset your password.<br/>
+          <b>${codes}</b> <br/><br/>
+         
+          Thank you!<br/>
+          Support<br/>
+          Gearify<br/><br/>
+          `,
+      })
+      .catch((e) => console.log(e));
+  };
+  const saveData = async () => {
+    setEmailError("");
+
+    if (!email.trim()) {
+      setEmailError("Required field");
+      return;
+    } else if (!validateEmail(email)) {
+      setEmailError("Enter correct email address");
+      return;
+    }
+    setAuthLoading(true);
+    setDisable(true);
+    let data = {
+      email: email,
+    };
+    let record = await checkUserByEmailAPI(data);
+
+    if (record === "success") {
+      var codes = Math.floor(Math.random() * 9000) + 1000;
+      console.log(codes);
+      sendEmail(codes);
+      props.navigation.navigate("Verification", {
+        code: codes,
+        email: email,
+      });
+    } else {
+      setEmailError(record);
+    }
+    //console.log(record);
+
+    setAuthLoading(false);
+    setDisable(false);
+  };
+
   const theme = useTheme();
 
   return (
@@ -178,13 +163,21 @@ export default function ForgotPassword(props) {
             </View>
           </View>
 
-          <View style={{ alignSelf: "center", marginTop: height / 90 }}>
-            <Text style={{ color: "red" }}>{authError}</Text>
+          <View style={{ alignSelf: "center" }}>
+            <Text style={[styles.textSize, { color: "red" }]}>{authError}</Text>
           </View>
-          <View style={styles.txtView}>
+          <View
+            style={[
+              styles.txtView,
+              {
+                marginTop: height / 90,
+                borderWidth: emailError !== "" ? 0.3 : 0,
+                borderColor: emailError !== "" ? colors.MAIN : null,
+              },
+            ]}
+          >
             <TextInput
-              label="Email"
-              placeholder="Email"
+              placeholder="Email Address"
               placeholderTextColor={theme.colors.secondary}
               style={[
                 styles.textSize,
@@ -192,12 +185,43 @@ export default function ForgotPassword(props) {
                   backgroundColor: colors.grays,
                 },
               ]}
-              keyboardType="email-address"
+              // right={
+              //   <TextInput.Icon
+              //     icon={rightIcon}
+              //     onPress={() => handleVisibility()}
+              //   />
+              // }
               autoCorrect={false}
               value={email}
-              onChangeText={(value) => setEmail(value)}
+              onChangeText={(value) => [setEmail(value), setEmailError("")]}
               error={error}
             />
+          </View>
+          <View
+            style={{
+              flexDirection: "row",
+              alignItems: "center",
+              justifyContent: "flex-end",
+              marginTop: 2,
+            }}
+          >
+            {emailError !== "" ? (
+              <MaterialIcons size={height / 60} color={"red"} name="error" />
+            ) : null}
+            <Text
+              style={[
+                styles.textSize,
+                {
+                  color: "red",
+                  textAlign: "right",
+                  marginEnd: 3,
+                  marginStart: 2,
+                  fontSize: height / 80,
+                },
+              ]}
+            >
+              {emailError}
+            </Text>
           </View>
 
           <View>
@@ -205,14 +229,14 @@ export default function ForgotPassword(props) {
               disabled={disable}
               activeOpacity={0.7}
               style={{ alignItems: "center", marginTop: height / 7 }}
-              onPress={() => props.navigation.navigate("Verification")}
+              onPress={() => saveData()}
             >
               <ImageBackground
                 source={require("../assets/button.png")}
                 style={styles.btnStyles}
               >
                 <View>
-                  {loading ? (
+                  {authLoading ? (
                     <ActivityIndicator size={"small"} color={colors.WHITE} />
                   ) : (
                     <Text
