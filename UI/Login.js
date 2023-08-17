@@ -16,12 +16,18 @@ import {
 import { Text, useTheme, ActivityIndicator } from "react-native-paper";
 import { colors } from "../assets/colors";
 import { MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
+import { appleAuth } from "@invertase/react-native-apple-authentication";
+
 // import AsyncStorage from "@react-native-async-storage/async-storage";
-// import { API } from "../PreferencesContext";
-// import { Login } from "./apis";
+import {
+  GoogleSignin,
+  GoogleSigninButton,
+  statusCodes,
+} from "@react-native-google-signin/google-signin";
+
 import axios from "axios";
 import * as Font from "expo-font";
-import { loginAPI } from "./APIs";
+import { loginAPI, PersonalAccountAPI } from "./APIs";
 
 export default function Login(props) {
   const [email, setEmail] = React.useState("");
@@ -31,6 +37,8 @@ export default function Login(props) {
   const [error, setError] = React.useState("");
   const [authError, setAuthError] = React.useState("");
   const [loading, setLoading] = React.useState(true);
+  const [gLoading, setGLoading] = React.useState(false);
+  const [aLoading, setALoading] = React.useState(false);
   const [authLoading, setAuthLoading] = React.useState(false);
   const [disable, setDisable] = React.useState(false);
   const [secureEntry, setSecureEntry] = React.useState(true);
@@ -41,6 +49,102 @@ export default function Login(props) {
     "GlacialIndifference-Regular": require("../assets/GlacialIndifference-Regular.otf"),
   };
 
+  useEffect(() => {
+    GoogleSignin.configure({
+      scopes: ["email"],
+      webClientId:
+        "401346723336-dqlvdanvfc5vfaqfsv95qdamgemfdf9b.apps.googleusercontent.com",
+      iosClientId:
+        "401346723336-hh734tvb1j74ied71970a66rdnqhhkgi.apps.googleusercontent.com",
+    });
+  }, []);
+
+  const handleAppleSignIn = async () => {
+    setAuthError("");
+    setALoading(true);
+    setDisable(true);
+    try {
+      const appleAuthRequestResponse = await appleAuth.performRequest({
+        requestedOperation: appleAuth.Operation.LOGIN,
+        requestedScopes: [appleAuth.Scope.EMAIL, appleAuth.Scope.FULL_NAME],
+      });
+
+      const { identityToken, nonce } = appleAuthRequestResponse;
+      console.log(appleAuthRequestResponse);
+
+      let data = {
+        firstname: appleAuthRequestResponse.fullName.givenName,
+        lastname: appleAuthRequestResponse.fullName.familyName,
+        email: appleAuthRequestResponse.email,
+        phone: "",
+        password: appleAuthRequestResponse.email,
+      };
+      // let record = await PersonalAccountAPI(data);
+
+      // if (record === "success") {
+      //   Alert.alert(
+      //     "Success",
+      //     "Account created successfully. Your Email: " +
+      //       appleAuthRequestResponse.email +
+      //       " and Password is: " +
+      //       appleAuthRequestResponse.email
+      //   );
+      setALoading(false);
+      // } else {
+      //   setAuthError(record);
+      // }
+      setALoading(false);
+      setDisable(false);
+    } catch (error) {
+      setALoading(false);
+      setDisable(false);
+      console.log("Apple Sign-In Error:", error);
+    }
+  };
+
+  const handleGoogleSignIn = async () => {
+    setAuthError("");
+    setGLoading(true);
+    try {
+      await GoogleSignin.hasPlayServices();
+      const userInfo = await GoogleSignin.signIn();
+      console.log("User Info:", userInfo.user);
+      let data = {
+        firstname: userInfo.user.givenName,
+        lastname: userInfo.user.familyName,
+        email: userInfo.user.email,
+        phone: "",
+        password: userInfo.user.email,
+      };
+      let record = await PersonalAccountAPI(data);
+
+      if (record === "success") {
+        Alert.alert(
+          "Success",
+          "Account created successfully. Your Email: " +
+            userInfo.user.email +
+            " and Password is: " +
+            userInfo.user.email
+        );
+        setGLoading(false);
+      } else {
+        setGLoading(false);
+        setAuthError(record);
+      }
+    } catch (error) {
+      setGLoading(false);
+      console.log(error);
+      if (error.code === statusCodes.SIGN_IN_CANCELLED) {
+        console.log("Sign in cancelled");
+      } else if (error.code === statusCodes.IN_PROGRESS) {
+        console.log("Sign in is already in progress");
+      } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
+        console.log("Play services are not available");
+      } else {
+        console.log("An error occurred:", error);
+      }
+    }
+  };
   useEffect(() => {
     loadFonts();
   }, []);
@@ -350,17 +454,33 @@ export default function Login(props) {
               marginTop: height / 30,
             }}
           >
-            <TouchableOpacity>
-              <Image
-                source={require("../assets/appleIcon.png")}
-                style={styles.iconImgStyle}
-              />
+            <TouchableOpacity
+              onPress={() => {
+                handleAppleSignIn();
+              }}
+            >
+              {aLoading ? (
+                <View style={styles.iconImgStyle}>
+                  <ActivityIndicator size={"large"} color={colors.MAIN} />
+                </View>
+              ) : (
+                <Image
+                  source={require("../assets/appleIcon.png")}
+                  style={styles.iconImgStyle}
+                />
+              )}
             </TouchableOpacity>
-            <TouchableOpacity>
-              <Image
-                source={require("../assets/google.png")}
-                style={[styles.iconImgStyle]}
-              />
+            <TouchableOpacity onPress={() => handleGoogleSignIn()}>
+              {gLoading ? (
+                <View style={styles.iconImgStyle}>
+                  <ActivityIndicator size={"large"} color={colors.MAIN} />
+                </View>
+              ) : (
+                <Image
+                  source={require("../assets/google.png")}
+                  style={[styles.iconImgStyle]}
+                />
+              )}
             </TouchableOpacity>
             <TouchableOpacity>
               <Image
