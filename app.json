@@ -24,11 +24,16 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-       "package": "com.nomad.gearify",
+      "package": "com.nomad.gearify",
       "versionCode": 6
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "a4b6521a-6164-4d88-b36e-7f0769bcc61d"
+      }
     }
   }
 }

@@ -331,7 +331,7 @@ export default function ChangePassword(props) {
             </TouchableOpacity>
           </View>
 
-          <TouchableOpacity
+          {/* <TouchableOpacity
             onPress={() => props.navigation.navigate("AccountType")}
             style={{ alignItems: "center", marginTop: height / 17 }}
             //onPress={() => props.navigation.navigate("SignupMain")}
@@ -428,7 +428,7 @@ export default function ChangePassword(props) {
                 Terms of use
               </Text>
             </TouchableOpacity>
-          </View>
+          </View> */}
         </View>
       )}
 

@@ -29,9 +29,14 @@
         <array>
           <string>com.nomad.gearify</string>
           <string>com.googleusercontent.apps.401346723336-hh734tvb1j74ied71970a66rdnqhhkgi</string>
+          <string>fb1433126217261225</string>
         </array>
       </dict>
     </array>
+    <key>FacebookAppID</key>
+    <string>1433126217261225</string>
+    <key>FacebookDisplayName</key>
+    <string>Gearify</string>
     <key>CFBundleVersion</key>
     <string>1</string>
     <key>LSRequiresIPhoneOS</key>

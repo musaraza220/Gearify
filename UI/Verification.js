@@ -49,11 +49,33 @@ export default function Verification(props) {
     return () => clearInterval(interval);
   }, [timer]);
 
+  const sendPhone = async (codes) => {
+    var myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+    var sraw = JSON.stringify({
+      phone: props.route.params.email,
+      sms_text: `Hello! Your Gearify account verification code is: ${codes}`,
+    });
+
+    var requestOptions = {
+      method: "POST",
+      headers: myHeaders,
+      body: sraw,
+      redirect: "follow",
+    };
+
+    fetch("http://142.93.149.52:8040/send_sms", requestOptions)
+      .then((response) => response.text())
+      .then((result) => console.log(result))
+      .catch((error) => console.log("error", error));
+  };
+
   const handleResendOTP = () => {
     if (timer === 0) {
       var codes = Math.floor(Math.random() * 9000) + 1000;
       console.log(codes);
-      sendEmail(codes);
+      console.log(props.route.params.phone);
+      props.route.params.phone === 1 ? sendPhone(codes) : sendEmail(codes);
       setResendCode(codes);
       setTimer(60);
     }
@@ -71,7 +93,7 @@ export default function Verification(props) {
   };
   useEffect(() => {
     console.log("Orientation changed. Width:", width, "Height:", height);
-    console.log(props.route.params.email.split("@")[1]);
+    console.log(props.route.params.email);
   }, [width, height]);
 
   const sendEmail = async (codes) => {
@@ -81,7 +103,7 @@ export default function Verification(props) {
         to: props.route.params.email,
         subject: "Password Reset Code",
         message: `Hello,<br/>
-          We received a request for a password reset for your account in Gearify.<br/>
+          We received a request for a password reset from your Gearify account.<br/>
           Please enter the code below to reset your password.<br/>
           <b>${codes}</b> <br/><br/>
          
@@ -155,8 +177,8 @@ export default function Verification(props) {
                   },
                 ]}
               >
-                Please enter 4 digit code send to {`\n`}*****@
-                {props.route.params.email.split("@")[1]}
+                Please enter 4 digit code send to {`\n`}
+                {props.route.params.email}
               </Text>
             </View>
           </View>
@@ -255,7 +277,7 @@ export default function Verification(props) {
             </TouchableOpacity>
           </View>
 
-          <TouchableOpacity
+          {/* <TouchableOpacity
             onPress={() => props.navigation.navigate("AccountType")}
             style={{ alignItems: "center", marginTop: height / 17 }}
             //onPress={() => props.navigation.navigate("SignupMain")}
@@ -352,7 +374,7 @@ export default function Verification(props) {
                 Terms of use
               </Text>
             </TouchableOpacity>
-          </View>
+          </View> */}
         </View>
       )}
 

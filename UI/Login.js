@@ -24,10 +24,13 @@ import {
   GoogleSigninButton,
   statusCodes,
 } from "@react-native-google-signin/google-signin";
+import * as WebBrowser from "expo-web-browser";
+import * as Facebook from "expo-auth-session/providers/facebook";
 
 import axios from "axios";
 import * as Font from "expo-font";
 import { loginAPI, PersonalAccountAPI } from "./APIs";
+WebBrowser.maybeCompleteAuthSession();
 
 export default function Login(props) {
   const [email, setEmail] = React.useState("");
@@ -39,15 +42,55 @@ export default function Login(props) {
   const [loading, setLoading] = React.useState(true);
   const [gLoading, setGLoading] = React.useState(false);
   const [aLoading, setALoading] = React.useState(false);
+  const [fLoading, setFLoading] = React.useState(false);
   const [authLoading, setAuthLoading] = React.useState(false);
   const [disable, setDisable] = React.useState(false);
   const [secureEntry, setSecureEntry] = React.useState(true);
   const [rightIcon, setRightIcon] = React.useState("eye");
+  const [user, setUser] = useState({});
   const { styles } = useStyle();
   const { width, height } = useWindowDimensions();
   let customFonts = {
     "GlacialIndifference-Regular": require("../assets/GlacialIndifference-Regular.otf"),
   };
+
+  const [request, response, promptAsync] = Facebook.useAuthRequest({
+    clientId: "1433126217261225", // change this for yours
+  });
+
+  const sendEmail = async (email, password) => {
+    await axios
+      .post("https://allkourtapi.eleget.net/send_email_general", {
+        from: "donotreply@kloudupload.com",
+        to: email,
+        subject: "Welcome to Gearify",
+        message: `Hello,<br/>
+          Thank you for account creation. Below is your credentials.<br/>
+          Email: ${email}<br/>
+          Password: ${password}<br/>
+          <b>${codes}</b> <br/><br/>
+         
+          Thank you!<br/>
+          Support<br/>
+          Gearify<br/><br/>
+          `,
+      })
+      .catch((e) => console.log(e));
+  };
+  useEffect(() => {
+    if (response && response.type === "success" && response.authentication) {
+      (async () => {
+        const userInfoResponse = await fetch(
+          `https://graph.facebook.com/me?access_token=${response.authentication.accessToken}&fields=id,name,email,picture.type(large)`
+        );
+        const userInfo = await userInfoResponse.json();
+        // console.log(userInfo);
+        saveDataFacebook(userInfo);
+        //setUser(userInfo);
+        // console.log(JSON.stringify(response, null, 2));
+      })();
+    }
+  }, [response]);
 
   useEffect(() => {
     GoogleSignin.configure({
@@ -59,6 +102,49 @@ export default function Login(props) {
     });
   }, []);
 
+  const handleFacebookLogin = async () => {
+    setAuthError("");
+    setDisable(true);
+    setFLoading(true);
+    const result = await promptAsync();
+
+    if (result.type !== "success") {
+      //alert("Something went wrong");
+      setDisable(false);
+      setFLoading(false);
+      return;
+    }
+    // console.log(user);
+  };
+
+  const saveDataFacebook = async (userInfo) => {
+    //console.log("usus", userInfo);
+    ///console.log(userInfo.name.split(" "));
+    let data = {
+      firstname: userInfo.name.split(" ")[0],
+      lastname: userInfo.name.split(" ")[1],
+      email: userInfo.email,
+      phone: "",
+      password: userInfo.email,
+    };
+    console.log(data);
+    let record = await PersonalAccountAPI(data);
+
+    if (record === "success") {
+      Alert.alert(
+        "Success",
+        "Account created successfully. Your Email: " +
+          userInfo.email +
+          " and Password is: " +
+          userInfo.email +
+          "\nConfirmation email has been sent to your email."
+      );
+    } else {
+      setAuthError(record);
+    }
+    setFLoading(false);
+    setDisable(false);
+  };
   const handleAppleSignIn = async () => {
     setAuthError("");
     setALoading(true);
@@ -79,20 +165,26 @@ export default function Login(props) {
         phone: "",
         password: appleAuthRequestResponse.email,
       };
-      // let record = await PersonalAccountAPI(data);
+      if (appleAuthRequestResponse.fullName.givenName === null) {
+        setAuthError("* User already exists *");
+      } else {
+        let record = await PersonalAccountAPI(data);
 
-      // if (record === "success") {
-      //   Alert.alert(
-      //     "Success",
-      //     "Account created successfully. Your Email: " +
-      //       appleAuthRequestResponse.email +
-      //       " and Password is: " +
-      //       appleAuthRequestResponse.email
-      //   );
-      setALoading(false);
-      // } else {
-      //   setAuthError(record);
-      // }
+        if (record === "success") {
+          Alert.alert(
+            "Success",
+            "Account created successfully. Your Email: " +
+              appleAuthRequestResponse.email +
+              " and Password is: " +
+              appleAuthRequestResponse.email +
+              "\nConfirmation email has been sent to your email."
+          );
+          setALoading(false);
+        } else {
+          setAuthError(record);
+        }
+      }
+
       setALoading(false);
       setDisable(false);
     } catch (error) {
@@ -124,7 +216,8 @@ export default function Login(props) {
           "Account created successfully. Your Email: " +
             userInfo.user.email +
             " and Password is: " +
-            userInfo.user.email
+            userInfo.user.email +
+            "\nConfirmation email has been sent to your email."
         );
         setGLoading(false);
       } else {
@@ -381,6 +474,9 @@ export default function Login(props) {
               props.navigation.navigate("ForgotPassword"),
               setEmail(""),
               setPassword(""),
+              setAuthError(""),
+              setEmailError(""),
+              setPasswordError(""),
             ]}
           >
             <View>
@@ -418,7 +514,14 @@ export default function Login(props) {
           </View>
 
           <TouchableOpacity
-            onPress={() => props.navigation.navigate("AccountType")}
+            onPress={() => [
+              props.navigation.navigate("AccountType"),
+              setAuthError(""),
+              setEmail(""),
+              setPassword(""),
+              setEmailError(""),
+              setPasswordError(""),
+            ]}
             style={{ alignItems: "center", marginTop: height / 17 }}
             //onPress={() => props.navigation.navigate("SignupMain")}
           >
@@ -456,7 +559,14 @@ export default function Login(props) {
           >
             <TouchableOpacity
               onPress={() => {
-                handleAppleSignIn();
+                [
+                  handleAppleSignIn(),
+                  setEmail(""),
+                  setPassword(""),
+                  setAuthError(""),
+                  setEmailError(""),
+                  setPasswordError(""),
+                ];
               }}
             >
               {aLoading ? (
@@ -470,7 +580,16 @@ export default function Login(props) {
                 />
               )}
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => handleGoogleSignIn()}>
+            <TouchableOpacity
+              onPress={() => [
+                handleGoogleSignIn(),
+                setEmail(""),
+                setPassword(""),
+                setAuthError(""),
+                setEmailError(""),
+                setPasswordError(""),
+              ]}
+            >
               {gLoading ? (
                 <View style={styles.iconImgStyle}>
                   <ActivityIndicator size={"large"} color={colors.MAIN} />
@@ -482,15 +601,42 @@ export default function Login(props) {
                 />
               )}
             </TouchableOpacity>
-            <TouchableOpacity>
-              <Image
-                source={require("../assets/fb.png")}
-                style={styles.iconImgStyle}
-              />
+            <TouchableOpacity
+              onPress={() => {
+                [
+                  handleFacebookLogin(),
+                  setEmail(""),
+                  setPassword(""),
+                  setAuthError(""),
+                  setEmailError(""),
+                  setPasswordError(""),
+                ];
+              }}
+            >
+              {fLoading ? (
+                <View style={styles.iconImgStyle}>
+                  <ActivityIndicator size={"large"} color={colors.MAIN} />
+                </View>
+              ) : (
+                <Image
+                  source={require("../assets/fb.png")}
+                  style={styles.iconImgStyle}
+                />
+              )}
             </TouchableOpacity>
           </View>
 
-          <TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => {
+              [
+                setEmail(""),
+                setPassword(""),
+                setAuthError(""),
+                setEmailError(""),
+                setPasswordError(""),
+              ];
+            }}
+          >
             <Text
               style={[
                 styles.textSize,
