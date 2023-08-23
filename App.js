@@ -9,6 +9,7 @@ import ChangePassword from "./UI/ChangePassword";
 import AccountType from "./UI/AccountType";
 import PersonalAccount from "./UI/PersonalAccount";
 import BusinessAccount from "./UI/BusinessAccount";
+import Home from "./UI/Home";
 import { MaterialCommunityIcons, FontAwesome5 } from "@expo/vector-icons";
 import {
   NavigationContainer,
@@ -176,6 +177,11 @@ export default function App() {
     <PaperProvider theme={scheme === "dark" ? MD3DarkTheme : MD3LightTheme}>
       <NavigationContainer independent={true}>
         <Stack.Navigator>
+          <Stack.Screen
+            name="Home"
+            component={Home}
+            options={{ headerShown: false }}
+          />
           <Stack.Screen
             name="Login"
             component={Login}
