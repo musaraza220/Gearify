@@ -51,7 +51,8 @@ export default function Login(props) {
   const { styles } = useStyle();
   const { width, height } = useWindowDimensions();
   let customFonts = {
-    "GlacialIndifference-Regular": require("../assets/GlacialIndifference-Regular.otf"),
+    "GlacialIndifference-Regular": require("../assets/AvenirNextCondensed.ttf"),
+    "GlacialIndifference-Bold": require("../assets/AvenirNextCondensedDemiBold.ttf"),
   };
 
   const [request, response, promptAsync] = Facebook.useAuthRequest({

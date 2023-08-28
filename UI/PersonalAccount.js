@@ -50,7 +50,8 @@ export default function PersonalAccount(props) {
   const { width, height } = useWindowDimensions();
 
   let customFonts = {
-    "GlacialIndifference-Regular": require("../assets/GlacialIndifference-Regular.otf"),
+    "GlacialIndifference-Regular": require("../assets/AvenirNextCondensed.ttf"),
+    "GlacialIndifference-Bold": require("../assets/AvenirNextCondensedDemiBold.ttf"),
   };
 
   useEffect(() => {

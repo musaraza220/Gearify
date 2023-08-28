@@ -10,10 +10,14 @@ import AccountType from "./UI/AccountType";
 import PersonalAccount from "./UI/PersonalAccount";
 import BusinessAccount from "./UI/BusinessAccount";
 import Home from "./UI/Home";
+import Categories from "./UI/Categories";
+import SubCat from "./UI/SubCat";
+import Products from "./UI/Products";
 import { MaterialCommunityIcons, FontAwesome5 } from "@expo/vector-icons";
 import {
   NavigationContainer,
   DefaultTheme,
+  ubx,
   DarkTheme,
 } from "@react-navigation/native";
 import { useColorScheme } from "react-native";
@@ -29,6 +33,8 @@ import {
   MD3DarkTheme,
   Provider as PaperProvider,
 } from "react-native-paper";
+import Filters from "./UI/Filter";
+import Search from "./UI/Search";
 
 // const Tab = createMaterialBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -177,6 +183,31 @@ export default function App() {
     <PaperProvider theme={scheme === "dark" ? MD3DarkTheme : MD3LightTheme}>
       <NavigationContainer independent={true}>
         <Stack.Navigator>
+          {/* <Stack.Screen
+            name="Search"
+            component={Search}
+            options={{ headerShown: false }}
+          /> */}
+          {/* <Stack.Screen
+            name="Filters"
+            component={Filters}
+            options={{ headerShown: false }}
+          /> */}
+          <Stack.Screen
+            name="Categories"
+            component={Categories}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="SubCat"
+            component={SubCat}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="Products"
+            component={Products}
+            options={{ headerShown: false }}
+          />
           <Stack.Screen
             name="Home"
             component={Home}
@@ -187,6 +218,7 @@ export default function App() {
             component={Login}
             options={{ headerShown: false }}
           />
+
           <Stack.Screen
             name="ForgotPassword"
             component={ForgotPassword}
