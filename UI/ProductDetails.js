@@ -24,8 +24,11 @@ import {
   Ionicons,
 } from "@expo/vector-icons";
 import { appleAuth } from "@invertase/react-native-apple-authentication";
-import Collapsible from "react-native-collapsible";
-
+import {
+  Collapse,
+  CollapseHeader,
+  CollapseBody,
+} from "accordion-collapse-react-native";
 // import AsyncStorage from "@react-native-async-storage/async-storage";
 import {
   GoogleSignin,
@@ -722,561 +725,609 @@ export default function ProductDetails(props) {
                 </View>
 
                 <View>
-                  <Text
-                    style={{
-                      fontFamily: "Mediums-Font",
-                      fontSize: height / 75,
-                      marginTop: 13,
-                    }}
-                  >
-                    Customer reviews
-                  </Text>
-
-                  <View
-                    style={{
-                      flexDirection: "row",
-                      justifyContent: "space-between",
-                      alignItems: "center",
-                    }}
-                  >
-                    <View
-                      style={{
-                        flexDirection: "row",
-                        alignItems: "center",
-                        marginTop: 5,
-                      }}
-                    >
-                      <Text
-                        style={{
-                          fontSize: height / 77,
-                          fontFamily: "GlacialIndifference-Regular",
-                        }}
-                      >
-                        {rating}
-                      </Text>
-                      <StarRating
-                        rating={rating}
-                        onChange={setRating}
-                        starSize={height / 60}
-                        color={colors.MAIN}
-                        style={{ marginStart: height / 80 }}
-                        maxStars={5}
-                        starStyle={{
-                          padding: 0,
-                          margin: 0,
-                          marginStart: -height / 170,
-                        }}
-                      />
-                    </View>
-                  </View>
-
-                  <View
-                    style={[
-                      styles.txtView1,
-                      {
-                        marginTop: height / 80,
-                        flex: 1,
-                        flexDirection: "row",
-                        alignItems: "center",
-                      },
-                    ]}
-                  >
-                    <Text
-                      style={{
-                        fontSize: height / 77,
-                        fontFamily: "GlacialIndifference-Regular",
-                        paddingStart: 15,
-                      }}
-                    >
-                      Create a video review
-                    </Text>
-                    {/* <TextInput
-                      placeholder="Search in reviews, Q&As ..."
-                      placeholderTextColor={theme.colors.secondary}
-                      style={[
-                        styles.textSize,
-                        {
-                          marginStart: 7,
-                          marginEnd: 7,
-                        },
-                      ]}
-                      autoCorrect={false}
-                      value={searchQry}
-                      onChangeText={(value) => [setSearchQry(value)]}
-                      error={error}
-                    /> */}
-                  </View>
-
-                  <View
-                    style={[
-                      styles.txtView1,
-                      {
-                        marginTop: height / 120,
-                        flex: 1,
-                        flexDirection: "row",
-                        alignItems: "center",
-                      },
-                    ]}
-                  >
-                    <Text
-                      style={{
-                        fontSize: height / 77,
-                        fontFamily: "GlacialIndifference-Regular",
-                        paddingStart: 15,
-                      }}
-                    >
-                      Write a review
-                    </Text>
-                    {/* <TextInput
-                      placeholder="Search in reviews, Q&As ..."
-                      placeholderTextColor={theme.colors.secondary}
-                      style={[
-                        styles.textSize,
-                        {
-                          marginStart: 7,
-                          marginEnd: 7,
-                        },
-                      ]}
-                      autoCorrect={false}
-                      value={searchQry}
-                      onChangeText={(value) => [setSearchQry(value)]}
-                      error={error}
-                    /> */}
-                  </View>
-
-                  <View
-                    style={{
-                      marginTop: 10,
-                    }}
-                  >
-                    <View
-                      style={{
-                        flexDirection: "row",
-                        alignItems: "center",
-                        marginTop: 5,
-                      }}
-                    >
-                      <Text
-                        style={{
-                          fontSize: height / 77,
-                          fontFamily: "GlacialIndifference-Regular",
-                        }}
-                      >
-                        5 star
-                      </Text>
-                      <StarRating
-                        rating={5}
-                        onChange={setRating}
-                        starSize={height / 60}
-                        color={colors.MAIN}
-                        style={{
-                          marginStart: height / 60,
-                          marginEnd: height / 60,
-                          width: width / 3,
-                        }}
-                        maxStars={5}
-                        starStyle={{
-                          padding: 0,
-                          margin: 0,
-                        }}
-                      />
-                      <Text
-                        style={{
-                          fontSize: height / 77,
-                          fontFamily: "GlacialIndifference-Regular",
-                        }}
-                      >
-                        60%
-                      </Text>
-                    </View>
-                    <View
-                      style={{
-                        flexDirection: "row",
-                        alignItems: "center",
-                        marginTop: 15,
-                      }}
-                    >
-                      <Text
-                        style={{
-                          fontSize: height / 77,
-                          fontFamily: "GlacialIndifference-Regular",
-                        }}
-                      >
-                        4 star
-                      </Text>
-                      <StarRating
-                        rating={5}
-                        onChange={setRating}
-                        starSize={height / 60}
-                        color={colors.MAIN}
-                        style={{
-                          marginStart: height / 60,
-                          marginEnd: height / 60,
-                          width: width / 3,
-                        }}
-                        maxStars={4}
-                        starStyle={{
-                          padding: 0,
-                          margin: 0,
-                        }}
-                      />
-                      <Text
-                        style={{
-                          fontSize: height / 77,
-                          fontFamily: "GlacialIndifference-Regular",
-                        }}
-                      >
-                        16%
-                      </Text>
-                    </View>
-
-                    <View
-                      style={{
-                        flexDirection: "row",
-                        alignItems: "center",
-                        marginTop: 15,
-                      }}
-                    >
-                      <Text
-                        style={{
-                          fontSize: height / 77,
-                          fontFamily: "GlacialIndifference-Regular",
-                        }}
-                      >
-                        3 star
-                      </Text>
-                      <StarRating
-                        rating={5}
-                        onChange={setRating}
-                        starSize={height / 60}
-                        color={colors.MAIN}
-                        style={{
-                          marginStart: height / 60,
-                          marginEnd: height / 60,
-                          width: width / 3,
-                        }}
-                        maxStars={3}
-                        starStyle={{
-                          padding: 0,
-                          margin: 0,
-                        }}
-                      />
-                      <Text
-                        style={{
-                          fontSize: height / 77,
-                          fontFamily: "GlacialIndifference-Regular",
-                        }}
-                      >
-                        11%
-                      </Text>
-                    </View>
-
-                    <View
-                      style={{
-                        flexDirection: "row",
-                        alignItems: "center",
-                        marginTop: 15,
-                      }}
-                    >
-                      <Text
-                        style={{
-                          fontSize: height / 77,
-                          fontFamily: "GlacialIndifference-Regular",
-                        }}
-                      >
-                        2 star
-                      </Text>
-                      <StarRating
-                        rating={5}
-                        onChange={setRating}
-                        starSize={height / 60}
-                        color={colors.MAIN}
-                        style={{
-                          marginStart: height / 60,
-                          marginEnd: height / 60,
-                          width: width / 3,
-                        }}
-                        maxStars={2}
-                        starStyle={{
-                          padding: 0,
-                          margin: 0,
-                        }}
-                      />
-                      <Text
-                        style={{
-                          fontSize: height / 77,
-                          fontFamily: "GlacialIndifference-Regular",
-                        }}
-                      >
-                        5%
-                      </Text>
-                    </View>
-                    <View
-                      style={{
-                        flexDirection: "row",
-                        alignItems: "center",
-                        marginTop: 15,
-                      }}
-                    >
-                      <Text
-                        style={{
-                          fontSize: height / 77,
-                          fontFamily: "GlacialIndifference-Regular",
-                        }}
-                      >
-                        1 star
-                      </Text>
-                      <StarRating
-                        rating={5}
-                        onChange={setRating}
-                        starSize={height / 60}
-                        color={colors.MAIN}
-                        style={{
-                          marginStart: height / 60,
-                          marginEnd: height / 60,
-                          width: width / 3,
-                        }}
-                        maxStars={1}
-                        starStyle={{
-                          padding: 0,
-                          margin: 0,
-                        }}
-                      />
-                      <Text
-                        style={{
-                          fontSize: height / 77,
-                          fontFamily: "GlacialIndifference-Regular",
-                        }}
-                      >
-                        8%
-                      </Text>
-                    </View>
-                  </View>
-
-                  <View>
-                    <Text
-                      style={{
-                        fontFamily: "Mediums-Font",
-                        fontSize: height / 75,
-                        marginTop: 15,
-                      }}
-                    >
-                      Video reviews
-                    </Text>
-
-                    <View
-                      style={{
-                        marginTop: 10,
-                        paddingHorizontal: 4,
-                        flexDirection: "row",
-                        justifyContent: "space-between",
-                      }}
-                    >
-                      <LinearGradient
-                        colors={["#ffffff", "lightgray"]}
-                        style={styles.infoStyles}
-                      ></LinearGradient>
-
-                      <LinearGradient
-                        colors={["#ffffff", "lightgray"]}
-                        style={styles.infoStyles}
-                      ></LinearGradient>
-                      <LinearGradient
-                        colors={["#ffffff", "lightgray"]}
-                        style={styles.infoStyles}
-                      ></LinearGradient>
-                      <LinearGradient
-                        colors={["#ffffff", "lightgray"]}
-                        style={styles.infoStyles}
-                      ></LinearGradient>
-                    </View>
-                  </View>
-
-                  <View>
-                    <Text
-                      style={{
-                        fontFamily: "GlacialIndifference-Regular",
-                        fontSize: height / 75,
-                        marginTop: 15,
-                      }}
-                    >
-                      Top reviews
-                    </Text>
-
-                    <View
-                      style={{
-                        marginTop: 10,
-                        flexDirection: "row",
-                        justifyContent: "space-between",
-                      }}
-                    >
-                      <Text
-                        style={{
-                          fontFamily: "GlacialIndifference-Regular",
-                          fontSize: height / 75,
-                        }}
-                      >
-                        5000 total ratings, 1500 with reviews
-                      </Text>
-                    </View>
-                  </View>
-                  <View>
-                    <Text
-                      style={{
-                        fontFamily: "Mediums-Font",
-                        fontSize: height / 75,
-                        marginTop: 15,
-                      }}
-                    >
-                      From Canada
-                    </Text>
-
-                    <View
-                      style={{
-                        marginTop: 10,
-                      }}
-                    >
-                      <View
-                        style={{ flexDirection: "row", alignItems: "center" }}
-                      >
-                        <MaterialCommunityIcons
-                          name="checkbox-blank-circle"
-                          size={height / 60}
-                          color="gray"
-                        />
-                        <Text
-                          style={{
-                            fontFamily: "GlacialIndifference-Regular",
-                            fontSize: height / 75,
-                          }}
-                        >
-                          {`    `}Customer123
-                        </Text>
-                      </View>
-
+                  <Collapse>
+                    <CollapseHeader>
                       <View
                         style={{
                           flexDirection: "row",
                           alignItems: "center",
-                          marginTop: 3,
+                          justifyContent: "space-between",
+
+                          marginTop: 13,
                         }}
                       >
-                        <StarRating
-                          rating={rating}
-                          onChange={setRating}
-                          starSize={height / 70}
-                          color={colors.MAIN}
-                          style={{ marginStart: height / 140 }}
-                          maxStars={5}
-                          starStyle={{
-                            padding: 0,
-                            margin: 0,
-                            marginStart: -height / 170,
+                        <Text
+                          style={{
+                            fontFamily: "Mediums-Font",
+                            fontSize: height / 75,
                           }}
+                        >
+                          Customer reviews
+                        </Text>
+                        <MaterialCommunityIcons
+                          name="chevron-down"
+                          size={height / 50}
                         />
-                        <Text
-                          style={{
-                            fontFamily: "GlacialIndifference-Regular",
-                            fontSize: height / 75,
-                          }}
-                        >
-                          {`    `}Verified Purchase
-                        </Text>
                       </View>
+                    </CollapseHeader>
 
-                      <Text
-                        style={{
-                          fontFamily: "Mediums-Font",
-                          fontSize: height / 75,
-                          marginTop: 3,
-                        }}
-                      >
-                        Lorem Ipsum is simply dummy text of the printing and
-                        typesetting
-                      </Text>
-                      <Text
-                        style={{
-                          fontFamily: "GlacialIndifference-Regular",
-                          fontSize: height / 76,
-                        }}
-                      >
-                        Reviewed in Canada on August 15, 2023
-                      </Text>
-
-                      <Text
-                        style={{
-                          fontFamily: "GlacialIndifference-Regular",
-                          fontSize: height / 75,
-                          marginTop: 5,
-                        }}
-                      >
-                        Color:Black {`            `} Size:9.5
-                      </Text>
-
-                      <Text
-                        style={{
-                          fontFamily: "GlacialIndifference-Regular",
-                          fontSize: height / 75,
-                          marginTop: 5,
-                          textAlign: "justify",
-                        }}
-                      >
-                        Lorem Ipsum is simply dummy text of the printing and
-                        typesetting industry. Lorem Ipsum has been the
-                        industry's standard dummy text ever since the 1500s,
-                        when an unknown printer took a galley of type and
-                        scrambled it to make a type specimen book. It has
-                        survived not only five centuries,
-                      </Text>
-                    </View>
-                  </View>
-
-                  <View
-                    style={{
-                      marginTop: 10,
-                      flexDirection: "row",
-                      justifyContent: "space-between",
-                    }}
-                  >
-                    <View style={{ flexDirection: "row" }}>
+                    <CollapseBody>
                       <View
-                        style={[styles.filterBtnPrice, { borderColor: "gray" }]}
-                      >
-                        <Text
-                          style={{
-                            fontFamily: "GlacialIndifference-Regular",
-                            fontSize: height / 75,
-                            textAlign: "center",
-                          }}
-                        >
-                          Helpful
-                        </Text>
-                      </View>
-
-                      <View style={[styles.filterBtnPrice, { borderWidth: 0 }]}>
-                        <Text
-                          style={{
-                            fontFamily: "GlacialIndifference-Regular",
-                            fontSize: height / 75,
-                            textAlign: "center",
-                          }}
-                        >
-                          Share
-                        </Text>
-                      </View>
-                    </View>
-                    <View style={[styles.filterBtnPrice, { borderWidth: 0 }]}>
-                      <Text
                         style={{
-                          fontFamily: "GlacialIndifference-Regular",
-                          fontSize: height / 75,
-                          textAlign: "center",
+                          flexDirection: "row",
+                          justifyContent: "space-between",
+                          alignItems: "center",
                         }}
                       >
-                        Report
-                      </Text>
-                    </View>
-                  </View>
+                        <View
+                          style={{
+                            flexDirection: "row",
+                            alignItems: "center",
+                            marginTop: 5,
+                          }}
+                        >
+                          <Text
+                            style={{
+                              fontSize: height / 77,
+                              fontFamily: "GlacialIndifference-Regular",
+                            }}
+                          >
+                            {rating}
+                          </Text>
+                          <StarRating
+                            rating={rating}
+                            onChange={setRating}
+                            starSize={height / 60}
+                            color={colors.MAIN}
+                            style={{ marginStart: height / 80 }}
+                            maxStars={5}
+                            starStyle={{
+                              padding: 0,
+                              margin: 0,
+                              marginStart: -height / 170,
+                            }}
+                          />
+                        </View>
+                      </View>
+
+                      <View
+                        style={[
+                          styles.txtView1,
+                          {
+                            marginTop: height / 80,
+                            flex: 1,
+                            flexDirection: "row",
+                            alignItems: "center",
+                          },
+                        ]}
+                      >
+                        <Text
+                          style={{
+                            fontSize: height / 77,
+                            fontFamily: "GlacialIndifference-Regular",
+                            paddingStart: 15,
+                          }}
+                        >
+                          Create a video review
+                        </Text>
+                        {/* <TextInput
+                      placeholder="Search in reviews, Q&As ..."
+                      placeholderTextColor={theme.colors.secondary}
+                      style={[
+                        styles.textSize,
+                        {
+                          marginStart: 7,
+                          marginEnd: 7,
+                        },
+                      ]}
+                      autoCorrect={false}
+                      value={searchQry}
+                      onChangeText={(value) => [setSearchQry(value)]}
+                      error={error}
+                    /> */}
+                      </View>
+
+                      <View
+                        style={[
+                          styles.txtView1,
+                          {
+                            marginTop: height / 120,
+                            flex: 1,
+                            flexDirection: "row",
+                            alignItems: "center",
+                          },
+                        ]}
+                      >
+                        <Text
+                          style={{
+                            fontSize: height / 77,
+                            fontFamily: "GlacialIndifference-Regular",
+                            paddingStart: 15,
+                          }}
+                        >
+                          Write a review
+                        </Text>
+                        {/* <TextInput
+                      placeholder="Search in reviews, Q&As ..."
+                      placeholderTextColor={theme.colors.secondary}
+                      style={[
+                        styles.textSize,
+                        {
+                          marginStart: 7,
+                          marginEnd: 7,
+                        },
+                      ]}
+                      autoCorrect={false}
+                      value={searchQry}
+                      onChangeText={(value) => [setSearchQry(value)]}
+                      error={error}
+                    /> */}
+                      </View>
+
+                      <View
+                        style={{
+                          marginTop: 10,
+                        }}
+                      >
+                        <View
+                          style={{
+                            flexDirection: "row",
+                            alignItems: "center",
+                            marginTop: 5,
+                          }}
+                        >
+                          <Text
+                            style={{
+                              fontSize: height / 77,
+                              fontFamily: "GlacialIndifference-Regular",
+                            }}
+                          >
+                            5 star
+                          </Text>
+                          <StarRating
+                            rating={5}
+                            onChange={setRating}
+                            starSize={height / 60}
+                            color={colors.MAIN}
+                            style={{
+                              marginStart: height / 60,
+                              marginEnd: height / 60,
+                              width: width / 3,
+                            }}
+                            maxStars={5}
+                            starStyle={{
+                              padding: 0,
+                              margin: 0,
+                            }}
+                          />
+                          <Text
+                            style={{
+                              fontSize: height / 77,
+                              fontFamily: "GlacialIndifference-Regular",
+                            }}
+                          >
+                            60%
+                          </Text>
+                        </View>
+                        <View
+                          style={{
+                            flexDirection: "row",
+                            alignItems: "center",
+                            marginTop: 15,
+                          }}
+                        >
+                          <Text
+                            style={{
+                              fontSize: height / 77,
+                              fontFamily: "GlacialIndifference-Regular",
+                            }}
+                          >
+                            4 star
+                          </Text>
+                          <StarRating
+                            rating={5}
+                            onChange={setRating}
+                            starSize={height / 60}
+                            color={colors.MAIN}
+                            style={{
+                              marginStart: height / 60,
+                              marginEnd: height / 60,
+                              width: width / 3,
+                            }}
+                            maxStars={4}
+                            starStyle={{
+                              padding: 0,
+                              margin: 0,
+                            }}
+                          />
+                          <Text
+                            style={{
+                              fontSize: height / 77,
+                              fontFamily: "GlacialIndifference-Regular",
+                            }}
+                          >
+                            16%
+                          </Text>
+                        </View>
+
+                        <View
+                          style={{
+                            flexDirection: "row",
+                            alignItems: "center",
+                            marginTop: 15,
+                          }}
+                        >
+                          <Text
+                            style={{
+                              fontSize: height / 77,
+                              fontFamily: "GlacialIndifference-Regular",
+                            }}
+                          >
+                            3 star
+                          </Text>
+                          <StarRating
+                            rating={5}
+                            onChange={setRating}
+                            starSize={height / 60}
+                            color={colors.MAIN}
+                            style={{
+                              marginStart: height / 60,
+                              marginEnd: height / 60,
+                              width: width / 3,
+                            }}
+                            maxStars={3}
+                            starStyle={{
+                              padding: 0,
+                              margin: 0,
+                            }}
+                          />
+                          <Text
+                            style={{
+                              fontSize: height / 77,
+                              fontFamily: "GlacialIndifference-Regular",
+                            }}
+                          >
+                            11%
+                          </Text>
+                        </View>
+
+                        <View
+                          style={{
+                            flexDirection: "row",
+                            alignItems: "center",
+                            marginTop: 15,
+                          }}
+                        >
+                          <Text
+                            style={{
+                              fontSize: height / 77,
+                              fontFamily: "GlacialIndifference-Regular",
+                            }}
+                          >
+                            2 star
+                          </Text>
+                          <StarRating
+                            rating={5}
+                            onChange={setRating}
+                            starSize={height / 60}
+                            color={colors.MAIN}
+                            style={{
+                              marginStart: height / 60,
+                              marginEnd: height / 60,
+                              width: width / 3,
+                            }}
+                            maxStars={2}
+                            starStyle={{
+                              padding: 0,
+                              margin: 0,
+                            }}
+                          />
+                          <Text
+                            style={{
+                              fontSize: height / 77,
+                              fontFamily: "GlacialIndifference-Regular",
+                            }}
+                          >
+                            5%
+                          </Text>
+                        </View>
+                        <View
+                          style={{
+                            flexDirection: "row",
+                            alignItems: "center",
+                            marginTop: 15,
+                          }}
+                        >
+                          <Text
+                            style={{
+                              fontSize: height / 77,
+                              fontFamily: "GlacialIndifference-Regular",
+                            }}
+                          >
+                            1 star
+                          </Text>
+                          <StarRating
+                            rating={5}
+                            onChange={setRating}
+                            starSize={height / 60}
+                            color={colors.MAIN}
+                            style={{
+                              marginStart: height / 60,
+                              marginEnd: height / 60,
+                              width: width / 3,
+                            }}
+                            maxStars={1}
+                            starStyle={{
+                              padding: 0,
+                              margin: 0,
+                            }}
+                          />
+                          <Text
+                            style={{
+                              fontSize: height / 77,
+                              fontFamily: "GlacialIndifference-Regular",
+                            }}
+                          >
+                            8%
+                          </Text>
+                        </View>
+                      </View>
+
+                      <View>
+                        <Text
+                          style={{
+                            fontFamily: "Mediums-Font",
+                            fontSize: height / 75,
+                            marginTop: 15,
+                          }}
+                        >
+                          Video reviews
+                        </Text>
+
+                        <View
+                          style={{
+                            marginTop: 10,
+                            paddingHorizontal: 4,
+                            flexDirection: "row",
+                            justifyContent: "space-between",
+                          }}
+                        >
+                          <LinearGradient
+                            colors={["#ffffff", "lightgray"]}
+                            style={styles.infoStyles}
+                          ></LinearGradient>
+
+                          <LinearGradient
+                            colors={["#ffffff", "lightgray"]}
+                            style={styles.infoStyles}
+                          ></LinearGradient>
+                          <LinearGradient
+                            colors={["#ffffff", "lightgray"]}
+                            style={styles.infoStyles}
+                          ></LinearGradient>
+                          <LinearGradient
+                            colors={["#ffffff", "lightgray"]}
+                            style={styles.infoStyles}
+                          ></LinearGradient>
+                        </View>
+                      </View>
+
+                      <Collapse>
+                        <CollapseHeader>
+                          <View
+                            style={{
+                              marginTop: 15,
+                              flexDirection: "row",
+                            }}
+                          >
+                            <Text
+                              style={{
+                                fontFamily: "GlacialIndifference-Regular",
+                                fontSize: height / 75,
+                              }}
+                            >
+                              Top reviews {`    `}
+                            </Text>
+                            <MaterialCommunityIcons
+                              name="chevron-down"
+                              size={height / 50}
+                            />
+                          </View>
+                        </CollapseHeader>
+                        <CollapseBody>
+                          <View
+                            style={{
+                              marginTop: 10,
+                              flexDirection: "row",
+                              justifyContent: "space-between",
+                            }}
+                          >
+                            <Text
+                              style={{
+                                fontFamily: "GlacialIndifference-Regular",
+                                fontSize: height / 75,
+                              }}
+                            >
+                              5000 total ratings, 1500 with reviews
+                            </Text>
+                          </View>
+                          <View>
+                            <Text
+                              style={{
+                                fontFamily: "Mediums-Font",
+                                fontSize: height / 75,
+                                marginTop: 15,
+                              }}
+                            >
+                              From Canada
+                            </Text>
+
+                            <View
+                              style={{
+                                marginTop: 10,
+                              }}
+                            >
+                              <View
+                                style={{
+                                  flexDirection: "row",
+                                  alignItems: "center",
+                                }}
+                              >
+                                <MaterialCommunityIcons
+                                  name="checkbox-blank-circle"
+                                  size={height / 60}
+                                  color="gray"
+                                />
+                                <Text
+                                  style={{
+                                    fontFamily: "GlacialIndifference-Regular",
+                                    fontSize: height / 75,
+                                  }}
+                                >
+                                  {`    `}Customer123
+                                </Text>
+                              </View>
+
+                              <View
+                                style={{
+                                  flexDirection: "row",
+                                  alignItems: "center",
+                                  marginTop: 3,
+                                }}
+                              >
+                                <StarRating
+                                  rating={rating}
+                                  onChange={setRating}
+                                  starSize={height / 70}
+                                  color={colors.MAIN}
+                                  style={{ marginStart: height / 140 }}
+                                  maxStars={5}
+                                  starStyle={{
+                                    padding: 0,
+                                    margin: 0,
+                                    marginStart: -height / 170,
+                                  }}
+                                />
+                                <Text
+                                  style={{
+                                    fontFamily: "GlacialIndifference-Regular",
+                                    fontSize: height / 75,
+                                  }}
+                                >
+                                  {`    `}Verified Purchase
+                                </Text>
+                              </View>
+
+                              <Text
+                                style={{
+                                  fontFamily: "Mediums-Font",
+                                  fontSize: height / 75,
+                                  marginTop: 3,
+                                }}
+                              >
+                                Lorem Ipsum is simply dummy text of the printing
+                                and typesetting
+                              </Text>
+                              <Text
+                                style={{
+                                  fontFamily: "GlacialIndifference-Regular",
+                                  fontSize: height / 76,
+                                }}
+                              >
+                                Reviewed in Canada on August 15, 2023
+                              </Text>
+
+                              <Text
+                                style={{
+                                  fontFamily: "GlacialIndifference-Regular",
+                                  fontSize: height / 75,
+                                  marginTop: 5,
+                                }}
+                              >
+                                Color:Black {`            `} Size:9.5
+                              </Text>
+
+                              <Text
+                                style={{
+                                  fontFamily: "GlacialIndifference-Regular",
+                                  fontSize: height / 75,
+                                  marginTop: 5,
+                                  textAlign: "justify",
+                                }}
+                              >
+                                Lorem Ipsum is simply dummy text of the printing
+                                and typesetting industry. Lorem Ipsum has been
+                                the industry's standard dummy text ever since
+                                the 1500s, when an unknown printer took a galley
+                                of type and scrambled it to make a type specimen
+                                book. It has survived not only five centuries,
+                              </Text>
+                            </View>
+                          </View>
+
+                          <View
+                            style={{
+                              marginTop: 10,
+                              flexDirection: "row",
+                              justifyContent: "space-between",
+                            }}
+                          >
+                            <View style={{ flexDirection: "row" }}>
+                              <View
+                                style={[
+                                  styles.filterBtnPrice,
+                                  { borderColor: "gray" },
+                                ]}
+                              >
+                                <Text
+                                  style={{
+                                    fontFamily: "GlacialIndifference-Regular",
+                                    fontSize: height / 75,
+                                    textAlign: "center",
+                                  }}
+                                >
+                                  Helpful
+                                </Text>
+                              </View>
+
+                              <View
+                                style={[
+                                  styles.filterBtnPrice,
+                                  { borderWidth: 0 },
+                                ]}
+                              >
+                                <Text
+                                  style={{
+                                    fontFamily: "GlacialIndifference-Regular",
+                                    fontSize: height / 75,
+                                    textAlign: "center",
+                                  }}
+                                >
+                                  Share
+                                </Text>
+                              </View>
+                            </View>
+                            <View
+                              style={[
+                                styles.filterBtnPrice,
+                                { borderWidth: 0 },
+                              ]}
+                            >
+                              <Text
+                                style={{
+                                  fontFamily: "GlacialIndifference-Regular",
+                                  fontSize: height / 75,
+                                  textAlign: "center",
+                                }}
+                              >
+                                Report
+                              </Text>
+                            </View>
+                          </View>
+                        </CollapseBody>
+                      </Collapse>
+                    </CollapseBody>
+                  </Collapse>
                 </View>
               </View>
             </ScrollView>

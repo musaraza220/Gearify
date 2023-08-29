@@ -23,8 +23,11 @@ import {
   Entypo,
 } from "@expo/vector-icons";
 import { appleAuth } from "@invertase/react-native-apple-authentication";
-import Collapsible from "react-native-collapsible";
-
+import {
+  Collapse,
+  CollapseHeader,
+  CollapseBody,
+} from "accordion-collapse-react-native";
 // import AsyncStorage from "@react-native-async-storage/async-storage";
 import {
   GoogleSignin,
@@ -167,930 +170,1072 @@ export default function Filters(props) {
                 </View>
 
                 <View>
-                  <View
-                    style={{
-                      marginTop: 10,
-                      flexDirection: "row",
-                      alignItems: "center",
-                      justifyContent: "space-between",
-                    }}
-                  >
-                    <Text
-                      style={{
-                        fontFamily: "Mediums-Font",
-                        fontSize: height / 55,
-                        paddingStart: height / 90,
-                      }}
-                    >
-                      Categories
-                    </Text>
-                    <MaterialCommunityIcons
-                      name="chevron-up"
-                      size={height / 40}
-                    />
-                  </View>
-
-                  <View style={{ marginTop: 10 }}>
-                    <Text
-                      style={{
-                        fontFamily: "GlacialIndifference-Regular",
-                        fontSize: height / 55,
-                        paddingStart: height / 90,
-                      }}
-                    >
-                      Cell phone Cases & Covers
-                    </Text>
-                  </View>
-                  <View
-                    style={{
-                      paddingStart: height / 90,
-                      flexDirection: "row",
-                      alignItems: "center",
-                    }}
-                  >
-                    <TouchableOpacity
-                      style={[styles.filterBtn, , { width: null }]}
-                    >
-                      <Text
+                  <Collapse>
+                    <CollapseHeader>
+                      <View
                         style={{
-                          fontFamily: "GlacialIndifference-Regular",
-                          fontSize: height / 55,
+                          marginTop: 10,
+                          flexDirection: "row",
+                          justifyContent: "space-between",
                         }}
                       >
-                        All
-                      </Text>
-                    </TouchableOpacity>
-
-                    <TouchableOpacity
-                      style={[styles.filterBtn, { borderColor: "gray" }]}
-                    >
-                      <Text
+                        <Text
+                          style={{
+                            fontFamily: "Mediums-Font",
+                            fontSize: height / 55,
+                            paddingStart: height / 90,
+                          }}
+                        >
+                          Categories
+                        </Text>
+                        <MaterialCommunityIcons
+                          name="chevron-down"
+                          size={height / 40}
+                        />
+                      </View>
+                    </CollapseHeader>
+                    <CollapseBody>
+                      <View style={{ marginTop: 10 }}>
+                        <Text
+                          style={{
+                            fontFamily: "GlacialIndifference-Regular",
+                            fontSize: height / 55,
+                            paddingStart: height / 90,
+                          }}
+                        >
+                          Cell phone Cases & Covers
+                        </Text>
+                      </View>
+                      <View
                         style={{
-                          fontFamily: "GlacialIndifference-Regular",
-                          fontSize: height / 55,
-                          textAlign: "center",
+                          paddingStart: height / 90,
+                          flexDirection: "row",
+                          alignItems: "center",
                         }}
                       >
-                        Basic Cases
-                      </Text>
-                    </TouchableOpacity>
+                        <TouchableOpacity
+                          style={[styles.filterBtn, , { width: null }]}
+                        >
+                          <Text
+                            style={{
+                              fontFamily: "GlacialIndifference-Regular",
+                              fontSize: height / 55,
+                            }}
+                          >
+                            All
+                          </Text>
+                        </TouchableOpacity>
 
-                    <TouchableOpacity
-                      style={[styles.filterBtn, { borderColor: "gray" }]}
-                    >
-                      <Text
-                        style={{
-                          fontFamily: "GlacialIndifference-Regular",
-                          fontSize: height / 55,
-                          textAlign: "center",
-                        }}
-                      >
-                        Flip Cases
-                      </Text>
-                    </TouchableOpacity>
-                  </View>
+                        <TouchableOpacity
+                          style={[styles.filterBtn, { borderColor: "gray" }]}
+                        >
+                          <Text
+                            style={{
+                              fontFamily: "GlacialIndifference-Regular",
+                              fontSize: height / 55,
+                              textAlign: "center",
+                            }}
+                          >
+                            Basic Cases
+                          </Text>
+                        </TouchableOpacity>
+
+                        <TouchableOpacity
+                          style={[styles.filterBtn, { borderColor: "gray" }]}
+                        >
+                          <Text
+                            style={{
+                              fontFamily: "GlacialIndifference-Regular",
+                              fontSize: height / 55,
+                              textAlign: "center",
+                            }}
+                          >
+                            Flip Cases
+                          </Text>
+                        </TouchableOpacity>
+                      </View>
+                    </CollapseBody>
+                  </Collapse>
                 </View>
 
                 <View style={{ marginTop: height / 90 }}>
-                  <View
-                    style={{
-                      marginTop: 10,
-                      flexDirection: "row",
-                      alignItems: "center",
-                      justifyContent: "space-between",
-                    }}
-                  >
-                    <Text
-                      style={{
-                        fontFamily: "Mediums-Font",
-                        fontSize: height / 55,
-                        paddingStart: height / 90,
-                      }}
-                    >
-                      Brands
-                    </Text>
-                    <MaterialCommunityIcons
-                      name="chevron-up"
-                      size={height / 40}
-                    />
-                  </View>
-
-                  <View
-                    style={{
-                      paddingStart: height / 90,
-                      flexDirection: "row",
-                      alignItems: "center",
-                    }}
-                  >
-                    <TouchableOpacity style={styles.filterBtn}>
-                      <Text
+                  <Collapse>
+                    <CollapseHeader>
+                      <View
                         style={{
-                          fontFamily: "GlacialIndifference-Regular",
-                          fontSize: height / 55,
-                          textAlign: "center",
+                          marginTop: 5,
+                          flexDirection: "row",
+                          justifyContent: "space-between",
                         }}
                       >
-                        Otterbox
-                      </Text>
-                    </TouchableOpacity>
-
-                    <TouchableOpacity
-                      style={[styles.filterBtn, { borderColor: "gray" }]}
-                    >
-                      <Text
+                        <Text
+                          style={{
+                            fontFamily: "Mediums-Font",
+                            fontSize: height / 55,
+                            paddingStart: height / 90,
+                          }}
+                        >
+                          Brands
+                        </Text>
+                        <MaterialCommunityIcons
+                          name="chevron-down"
+                          size={height / 40}
+                        />
+                      </View>
+                    </CollapseHeader>
+                    <CollapseBody>
+                      <View
                         style={{
-                          fontFamily: "GlacialIndifference-Regular",
-                          fontSize: height / 55,
-                          textAlign: "center",
+                          paddingStart: height / 90,
+                          flexDirection: "row",
+                          alignItems: "center",
                         }}
                       >
-                        Casetify
-                      </Text>
-                    </TouchableOpacity>
+                        <TouchableOpacity style={styles.filterBtn}>
+                          <Text
+                            style={{
+                              fontFamily: "GlacialIndifference-Regular",
+                              fontSize: height / 55,
+                              textAlign: "center",
+                            }}
+                          >
+                            Otterbox
+                          </Text>
+                        </TouchableOpacity>
 
-                    <TouchableOpacity
-                      style={[styles.filterBtn, { borderColor: "gray" }]}
-                    >
-                      <Text
+                        <TouchableOpacity
+                          style={[styles.filterBtn, { borderColor: "gray" }]}
+                        >
+                          <Text
+                            style={{
+                              fontFamily: "GlacialIndifference-Regular",
+                              fontSize: height / 55,
+                              textAlign: "center",
+                            }}
+                          >
+                            Casetify
+                          </Text>
+                        </TouchableOpacity>
+
+                        <TouchableOpacity
+                          style={[styles.filterBtn, { borderColor: "gray" }]}
+                        >
+                          <Text
+                            style={{
+                              fontFamily: "GlacialIndifference-Regular",
+                              fontSize: height / 55,
+                              textAlign: "center",
+                            }}
+                          >
+                            myCharge
+                          </Text>
+                        </TouchableOpacity>
+                      </View>
+
+                      <View
                         style={{
-                          fontFamily: "GlacialIndifference-Regular",
-                          fontSize: height / 55,
-                          textAlign: "center",
+                          paddingStart: height / 90,
+                          flexDirection: "row",
+                          alignItems: "center",
+                          marginTop: 2,
                         }}
                       >
-                        myCharge
-                      </Text>
-                    </TouchableOpacity>
-                  </View>
+                        <TouchableOpacity
+                          style={[styles.filterBtn, { borderColor: "gray" }]}
+                        >
+                          <Text
+                            style={{
+                              fontFamily: "GlacialIndifference-Regular",
+                              fontSize: height / 55,
+                              textAlign: "center",
+                            }}
+                          >
+                            Everki
+                          </Text>
+                        </TouchableOpacity>
 
-                  <View
-                    style={{
-                      paddingStart: height / 90,
-                      flexDirection: "row",
-                      alignItems: "center",
-                      marginTop: 2,
-                    }}
-                  >
-                    <TouchableOpacity
-                      style={[styles.filterBtn, { borderColor: "gray" }]}
-                    >
-                      <Text
-                        style={{
-                          fontFamily: "GlacialIndifference-Regular",
-                          fontSize: height / 55,
-                          textAlign: "center",
-                        }}
-                      >
-                        Everki
-                      </Text>
-                    </TouchableOpacity>
+                        <TouchableOpacity
+                          style={[styles.filterBtn, { borderColor: "gray" }]}
+                        >
+                          <Text
+                            style={{
+                              fontFamily: "GlacialIndifference-Regular",
+                              fontSize: height / 55,
+                              textAlign: "center",
+                            }}
+                          >
+                            JLabAudio
+                          </Text>
+                        </TouchableOpacity>
 
-                    <TouchableOpacity
-                      style={[styles.filterBtn, { borderColor: "gray" }]}
-                    >
-                      <Text
-                        style={{
-                          fontFamily: "GlacialIndifference-Regular",
-                          fontSize: height / 55,
-                          textAlign: "center",
-                        }}
-                      >
-                        JLabAudio
-                      </Text>
-                    </TouchableOpacity>
-
-                    <TouchableOpacity
-                      style={[styles.filterBtn, { borderColor: "gray" }]}
-                    >
-                      <Text
-                        style={{
-                          fontFamily: "GlacialIndifference-Regular",
-                          fontSize: height / 55,
-                          textAlign: "center",
-                        }}
-                      >
-                        iHome
-                      </Text>
-                    </TouchableOpacity>
-                  </View>
+                        <TouchableOpacity
+                          style={[styles.filterBtn, { borderColor: "gray" }]}
+                        >
+                          <Text
+                            style={{
+                              fontFamily: "GlacialIndifference-Regular",
+                              fontSize: height / 55,
+                              textAlign: "center",
+                            }}
+                          >
+                            iHome
+                          </Text>
+                        </TouchableOpacity>
+                      </View>
+                    </CollapseBody>
+                  </Collapse>
                 </View>
 
                 <View style={{ marginTop: height / 90 }}>
-                  <View
-                    style={{
-                      marginTop: 10,
-                      flexDirection: "row",
-                      alignItems: "center",
-                      justifyContent: "space-between",
-                    }}
-                  >
-                    <Text
-                      style={{
-                        fontFamily: "Mediums-Font",
-                        fontSize: height / 55,
-                        paddingStart: height / 90,
-                      }}
-                    >
-                      Colors
-                    </Text>
-                    <MaterialCommunityIcons
-                      name="chevron-up"
-                      size={height / 40}
-                    />
-                  </View>
+                  <Collapse>
+                    <CollapseHeader>
+                      <View
+                        style={{
+                          marginTop: 5,
+                          flexDirection: "row",
+                          justifyContent: "space-between",
+                        }}
+                      >
+                        <Text
+                          style={{
+                            fontFamily: "Mediums-Font",
+                            fontSize: height / 55,
+                            paddingStart: height / 90,
+                          }}
+                        >
+                          Colors
+                        </Text>
+                        <MaterialCommunityIcons
+                          name="chevron-down"
+                          size={height / 40}
+                        />
+                      </View>
+                    </CollapseHeader>
+                    <CollapseBody>
+                      <View
+                        style={{
+                          paddingStart: height / 90,
+                          flexDirection: "row",
+                          alignItems: "center",
+                        }}
+                      >
+                        <TouchableOpacity style={styles.filterBtnColor}>
+                          <View style={styles.colorBox}></View>
+                          <Text
+                            style={{
+                              fontFamily: "GlacialIndifference-Regular",
+                              fontSize: height / 55,
+                              textAlign: "center",
+                            }}
+                          >
+                            Black{`     `}
+                          </Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                          style={[
+                            styles.filterBtnColor,
+                            { borderColor: "gray" },
+                          ]}
+                        >
+                          <View
+                            style={[
+                              styles.colorBox,
+                              { backgroundColor: "gray" },
+                            ]}
+                          ></View>
+                          <Text
+                            style={{
+                              fontFamily: "GlacialIndifference-Regular",
+                              fontSize: height / 55,
+                              textAlign: "center",
+                            }}
+                          >
+                            Grey{`     `}
+                          </Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                          style={[
+                            styles.filterBtnColor,
+                            { borderColor: "gray" },
+                          ]}
+                        >
+                          <View
+                            style={[
+                              styles.colorBox,
+                              { backgroundColor: "white" },
+                            ]}
+                          ></View>
+                          <Text
+                            style={{
+                              fontFamily: "GlacialIndifference-Regular",
+                              fontSize: height / 55,
+                              textAlign: "center",
+                            }}
+                          >
+                            White{`     `}
+                          </Text>
+                        </TouchableOpacity>
+                      </View>
 
-                  <View
-                    style={{
-                      paddingStart: height / 90,
-                      flexDirection: "row",
-                      alignItems: "center",
-                    }}
-                  >
-                    <TouchableOpacity style={styles.filterBtnColor}>
-                      <View style={styles.colorBox}></View>
-                      <Text
-                        style={{
-                          fontFamily: "GlacialIndifference-Regular",
-                          fontSize: height / 55,
-                          textAlign: "center",
-                        }}
-                      >
-                        Black{`     `}
-                      </Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                      style={[styles.filterBtnColor, { borderColor: "gray" }]}
-                    >
                       <View
-                        style={[styles.colorBox, { backgroundColor: "gray" }]}
-                      ></View>
-                      <Text
                         style={{
-                          fontFamily: "GlacialIndifference-Regular",
-                          fontSize: height / 55,
-                          textAlign: "center",
+                          paddingStart: height / 90,
+                          flexDirection: "row",
+                          alignItems: "center",
+                          marginTop: 2,
                         }}
                       >
-                        Grey{`     `}
-                      </Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                      style={[styles.filterBtnColor, { borderColor: "gray" }]}
-                    >
-                      <View
-                        style={[styles.colorBox, { backgroundColor: "white" }]}
-                      ></View>
-                      <Text
-                        style={{
-                          fontFamily: "GlacialIndifference-Regular",
-                          fontSize: height / 55,
-                          textAlign: "center",
-                        }}
-                      >
-                        White{`     `}
-                      </Text>
-                    </TouchableOpacity>
-                  </View>
+                        <TouchableOpacity
+                          style={[
+                            styles.filterBtnColor,
+                            { borderColor: "gray" },
+                          ]}
+                        >
+                          <View
+                            style={[
+                              styles.colorBox,
+                              { backgroundColor: "brown" },
+                            ]}
+                          ></View>
+                          <Text
+                            style={{
+                              fontFamily: "GlacialIndifference-Regular",
+                              fontSize: height / 55,
+                              textAlign: "center",
+                            }}
+                          >
+                            Brown{`     `}
+                          </Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                          style={[
+                            styles.filterBtnColor,
+                            { borderColor: "gray" },
+                          ]}
+                        >
+                          <View
+                            style={[
+                              styles.colorBox,
+                              { backgroundColor: "beige" },
+                            ]}
+                          ></View>
+                          <Text
+                            style={{
+                              fontFamily: "GlacialIndifference-Regular",
+                              fontSize: height / 55,
+                              textAlign: "center",
+                            }}
+                          >
+                            Beige{`     `}
+                          </Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                          style={[
+                            styles.filterBtnColor,
+                            { borderColor: "gray" },
+                          ]}
+                        >
+                          <View
+                            style={[
+                              styles.colorBox,
+                              { backgroundColor: "red" },
+                            ]}
+                          ></View>
+                          <Text
+                            style={{
+                              fontFamily: "GlacialIndifference-Regular",
+                              fontSize: height / 55,
+                              textAlign: "center",
+                            }}
+                          >
+                            Red{`     `}
+                          </Text>
+                        </TouchableOpacity>
+                      </View>
 
-                  <View
-                    style={{
-                      paddingStart: height / 90,
-                      flexDirection: "row",
-                      alignItems: "center",
-                      marginTop: 2,
-                    }}
-                  >
-                    <TouchableOpacity
-                      style={[styles.filterBtnColor, { borderColor: "gray" }]}
-                    >
                       <View
-                        style={[styles.colorBox, { backgroundColor: "brown" }]}
-                      ></View>
-                      <Text
                         style={{
-                          fontFamily: "GlacialIndifference-Regular",
-                          fontSize: height / 55,
-                          textAlign: "center",
+                          paddingStart: height / 90,
+                          flexDirection: "row",
+                          alignItems: "center",
+                          marginTop: 2,
                         }}
                       >
-                        Brown{`     `}
-                      </Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                      style={[styles.filterBtnColor, { borderColor: "gray" }]}
-                    >
-                      <View
-                        style={[styles.colorBox, { backgroundColor: "beige" }]}
-                      ></View>
-                      <Text
-                        style={{
-                          fontFamily: "GlacialIndifference-Regular",
-                          fontSize: height / 55,
-                          textAlign: "center",
-                        }}
-                      >
-                        Beige{`     `}
-                      </Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                      style={[styles.filterBtnColor, { borderColor: "gray" }]}
-                    >
-                      <View
-                        style={[styles.colorBox, { backgroundColor: "red" }]}
-                      ></View>
-                      <Text
-                        style={{
-                          fontFamily: "GlacialIndifference-Regular",
-                          fontSize: height / 55,
-                          textAlign: "center",
-                        }}
-                      >
-                        Red{`     `}
-                      </Text>
-                    </TouchableOpacity>
-                  </View>
+                        <TouchableOpacity
+                          style={[
+                            styles.filterBtnColor,
+                            { borderColor: "gray" },
+                          ]}
+                        >
+                          <View
+                            style={[
+                              styles.colorBox,
+                              { backgroundColor: "orange" },
+                            ]}
+                          ></View>
+                          <Text
+                            style={{
+                              fontFamily: "GlacialIndifference-Regular",
+                              fontSize: height / 55,
+                              textAlign: "center",
+                            }}
+                          >
+                            Orange{`     `}
+                          </Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                          style={[
+                            styles.filterBtnColor,
+                            { borderColor: "gray" },
+                          ]}
+                        >
+                          <View
+                            style={[
+                              styles.colorBox,
+                              { backgroundColor: "yellow" },
+                            ]}
+                          ></View>
+                          <Text
+                            style={{
+                              fontFamily: "GlacialIndifference-Regular",
+                              fontSize: height / 55,
+                              textAlign: "center",
+                            }}
+                          >
+                            Yellow{`     `}
+                          </Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                          style={[
+                            styles.filterBtnColor,
+                            { borderColor: "gray" },
+                          ]}
+                        >
+                          <View
+                            style={[
+                              styles.colorBox,
+                              { backgroundColor: "ivory" },
+                            ]}
+                          ></View>
+                          <Text
+                            style={{
+                              fontFamily: "GlacialIndifference-Regular",
+                              fontSize: height / 55,
+                              textAlign: "center",
+                            }}
+                          >
+                            Ivory{`     `}
+                          </Text>
+                        </TouchableOpacity>
+                      </View>
 
-                  <View
-                    style={{
-                      paddingStart: height / 90,
-                      flexDirection: "row",
-                      alignItems: "center",
-                      marginTop: 2,
-                    }}
-                  >
-                    <TouchableOpacity
-                      style={[styles.filterBtnColor, { borderColor: "gray" }]}
-                    >
                       <View
-                        style={[styles.colorBox, { backgroundColor: "orange" }]}
-                      ></View>
-                      <Text
                         style={{
-                          fontFamily: "GlacialIndifference-Regular",
-                          fontSize: height / 55,
-                          textAlign: "center",
+                          paddingStart: height / 90,
+                          flexDirection: "row",
+                          alignItems: "center",
+                          marginTop: 2,
                         }}
                       >
-                        Orange{`     `}
-                      </Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                      style={[styles.filterBtnColor, { borderColor: "gray" }]}
-                    >
-                      <View
-                        style={[styles.colorBox, { backgroundColor: "yellow" }]}
-                      ></View>
-                      <Text
-                        style={{
-                          fontFamily: "GlacialIndifference-Regular",
-                          fontSize: height / 55,
-                          textAlign: "center",
-                        }}
-                      >
-                        Yellow{`     `}
-                      </Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                      style={[styles.filterBtnColor, { borderColor: "gray" }]}
-                    >
-                      <View
-                        style={[styles.colorBox, { backgroundColor: "ivory" }]}
-                      ></View>
-                      <Text
-                        style={{
-                          fontFamily: "GlacialIndifference-Regular",
-                          fontSize: height / 55,
-                          textAlign: "center",
-                        }}
-                      >
-                        Ivory{`     `}
-                      </Text>
-                    </TouchableOpacity>
-                  </View>
+                        <TouchableOpacity
+                          style={[
+                            styles.filterBtnColor,
+                            { borderColor: "gray" },
+                          ]}
+                        >
+                          <View
+                            style={[
+                              styles.colorBox,
+                              { backgroundColor: "green" },
+                            ]}
+                          ></View>
+                          <Text
+                            style={{
+                              fontFamily: "GlacialIndifference-Regular",
+                              fontSize: height / 55,
+                              textAlign: "center",
+                            }}
+                          >
+                            Green{`     `}
+                          </Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                          style={[
+                            styles.filterBtnColor,
+                            { borderColor: "gray" },
+                          ]}
+                        >
+                          <View
+                            style={[
+                              styles.colorBox,
+                              { backgroundColor: "blue" },
+                            ]}
+                          ></View>
+                          <Text
+                            style={{
+                              fontFamily: "GlacialIndifference-Regular",
+                              fontSize: height / 55,
+                              textAlign: "center",
+                            }}
+                          >
+                            Blue{`     `}
+                          </Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                          style={[
+                            styles.filterBtnColor,
+                            { borderColor: "gray" },
+                          ]}
+                        >
+                          <View
+                            style={[
+                              styles.colorBox,
+                              { backgroundColor: "purple" },
+                            ]}
+                          ></View>
+                          <Text
+                            style={{
+                              fontFamily: "GlacialIndifference-Regular",
+                              fontSize: height / 55,
+                              textAlign: "center",
+                            }}
+                          >
+                            Purple{`     `}
+                          </Text>
+                        </TouchableOpacity>
+                      </View>
 
-                  <View
-                    style={{
-                      paddingStart: height / 90,
-                      flexDirection: "row",
-                      alignItems: "center",
-                      marginTop: 2,
-                    }}
-                  >
-                    <TouchableOpacity
-                      style={[styles.filterBtnColor, { borderColor: "gray" }]}
-                    >
                       <View
-                        style={[styles.colorBox, { backgroundColor: "green" }]}
-                      ></View>
-                      <Text
                         style={{
-                          fontFamily: "GlacialIndifference-Regular",
-                          fontSize: height / 55,
-                          textAlign: "center",
+                          paddingStart: height / 90,
+                          flexDirection: "row",
+                          alignItems: "center",
+                          marginTop: 2,
                         }}
                       >
-                        Green{`     `}
-                      </Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                      style={[styles.filterBtnColor, { borderColor: "gray" }]}
-                    >
-                      <View
-                        style={[styles.colorBox, { backgroundColor: "blue" }]}
-                      ></View>
-                      <Text
-                        style={{
-                          fontFamily: "GlacialIndifference-Regular",
-                          fontSize: height / 55,
-                          textAlign: "center",
-                        }}
-                      >
-                        Blue{`     `}
-                      </Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                      style={[styles.filterBtnColor, { borderColor: "gray" }]}
-                    >
-                      <View
-                        style={[styles.colorBox, { backgroundColor: "purple" }]}
-                      ></View>
-                      <Text
-                        style={{
-                          fontFamily: "GlacialIndifference-Regular",
-                          fontSize: height / 55,
-                          textAlign: "center",
-                        }}
-                      >
-                        Purple{`     `}
-                      </Text>
-                    </TouchableOpacity>
-                  </View>
-
-                  <View
-                    style={{
-                      paddingStart: height / 90,
-                      flexDirection: "row",
-                      alignItems: "center",
-                      marginTop: 2,
-                    }}
-                  >
-                    <TouchableOpacity
-                      style={[styles.filterBtnColor, { borderColor: "gray" }]}
-                    >
-                      <View
-                        style={[styles.colorBox, { backgroundColor: "pink" }]}
-                      ></View>
-                      <Text
-                        style={{
-                          fontFamily: "GlacialIndifference-Regular",
-                          fontSize: height / 55,
-                          textAlign: "center",
-                        }}
-                      >
-                        Pink{`     `}
-                      </Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                      style={[styles.filterBtnColor, { borderColor: "gray" }]}
-                    >
-                      <View
-                        style={[styles.colorBox, { backgroundColor: "gold" }]}
-                      ></View>
-                      <Text
-                        style={{
-                          fontFamily: "GlacialIndifference-Regular",
-                          fontSize: height / 55,
-                          textAlign: "center",
-                        }}
-                      >
-                        Gold{`     `}
-                      </Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                      style={[styles.filterBtnColor, { borderColor: "gray" }]}
-                    >
-                      <View
-                        style={[styles.colorBox, { backgroundColor: "silver" }]}
-                      ></View>
-                      <Text
-                        style={{
-                          fontFamily: "GlacialIndifference-Regular",
-                          fontSize: height / 55,
-                          textAlign: "center",
-                        }}
-                      >
-                        Silver{`     `}
-                      </Text>
-                    </TouchableOpacity>
-                  </View>
+                        <TouchableOpacity
+                          style={[
+                            styles.filterBtnColor,
+                            { borderColor: "gray" },
+                          ]}
+                        >
+                          <View
+                            style={[
+                              styles.colorBox,
+                              { backgroundColor: "pink" },
+                            ]}
+                          ></View>
+                          <Text
+                            style={{
+                              fontFamily: "GlacialIndifference-Regular",
+                              fontSize: height / 55,
+                              textAlign: "center",
+                            }}
+                          >
+                            Pink{`     `}
+                          </Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                          style={[
+                            styles.filterBtnColor,
+                            { borderColor: "gray" },
+                          ]}
+                        >
+                          <View
+                            style={[
+                              styles.colorBox,
+                              { backgroundColor: "gold" },
+                            ]}
+                          ></View>
+                          <Text
+                            style={{
+                              fontFamily: "GlacialIndifference-Regular",
+                              fontSize: height / 55,
+                              textAlign: "center",
+                            }}
+                          >
+                            Gold{`     `}
+                          </Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                          style={[
+                            styles.filterBtnColor,
+                            { borderColor: "gray" },
+                          ]}
+                        >
+                          <View
+                            style={[
+                              styles.colorBox,
+                              { backgroundColor: "silver" },
+                            ]}
+                          ></View>
+                          <Text
+                            style={{
+                              fontFamily: "GlacialIndifference-Regular",
+                              fontSize: height / 55,
+                              textAlign: "center",
+                            }}
+                          >
+                            Silver{`     `}
+                          </Text>
+                        </TouchableOpacity>
+                      </View>
+                    </CollapseBody>
+                  </Collapse>
                 </View>
 
                 <View style={{ marginTop: height / 90 }}>
-                  <View
-                    style={{
-                      marginTop: 10,
-                      flexDirection: "row",
-                      alignItems: "center",
-                      justifyContent: "space-between",
-                    }}
-                  >
-                    <Text
-                      style={{
-                        fontFamily: "Mediums-Font",
-                        fontSize: height / 55,
-                        paddingStart: height / 90,
-                      }}
-                    >
-                      Price & Deals
-                    </Text>
-                    <MaterialCommunityIcons
-                      name="chevron-up"
-                      size={height / 40}
-                    />
-                  </View>
+                  <Collapse>
+                    <CollapseHeader>
+                      <View
+                        style={{
+                          marginTop: 5,
+                          flexDirection: "row",
+                          justifyContent: "space-between",
+                        }}
+                      >
+                        <Text
+                          style={{
+                            fontFamily: "Mediums-Font",
+                            fontSize: height / 55,
+                            paddingStart: height / 90,
+                          }}
+                        >
+                          Price & Deals
+                        </Text>
+                        <MaterialCommunityIcons
+                          name="chevron-down"
+                          size={height / 40}
+                        />
+                      </View>
+                    </CollapseHeader>
+                    <CollapseBody>
+                      <View
+                        style={{
+                          paddingStart: height / 90,
+                          flexDirection: "row",
+                          alignItems: "center",
+                        }}
+                      >
+                        <TouchableOpacity style={styles.filterBtnPrice}>
+                          <Text
+                            style={{
+                              fontFamily: "GlacialIndifference-Regular",
+                              fontSize: height / 55,
+                              textAlign: "center",
+                            }}
+                          >
+                            All prices
+                          </Text>
+                        </TouchableOpacity>
 
-                  <View
-                    style={{
-                      paddingStart: height / 90,
-                      flexDirection: "row",
-                      alignItems: "center",
-                    }}
-                  >
-                    <TouchableOpacity style={styles.filterBtnPrice}>
-                      <Text
-                        style={{
-                          fontFamily: "GlacialIndifference-Regular",
-                          fontSize: height / 55,
-                          textAlign: "center",
-                        }}
-                      >
-                        All prices
-                      </Text>
-                    </TouchableOpacity>
+                        <TouchableOpacity
+                          style={[
+                            styles.filterBtnPrice,
+                            { borderColor: "gray" },
+                          ]}
+                        >
+                          <Text
+                            style={{
+                              fontFamily: "GlacialIndifference-Regular",
+                              fontSize: height / 55,
+                              textAlign: "center",
+                            }}
+                          >
+                            Up to $10
+                          </Text>
+                        </TouchableOpacity>
 
-                    <TouchableOpacity
-                      style={[styles.filterBtnPrice, { borderColor: "gray" }]}
-                    >
-                      <Text
-                        style={{
-                          fontFamily: "GlacialIndifference-Regular",
-                          fontSize: height / 55,
-                          textAlign: "center",
-                        }}
-                      >
-                        Up to $10
-                      </Text>
-                    </TouchableOpacity>
+                        <TouchableOpacity
+                          style={[
+                            styles.filterBtnPrice,
+                            { borderColor: "gray" },
+                          ]}
+                        >
+                          <Text
+                            style={{
+                              fontFamily: "GlacialIndifference-Regular",
+                              fontSize: height / 55,
+                              textAlign: "center",
+                            }}
+                          >
+                            $10 to $25
+                          </Text>
+                        </TouchableOpacity>
+                      </View>
 
-                    <TouchableOpacity
-                      style={[styles.filterBtnPrice, { borderColor: "gray" }]}
-                    >
-                      <Text
+                      <View
                         style={{
-                          fontFamily: "GlacialIndifference-Regular",
-                          fontSize: height / 55,
-                          textAlign: "center",
+                          paddingStart: height / 90,
+                          flexDirection: "row",
+                          alignItems: "center",
+                          marginTop: 3,
                         }}
                       >
-                        $10 to $25
-                      </Text>
-                    </TouchableOpacity>
-                  </View>
+                        <TouchableOpacity
+                          style={[
+                            styles.filterBtnPrice,
+                            { borderColor: "gray" },
+                          ]}
+                        >
+                          <Text
+                            style={{
+                              fontFamily: "GlacialIndifference-Regular",
+                              fontSize: height / 55,
+                              textAlign: "center",
+                            }}
+                          >
+                            $25 to $50
+                          </Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                          style={[
+                            styles.filterBtnPrice,
+                            { borderColor: "gray" },
+                          ]}
+                        >
+                          <Text
+                            style={{
+                              fontFamily: "GlacialIndifference-Regular",
+                              fontSize: height / 55,
+                              textAlign: "center",
+                            }}
+                          >
+                            $50 to $100
+                          </Text>
+                        </TouchableOpacity>
 
-                  <View
-                    style={{
-                      paddingStart: height / 90,
-                      flexDirection: "row",
-                      alignItems: "center",
-                      marginTop: 3,
-                    }}
-                  >
-                    <TouchableOpacity
-                      style={[styles.filterBtnPrice, { borderColor: "gray" }]}
-                    >
-                      <Text
-                        style={{
-                          fontFamily: "GlacialIndifference-Regular",
-                          fontSize: height / 55,
-                          textAlign: "center",
-                        }}
-                      >
-                        $25 to $50
-                      </Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                      style={[styles.filterBtnPrice, { borderColor: "gray" }]}
-                    >
-                      <Text
-                        style={{
-                          fontFamily: "GlacialIndifference-Regular",
-                          fontSize: height / 55,
-                          textAlign: "center",
-                        }}
-                      >
-                        $50 to $100
-                      </Text>
-                    </TouchableOpacity>
-
-                    <TouchableOpacity
-                      style={[
-                        styles.filterBtnPrice,
-                        { borderColor: "gray", width: height / 8 },
-                      ]}
-                    >
-                      <Text
-                        style={{
-                          fontFamily: "GlacialIndifference-Regular",
-                          fontSize: height / 55,
-                          textAlign: "center",
-                        }}
-                      >
-                        $100 & above
-                      </Text>
-                    </TouchableOpacity>
-                  </View>
+                        <TouchableOpacity
+                          style={[
+                            styles.filterBtnPrice,
+                            { borderColor: "gray", width: height / 8 },
+                          ]}
+                        >
+                          <Text
+                            style={{
+                              fontFamily: "GlacialIndifference-Regular",
+                              fontSize: height / 55,
+                              textAlign: "center",
+                            }}
+                          >
+                            $100 & above
+                          </Text>
+                        </TouchableOpacity>
+                      </View>
+                    </CollapseBody>
+                  </Collapse>
                 </View>
 
                 <View style={{ marginTop: height / 90 }}>
-                  <View
-                    style={{
-                      marginTop: 10,
-                      flexDirection: "row",
-                      alignItems: "center",
-                      justifyContent: "space-between",
-                    }}
-                  >
-                    <Text
-                      style={{
-                        fontFamily: "Mediums-Font",
-                        fontSize: height / 55,
-                        paddingStart: height / 90,
-                      }}
-                    >
-                      Customer Reviews
-                    </Text>
-                    <MaterialCommunityIcons
-                      name="chevron-up"
-                      size={height / 40}
-                    />
-                  </View>
-
-                  <View
-                    style={{
-                      paddingStart: height / 90,
-                      flexDirection: "row",
-                      alignItems: "center",
-                    }}
-                  >
-                    <TouchableOpacity style={styles.filterBtnRating}>
-                      <MaterialCommunityIcons
-                        name="star"
-                        size={height / 55}
-                        color="gold"
-                      />
-                      <MaterialCommunityIcons
-                        name="star"
-                        size={height / 55}
-                        color="gold"
-                      />
-                      <MaterialCommunityIcons
-                        name="star"
-                        size={height / 55}
-                        color="gold"
-                      />
-                      <MaterialCommunityIcons
-                        name="star"
-                        size={height / 55}
-                        color="gold"
-                      />
-                      <Text
+                  <Collapse>
+                    <CollapseHeader>
+                      <View
                         style={{
-                          fontFamily: "GlacialIndifference-Regular",
-                          fontSize: height / 55,
-                          textAlign: "center",
+                          marginTop: 5,
+                          flexDirection: "row",
+                          justifyContent: "space-between",
                         }}
                       >
-                        {` `} & up
-                      </Text>
-                    </TouchableOpacity>
-
-                    <TouchableOpacity
-                      style={[styles.filterBtnRating, { borderColor: "gray" }]}
-                    >
-                      <MaterialCommunityIcons
-                        name="star"
-                        size={height / 55}
-                        color="gold"
-                      />
-                      <MaterialCommunityIcons
-                        name="star"
-                        size={height / 55}
-                        color="gold"
-                      />
-                      <MaterialCommunityIcons
-                        name="star"
-                        size={height / 55}
-                        color="gold"
-                      />
-                      <Text
+                        <Text
+                          style={{
+                            fontFamily: "Mediums-Font",
+                            fontSize: height / 55,
+                            paddingStart: height / 90,
+                          }}
+                        >
+                          Customer Reviews
+                        </Text>
+                        <MaterialCommunityIcons
+                          name="chevron-down"
+                          size={height / 40}
+                        />
+                      </View>
+                    </CollapseHeader>
+                    <CollapseBody>
+                      <View
                         style={{
-                          fontFamily: "GlacialIndifference-Regular",
-                          fontSize: height / 55,
-                          textAlign: "center",
+                          paddingStart: height / 90,
+                          flexDirection: "row",
+                          alignItems: "center",
                         }}
                       >
-                        {` `} & up
-                      </Text>
-                    </TouchableOpacity>
+                        <TouchableOpacity style={styles.filterBtnRating}>
+                          <MaterialCommunityIcons
+                            name="star"
+                            size={height / 55}
+                            color="gold"
+                          />
+                          <MaterialCommunityIcons
+                            name="star"
+                            size={height / 55}
+                            color="gold"
+                          />
+                          <MaterialCommunityIcons
+                            name="star"
+                            size={height / 55}
+                            color="gold"
+                          />
+                          <MaterialCommunityIcons
+                            name="star"
+                            size={height / 55}
+                            color="gold"
+                          />
+                          <Text
+                            style={{
+                              fontFamily: "GlacialIndifference-Regular",
+                              fontSize: height / 55,
+                              textAlign: "center",
+                            }}
+                          >
+                            {` `} & up
+                          </Text>
+                        </TouchableOpacity>
 
-                    <TouchableOpacity
-                      style={[styles.filterBtnRating, { borderColor: "gray" }]}
-                    >
-                      <MaterialCommunityIcons
-                        name="star"
-                        size={height / 55}
-                        color="gold"
-                      />
-                      <MaterialCommunityIcons
-                        name="star"
-                        size={height / 55}
-                        color="gold"
-                      />
+                        <TouchableOpacity
+                          style={[
+                            styles.filterBtnRating,
+                            { borderColor: "gray" },
+                          ]}
+                        >
+                          <MaterialCommunityIcons
+                            name="star"
+                            size={height / 55}
+                            color="gold"
+                          />
+                          <MaterialCommunityIcons
+                            name="star"
+                            size={height / 55}
+                            color="gold"
+                          />
+                          <MaterialCommunityIcons
+                            name="star"
+                            size={height / 55}
+                            color="gold"
+                          />
+                          <Text
+                            style={{
+                              fontFamily: "GlacialIndifference-Regular",
+                              fontSize: height / 55,
+                              textAlign: "center",
+                            }}
+                          >
+                            {` `} & up
+                          </Text>
+                        </TouchableOpacity>
 
-                      <Text
+                        <TouchableOpacity
+                          style={[
+                            styles.filterBtnRating,
+                            { borderColor: "gray" },
+                          ]}
+                        >
+                          <MaterialCommunityIcons
+                            name="star"
+                            size={height / 55}
+                            color="gold"
+                          />
+                          <MaterialCommunityIcons
+                            name="star"
+                            size={height / 55}
+                            color="gold"
+                          />
+
+                          <Text
+                            style={{
+                              fontFamily: "GlacialIndifference-Regular",
+                              fontSize: height / 55,
+                              textAlign: "center",
+                            }}
+                          >
+                            {` `} & up
+                          </Text>
+                        </TouchableOpacity>
+                      </View>
+
+                      <View
                         style={{
-                          fontFamily: "GlacialIndifference-Regular",
-                          fontSize: height / 55,
-                          textAlign: "center",
+                          paddingStart: height / 90,
+                          flexDirection: "row",
+                          alignItems: "center",
+                          marginTop: 3,
                         }}
                       >
-                        {` `} & up
-                      </Text>
-                    </TouchableOpacity>
-                  </View>
+                        <TouchableOpacity
+                          style={[
+                            styles.filterBtnRating,
+                            { borderColor: "gray" },
+                          ]}
+                        >
+                          <MaterialCommunityIcons
+                            name="star"
+                            size={height / 55}
+                            color="gold"
+                          />
 
-                  <View
-                    style={{
-                      paddingStart: height / 90,
-                      flexDirection: "row",
-                      alignItems: "center",
-                      marginTop: 3,
-                    }}
-                  >
-                    <TouchableOpacity
-                      style={[styles.filterBtnRating, { borderColor: "gray" }]}
-                    >
-                      <MaterialCommunityIcons
-                        name="star"
-                        size={height / 55}
-                        color="gold"
-                      />
-
-                      <Text
-                        style={{
-                          fontFamily: "GlacialIndifference-Regular",
-                          fontSize: height / 55,
-                          textAlign: "center",
-                        }}
-                      >
-                        {` `} & up
-                      </Text>
-                    </TouchableOpacity>
-                  </View>
+                          <Text
+                            style={{
+                              fontFamily: "GlacialIndifference-Regular",
+                              fontSize: height / 55,
+                              textAlign: "center",
+                            }}
+                          >
+                            {` `} & up
+                          </Text>
+                        </TouchableOpacity>
+                      </View>
+                    </CollapseBody>
+                  </Collapse>
                 </View>
 
                 <View style={{ marginTop: height / 90 }}>
-                  <View
-                    style={{
-                      marginTop: 10,
-                      flexDirection: "row",
-                      alignItems: "center",
-                      justifyContent: "space-between",
-                    }}
-                  >
-                    <Text
-                      style={{
-                        fontFamily: "Mediums-Font",
-                        fontSize: height / 55,
-                        paddingStart: height / 90,
-                      }}
-                    >
-                      Sort By
-                    </Text>
-                    <MaterialCommunityIcons
-                      name="chevron-up"
-                      size={height / 40}
-                    />
-                  </View>
+                  <Collapse>
+                    <CollapseHeader>
+                      <View
+                        style={{
+                          marginTop: 5,
+                          flexDirection: "row",
+                          alignItems: "center",
+                          justifyContent: "space-between",
+                        }}
+                      >
+                        <Text
+                          style={{
+                            fontFamily: "Mediums-Font",
+                            fontSize: height / 55,
+                            paddingStart: height / 90,
+                          }}
+                        >
+                          Sort By
+                        </Text>
+                        <MaterialCommunityIcons
+                          name="chevron-down"
+                          size={height / 40}
+                        />
+                      </View>
+                    </CollapseHeader>
+                    <CollapseBody>
+                      <View
+                        style={{
+                          paddingStart: height / 90,
+                          flexDirection: "row",
+                          alignItems: "center",
+                        }}
+                      >
+                        <TouchableOpacity style={styles.filterBtnPrice}>
+                          <Text
+                            style={{
+                              fontFamily: "GlacialIndifference-Regular",
+                              fontSize: height / 55,
+                              textAlign: "center",
+                            }}
+                          >
+                            Featured
+                          </Text>
+                        </TouchableOpacity>
 
-                  <View
-                    style={{
-                      paddingStart: height / 90,
-                      flexDirection: "row",
-                      alignItems: "center",
-                    }}
-                  >
-                    <TouchableOpacity style={styles.filterBtnPrice}>
-                      <Text
-                        style={{
-                          fontFamily: "GlacialIndifference-Regular",
-                          fontSize: height / 55,
-                          textAlign: "center",
-                        }}
-                      >
-                        Featured
-                      </Text>
-                    </TouchableOpacity>
+                        <TouchableOpacity
+                          style={[
+                            styles.filterBtnRating,
+                            { borderColor: "gray" },
+                          ]}
+                        >
+                          <Text
+                            style={{
+                              fontFamily: "GlacialIndifference-Regular",
+                              fontSize: height / 55,
+                              textAlign: "center",
+                            }}
+                          >
+                            Price:Low to High
+                          </Text>
+                        </TouchableOpacity>
 
-                    <TouchableOpacity
-                      style={[styles.filterBtnRating, { borderColor: "gray" }]}
-                    >
-                      <Text
-                        style={{
-                          fontFamily: "GlacialIndifference-Regular",
-                          fontSize: height / 55,
-                          textAlign: "center",
-                        }}
-                      >
-                        Price:Low to High
-                      </Text>
-                    </TouchableOpacity>
+                        <TouchableOpacity
+                          style={[
+                            styles.filterBtnRating,
+                            { borderColor: "gray" },
+                          ]}
+                        >
+                          <Text
+                            style={{
+                              fontFamily: "GlacialIndifference-Regular",
+                              fontSize: height / 55,
+                              textAlign: "center",
+                            }}
+                          >
+                            Price:High to Low
+                          </Text>
+                        </TouchableOpacity>
+                      </View>
 
-                    <TouchableOpacity
-                      style={[styles.filterBtnRating, { borderColor: "gray" }]}
-                    >
-                      <Text
+                      <View
                         style={{
-                          fontFamily: "GlacialIndifference-Regular",
-                          fontSize: height / 55,
-                          textAlign: "center",
+                          paddingStart: height / 90,
+                          flexDirection: "row",
+                          alignItems: "center",
+                          marginTop: 3,
                         }}
                       >
-                        Price:High to Low
-                      </Text>
-                    </TouchableOpacity>
-                  </View>
-
-                  <View
-                    style={{
-                      paddingStart: height / 90,
-                      flexDirection: "row",
-                      alignItems: "center",
-                      marginTop: 3,
-                    }}
-                  >
-                    <TouchableOpacity
-                      style={[styles.filterBtnRating, { borderColor: "gray" }]}
-                    >
-                      <Text
+                        <TouchableOpacity
+                          style={[
+                            styles.filterBtnRating,
+                            { borderColor: "gray" },
+                          ]}
+                        >
+                          <Text
+                            style={{
+                              fontFamily: "GlacialIndifference-Regular",
+                              fontSize: height / 55,
+                              textAlign: "center",
+                            }}
+                          >
+                            Avg. Customer Review
+                          </Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                          style={[
+                            styles.filterBtnRating,
+                            { borderColor: "gray" },
+                          ]}
+                        >
+                          <Text
+                            style={{
+                              fontFamily: "GlacialIndifference-Regular",
+                              fontSize: height / 55,
+                              textAlign: "center",
+                            }}
+                          >
+                            Newest Arrivals
+                          </Text>
+                        </TouchableOpacity>
+                      </View>
+                      <View
                         style={{
-                          fontFamily: "GlacialIndifference-Regular",
-                          fontSize: height / 55,
-                          textAlign: "center",
+                          paddingStart: height / 90,
+                          flexDirection: "row",
+                          alignItems: "center",
+                          marginTop: 3,
                         }}
                       >
-                        Avg. Customer Review
-                      </Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                      style={[styles.filterBtnRating, { borderColor: "gray" }]}
-                    >
-                      <Text
-                        style={{
-                          fontFamily: "GlacialIndifference-Regular",
-                          fontSize: height / 55,
-                          textAlign: "center",
-                        }}
-                      >
-                        Newest Arrivals
-                      </Text>
-                    </TouchableOpacity>
-                  </View>
-                  <View
-                    style={{
-                      paddingStart: height / 90,
-                      flexDirection: "row",
-                      alignItems: "center",
-                      marginTop: 3,
-                    }}
-                  >
-                    <TouchableOpacity
-                      style={[
-                        styles.filterBtnPrice,
-                        { borderColor: "gray", width: height / 8 },
-                      ]}
-                    >
-                      <Text
-                        style={{
-                          fontFamily: "GlacialIndifference-Regular",
-                          fontSize: height / 55,
-                          textAlign: "center",
-                        }}
-                      >
-                        Best Seller
-                      </Text>
-                    </TouchableOpacity>
-                  </View>
+                        <TouchableOpacity
+                          style={[
+                            styles.filterBtnPrice,
+                            { borderColor: "gray", width: height / 8 },
+                          ]}
+                        >
+                          <Text
+                            style={{
+                              fontFamily: "GlacialIndifference-Regular",
+                              fontSize: height / 55,
+                              textAlign: "center",
+                            }}
+                          >
+                            Best Seller
+                          </Text>
+                        </TouchableOpacity>
+                      </View>
+                    </CollapseBody>
+                  </Collapse>
                 </View>
               </View>
             </ScrollView>
