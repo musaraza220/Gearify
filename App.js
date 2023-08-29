@@ -35,6 +35,7 @@ import {
 } from "react-native-paper";
 import Filters from "./UI/Filter";
 import Search from "./UI/Search";
+import ProductDetails from "./UI/ProductDetails";
 
 // const Tab = createMaterialBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -183,11 +184,16 @@ export default function App() {
     <PaperProvider theme={scheme === "dark" ? MD3DarkTheme : MD3LightTheme}>
       <NavigationContainer independent={true}>
         <Stack.Navigator>
-          {/* <Stack.Screen
+          <Stack.Screen
+            name="ProductDetails"
+            component={ProductDetails}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
             name="Search"
             component={Search}
             options={{ headerShown: false }}
-          /> */}
+          />
           {/* <Stack.Screen
             name="Filters"
             component={Filters}
