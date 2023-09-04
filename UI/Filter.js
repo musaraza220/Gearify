@@ -1479,6 +1479,7 @@ const useStyle = () => {
       backgroundColor: "black",
       height: height / 50,
       width: width / 25,
+      borderWidth: 0.7,
     },
   });
   return { styles };

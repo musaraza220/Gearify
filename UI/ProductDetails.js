@@ -40,6 +40,8 @@ import LinearGradient from "react-native-linear-gradient";
 import StarRating from "react-native-star-rating-widget";
 
 import axios from "axios";
+import { Overlay } from "react-native-elements";
+
 import * as Font from "expo-font";
 import { loginAPI, PersonalAccountAPI } from "./APIs";
 WebBrowser.maybeCompleteAuthSession();
@@ -55,12 +57,15 @@ export default function ProductDetails(props) {
   const [gLoading, setGLoading] = React.useState(false);
   const [gridView, setGridView] = React.useState(true);
   const [listView, setListView] = React.useState(false);
-  const [aLoading, setALoading] = React.useState(false);
-  const [fLoading, setFLoading] = React.useState(false);
+  const [feedback, setFeedback] = React.useState(false);
+  const [report, setReport] = React.useState(false);
+  const [reviewSwitch, setReviewSwitch] = React.useState(false);
+  const [reportSwitch, setReportSwitch] = React.useState(false);
   const [authLoading, setAuthLoading] = React.useState(false);
   const [disable, setDisable] = React.useState(false);
   const [secureEntry, setSecureEntry] = React.useState(true);
   const [rightIcon, setRightIcon] = React.useState("eye");
+
   const [rating, setRating] = useState(3.5);
   const [user, setUser] = useState({});
   const { styles } = useStyle();
@@ -133,6 +138,7 @@ export default function ProductDetails(props) {
                 </View>
               </ImageBackground>
             </View>
+
             {/* //////// TOP BUTTONS //////// */}
 
             <ScrollView showsVerticalScrollIndicator={false}>
@@ -200,7 +206,7 @@ export default function ProductDetails(props) {
 
                 <Text
                   style={{
-                    fontFamily: "GlacialIndifference-Regular",
+                    fontFamily: "Mediums-Font",
                     fontSize: height / 75,
                     marginTop: 4,
                   }}
@@ -208,7 +214,7 @@ export default function ProductDetails(props) {
                   Brand Name
                 </Text>
 
-                <View style={{ marginTop: height / 58 }}>
+                <View style={{ marginTop: height / 200 }}>
                   <LinearGradient
                     colors={["#ffffff", "lightgray"]}
                     style={styles.bestSellerBackList}
@@ -220,7 +226,7 @@ export default function ProductDetails(props) {
                         paddingHorizontal: 5,
                       }}
                     >
-                      <Ionicons name="share-outline" size={height / 50} />
+                      <View></View>
                       <View>
                         <Text
                           style={{
@@ -262,21 +268,34 @@ export default function ProductDetails(props) {
                         />
                       </View>
                     </View>
-
-                    <TouchableOpacity
+                    <View
                       style={{
                         alignSelf: "flex-end",
-                        marginTop: height / 35,
-                        opacity: 0.6,
-                        marginBottom: 5,
+                        paddingHorizontal: 5,
                       }}
                     >
-                      <EvilIcons
-                        name="heart"
-                        color={colors.MAIN}
-                        size={height / 31}
-                      />
-                    </TouchableOpacity>
+                      <View
+                        style={{
+                          marginTop: -20,
+                          marginBottom: 20,
+                          marginStart: 3,
+                        }}
+                      >
+                        <Ionicons name="share-outline" size={height / 50} />
+                      </View>
+                      <TouchableOpacity
+                        style={{
+                          opacity: 0.6,
+                          marginBottom: 10,
+                        }}
+                      >
+                        <EvilIcons
+                          name="heart"
+                          color={colors.MAIN}
+                          size={height / 40}
+                        />
+                      </TouchableOpacity>
+                    </View>
                   </LinearGradient>
                 </View>
 
@@ -298,54 +317,105 @@ export default function ProductDetails(props) {
                       marginTop: 5,
                     }}
                   >
-                    <LinearGradient
-                      colors={["#ffffff", "lightgray"]}
-                      style={styles.catCircle}
-                    >
-                      <Image
-                        source={require("../assets/product.png")}
+                    <View>
+                      <LinearGradient
+                        colors={["#ffffff", "lightgray"]}
+                        style={[
+                          styles.catCircle,
+                          { borderColor: colors.MAIN, borderWidth: 0.7 },
+                        ]}
+                      >
+                        <Image
+                          source={require("../assets/product.png")}
+                          style={{
+                            height: 60,
+                            resizeMode: "contain",
+                          }}
+                        />
+                      </LinearGradient>
+                      <Text
                         style={{
-                          height: 60,
-                          resizeMode: "contain",
+                          fontFamily: "GlacialIndifference-Regular",
+                          fontSize: height / 75,
+                          marginTop: 4,
+                          textAlign: "center",
                         }}
-                      />
-                    </LinearGradient>
-                    <LinearGradient
-                      colors={["#ffffff", "lightgray"]}
-                      style={styles.catCircle}
-                    >
-                      <Image
-                        source={require("../assets/product.png")}
+                      >
+                        Black
+                      </Text>
+                    </View>
+                    <View>
+                      <LinearGradient
+                        colors={["#ffffff", "lightgray"]}
+                        style={styles.catCircle}
+                      >
+                        <Image
+                          source={require("../assets/product.png")}
+                          style={{
+                            height: 60,
+                            resizeMode: "contain",
+                          }}
+                        />
+                      </LinearGradient>
+                      <Text
                         style={{
-                          height: 60,
-                          resizeMode: "contain",
+                          fontFamily: "GlacialIndifference-Regular",
+                          fontSize: height / 75,
+                          marginTop: 4,
+                          textAlign: "center",
                         }}
-                      />
-                    </LinearGradient>
-                    <LinearGradient
-                      colors={["#ffffff", "lightgray"]}
-                      style={styles.catCircle}
-                    >
-                      <Image
-                        source={require("../assets/product.png")}
+                      >
+                        White
+                      </Text>
+                    </View>
+                    <View>
+                      <LinearGradient
+                        colors={["#ffffff", "lightgray"]}
+                        style={styles.catCircle}
+                      >
+                        <Image
+                          source={require("../assets/product.png")}
+                          style={{
+                            height: 60,
+                            resizeMode: "contain",
+                          }}
+                        />
+                      </LinearGradient>
+                      <Text
                         style={{
-                          height: 60,
-                          resizeMode: "contain",
+                          fontFamily: "GlacialIndifference-Regular",
+                          fontSize: height / 75,
+                          marginTop: 4,
+                          textAlign: "center",
                         }}
-                      />
-                    </LinearGradient>
-                    <LinearGradient
-                      colors={["#ffffff", "lightgray"]}
-                      style={styles.catCircle}
-                    >
-                      <Image
-                        source={require("../assets/product.png")}
+                      >
+                        Grey
+                      </Text>
+                    </View>
+                    <View>
+                      <LinearGradient
+                        colors={["#ffffff", "lightgray"]}
+                        style={styles.catCircle}
+                      >
+                        <Image
+                          source={require("../assets/product.png")}
+                          style={{
+                            height: 60,
+                            resizeMode: "contain",
+                          }}
+                        />
+                      </LinearGradient>
+                      <Text
                         style={{
-                          height: 60,
-                          resizeMode: "contain",
+                          fontFamily: "GlacialIndifference-Regular",
+                          fontSize: height / 75,
+                          marginTop: 4,
+                          textAlign: "center",
                         }}
-                      />
-                    </LinearGradient>
+                      >
+                        Blue
+                      </Text>
+                    </View>
                   </View>
                 </View>
 
@@ -420,6 +490,148 @@ export default function ProductDetails(props) {
                   </View>
                 </View>
 
+                <View>
+                  <Text
+                    style={{
+                      fontFamily: "Mediums-Font",
+                      fontSize: height / 75,
+                      marginTop: 7,
+                    }}
+                  >
+                    Material:
+                  </Text>
+                  <View
+                    style={{
+                      flexDirection: "row",
+                      justifyContent: "space-between",
+                      alignItems: "center",
+                      marginTop: 5,
+                    }}
+                  >
+                    <TouchableOpacity style={styles.filterBtnPrice}>
+                      <Text
+                        style={{
+                          fontFamily: "GlacialIndifference-Regular",
+                          fontSize: height / 75,
+                          textAlign: "center",
+                        }}
+                      >
+                        A
+                      </Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      style={[styles.filterBtnPrice, { borderColor: "gray" }]}
+                    >
+                      <Text
+                        style={{
+                          fontFamily: "GlacialIndifference-Regular",
+                          fontSize: height / 75,
+                          textAlign: "center",
+                        }}
+                      >
+                        B
+                      </Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      style={[styles.filterBtnPrice, { borderColor: "gray" }]}
+                    >
+                      <Text
+                        style={{
+                          fontFamily: "GlacialIndifference-Regular",
+                          fontSize: height / 75,
+                          textAlign: "center",
+                        }}
+                      >
+                        C
+                      </Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      style={[styles.filterBtnPrice, { borderColor: "gray" }]}
+                    >
+                      <Text
+                        style={{
+                          fontFamily: "GlacialIndifference-Regular",
+                          fontSize: height / 75,
+                          textAlign: "center",
+                        }}
+                      >
+                        D
+                      </Text>
+                    </TouchableOpacity>
+                  </View>
+                </View>
+
+                {/* <View>
+                  <Text
+                    style={{
+                      fontFamily: "Mediums-Font",
+                      fontSize: height / 75,
+                      marginTop: 7,
+                    }}
+                  >
+                    Weight:
+                  </Text>
+                  <View
+                    style={{
+                      flexDirection: "row",
+                      justifyContent: "space-between",
+                      alignItems: "center",
+                      marginTop: 5,
+                    }}
+                  >
+                    <TouchableOpacity style={styles.filterBtnPrice}>
+                      <Text
+                        style={{
+                          fontFamily: "GlacialIndifference-Regular",
+                          fontSize: height / 75,
+                          textAlign: "center",
+                        }}
+                      >
+                        lbs
+                      </Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      style={[styles.filterBtnPrice, { borderColor: "gray" }]}
+                    >
+                      <Text
+                        style={{
+                          fontFamily: "GlacialIndifference-Regular",
+                          fontSize: height / 75,
+                          textAlign: "center",
+                        }}
+                      >
+                        lbs
+                      </Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      style={[styles.filterBtnPrice, { borderColor: "gray" }]}
+                    >
+                      <Text
+                        style={{
+                          fontFamily: "GlacialIndifference-Regular",
+                          fontSize: height / 75,
+                          textAlign: "center",
+                        }}
+                      >
+                        lbs
+                      </Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      style={[styles.filterBtnPrice, { borderColor: "gray" }]}
+                    >
+                      <Text
+                        style={{
+                          fontFamily: "GlacialIndifference-Regular",
+                          fontSize: height / 75,
+                          textAlign: "center",
+                        }}
+                      >
+                        lbs
+                      </Text>
+                    </TouchableOpacity>
+                  </View>
+                </View> */}
+
                 <View
                   style={{
                     flexDirection: "row",
@@ -447,8 +659,19 @@ export default function ProductDetails(props) {
                       Quantity:{`  `}
                     </Text>
                     <View
-                      style={[styles.filterBtnPrice, { borderColor: "gray" }]}
+                      style={[
+                        styles.filterBtnPrice,
+                        {
+                          borderColor: "gray",
+                          flexDirection: "row",
+                          justifyContent: "space-between",
+                        },
+                      ]}
                     >
+                      <MaterialCommunityIcons
+                        name="chevron-down"
+                        size={height / 50}
+                      />
                       <Text
                         style={{
                           fontFamily: "GlacialIndifference-Regular",
@@ -458,6 +681,10 @@ export default function ProductDetails(props) {
                       >
                         10
                       </Text>
+                      <MaterialCommunityIcons
+                        name="chevron-up"
+                        size={height / 50}
+                      />
                     </View>
                   </View>
                 </View>
@@ -465,7 +692,7 @@ export default function ProductDetails(props) {
                   style={{
                     flexDirection: "row",
                     alignItems: "center",
-                    marginTop: height / 113,
+                    marginTop: height / 220,
                     justifyContent: "space-between",
                   }}
                 >
@@ -541,7 +768,6 @@ export default function ProductDetails(props) {
                 <View
                   style={{
                     marginTop: 15,
-                    paddingHorizontal: 4,
                     flexDirection: "row",
                     justifyContent: "space-between",
                   }}
@@ -578,7 +804,6 @@ export default function ProductDetails(props) {
                   <View
                     style={{
                       marginTop: 10,
-                      paddingHorizontal: 4,
                       flexDirection: "row",
                       justifyContent: "space-between",
                     }}
@@ -640,7 +865,7 @@ export default function ProductDetails(props) {
                     style={{
                       fontFamily: "Mediums-Font",
                       fontSize: height / 75,
-                      marginTop: 15,
+                      marginTop: 10,
                     }}
                   >
                     You might also like
@@ -649,7 +874,6 @@ export default function ProductDetails(props) {
                   <View
                     style={{
                       marginTop: 10,
-                      paddingHorizontal: 4,
                       flexDirection: "row",
                       justifyContent: "space-between",
                     }}
@@ -687,7 +911,6 @@ export default function ProductDetails(props) {
 
                   <View
                     style={{
-                      paddingHorizontal: 4,
                       flexDirection: "row",
                       justifyContent: "space-between",
                       alignItems: "center",
@@ -724,6 +947,108 @@ export default function ProductDetails(props) {
                   </View>
                 </View>
 
+                <View style={{ marginTop: 10 }}>
+                  <Text
+                    style={{
+                      fontFamily: "GlacialIndifference-Regular",
+                      fontSize: height / 75,
+                    }}
+                  >
+                    Q: Lorem Ipsum is simply dummy text of the printing and
+                    typesetting industry.
+                  </Text>
+                  <Text
+                    style={{
+                      fontFamily: "GlacialIndifference-Regular",
+                      fontSize: height / 75,
+                    }}
+                  >
+                    A: Lorem Ipsum is simply dummy text of the printing and
+                    typesetting industry.
+                  </Text>
+                </View>
+
+                <View style={{ marginTop: 10 }}>
+                  <Text
+                    style={{
+                      fontFamily: "GlacialIndifference-Regular",
+                      fontSize: height / 75,
+                    }}
+                  >
+                    Q: Lorem Ipsum is simply dummy text of the printing and
+                    typesetting industry.
+                  </Text>
+                  <Text
+                    style={{
+                      fontFamily: "GlacialIndifference-Regular",
+                      fontSize: height / 75,
+                    }}
+                  >
+                    A: Lorem Ipsum is simply dummy text of the printing and
+                    typesetting industry.
+                  </Text>
+                </View>
+
+                <View style={{ marginTop: 10 }}>
+                  <Text
+                    style={{
+                      fontFamily: "GlacialIndifference-Regular",
+                      fontSize: height / 75,
+                    }}
+                  >
+                    Q: Lorem Ipsum is simply dummy text of the printing and
+                    typesetting industry.
+                  </Text>
+                  <Text
+                    style={{
+                      fontFamily: "GlacialIndifference-Regular",
+                      fontSize: height / 75,
+                    }}
+                  >
+                    A: Lorem Ipsum is simply dummy text of the printing and
+                    typesetting industry.
+                  </Text>
+                </View>
+                <View style={{ marginTop: 10 }}>
+                  <Text
+                    style={{
+                      fontFamily: "GlacialIndifference-Regular",
+                      fontSize: height / 75,
+                    }}
+                  >
+                    Q: Lorem Ipsum is simply dummy text of the printing and
+                    typesetting industry.
+                  </Text>
+                  <Text
+                    style={{
+                      fontFamily: "GlacialIndifference-Regular",
+                      fontSize: height / 75,
+                    }}
+                  >
+                    A: Lorem Ipsum is simply dummy text of the printing and
+                    typesetting industry.
+                  </Text>
+                </View>
+                <View style={{ marginTop: 10 }}>
+                  <Text
+                    style={{
+                      fontFamily: "GlacialIndifference-Regular",
+                      fontSize: height / 75,
+                    }}
+                  >
+                    Q: Lorem Ipsum is simply dummy text of the printing and
+                    typesetting industry.
+                  </Text>
+                  <Text
+                    style={{
+                      fontFamily: "GlacialIndifference-Regular",
+                      fontSize: height / 75,
+                    }}
+                  >
+                    A: Lorem Ipsum is simply dummy text of the printing and
+                    typesetting industry.
+                  </Text>
+                </View>
                 <View>
                   <Collapse>
                     <CollapseHeader>
@@ -766,20 +1091,12 @@ export default function ProductDetails(props) {
                             marginTop: 5,
                           }}
                         >
-                          <Text
-                            style={{
-                              fontSize: height / 77,
-                              fontFamily: "GlacialIndifference-Regular",
-                            }}
-                          >
-                            {rating}
-                          </Text>
                           <StarRating
                             rating={rating}
                             onChange={setRating}
                             starSize={height / 60}
                             color={colors.MAIN}
-                            style={{ marginStart: height / 80 }}
+                            style={{ marginStart: height / 150 }}
                             maxStars={5}
                             starStyle={{
                               padding: 0,
@@ -787,6 +1104,14 @@ export default function ProductDetails(props) {
                               marginStart: -height / 170,
                             }}
                           />
+                          <Text
+                            style={{
+                              fontSize: height / 77,
+                              fontFamily: "GlacialIndifference-Regular",
+                            }}
+                          >
+                            {rating} out of 5
+                          </Text>
                         </View>
                       </View>
 
@@ -827,7 +1152,10 @@ export default function ProductDetails(props) {
                     /> */}
                       </View>
 
-                      <View
+                      <TouchableOpacity
+                        onPress={() =>
+                          props.navigation.navigate("WriteReviews")
+                        }
                         style={[
                           styles.txtView1,
                           {
@@ -862,14 +1190,14 @@ export default function ProductDetails(props) {
                       onChangeText={(value) => [setSearchQry(value)]}
                       error={error}
                     /> */}
-                      </View>
+                      </TouchableOpacity>
 
                       <View
                         style={{
                           marginTop: 10,
                         }}
                       >
-                        <View
+                        <TouchableOpacity
                           style={{
                             flexDirection: "row",
                             alignItems: "center",
@@ -908,8 +1236,8 @@ export default function ProductDetails(props) {
                           >
                             60%
                           </Text>
-                        </View>
-                        <View
+                        </TouchableOpacity>
+                        <TouchableOpacity
                           style={{
                             flexDirection: "row",
                             alignItems: "center",
@@ -948,9 +1276,9 @@ export default function ProductDetails(props) {
                           >
                             16%
                           </Text>
-                        </View>
+                        </TouchableOpacity>
 
-                        <View
+                        <TouchableOpacity
                           style={{
                             flexDirection: "row",
                             alignItems: "center",
@@ -989,9 +1317,9 @@ export default function ProductDetails(props) {
                           >
                             11%
                           </Text>
-                        </View>
+                        </TouchableOpacity>
 
-                        <View
+                        <TouchableOpacity
                           style={{
                             flexDirection: "row",
                             alignItems: "center",
@@ -1030,8 +1358,8 @@ export default function ProductDetails(props) {
                           >
                             5%
                           </Text>
-                        </View>
-                        <View
+                        </TouchableOpacity>
+                        <TouchableOpacity
                           style={{
                             flexDirection: "row",
                             alignItems: "center",
@@ -1070,24 +1398,36 @@ export default function ProductDetails(props) {
                           >
                             8%
                           </Text>
-                        </View>
+                        </TouchableOpacity>
                       </View>
 
                       <View>
-                        <Text
+                        <TouchableOpacity
+                          onPress={() =>
+                            props.navigation.navigate("VideoReviews")
+                          }
                           style={{
-                            fontFamily: "Mediums-Font",
-                            fontSize: height / 75,
                             marginTop: 15,
+                            flexDirection: "row",
                           }}
                         >
-                          Video reviews
-                        </Text>
+                          <Text
+                            style={{
+                              fontFamily: "GlacialIndifference-Regular",
+                              fontSize: height / 75,
+                            }}
+                          >
+                            Video reviews {`   `}
+                          </Text>
+                          <MaterialCommunityIcons
+                            name="chevron-right"
+                            size={height / 50}
+                          />
+                        </TouchableOpacity>
 
                         <View
                           style={{
                             marginTop: 10,
-                            paddingHorizontal: 4,
                             flexDirection: "row",
                             justifyContent: "space-between",
                           }}
@@ -1111,206 +1451,265 @@ export default function ProductDetails(props) {
                           ></LinearGradient>
                         </View>
                       </View>
+                      <View
+                        style={{
+                          marginTop: 15,
+                          flexDirection: "row",
+                        }}
+                      >
+                        <Overlay
+                          visible={reviewSwitch}
+                          overlayStyle={{
+                            borderRadius: 5,
 
-                      <Collapse>
-                        <CollapseHeader>
+                            backgroundColor: theme.colors.background,
+                            marginTop: height / 10,
+                            marginStart: -height / 70,
+                          }}
+                        >
+                          <View style={{}}>
+                            <TouchableOpacity
+                              style={{ alignSelf: "flex-end" }}
+                              onPress={() => setReviewSwitch(false)}
+                            >
+                              <MaterialCommunityIcons name="close" />
+                            </TouchableOpacity>
+                          </View>
                           <View
                             style={{
-                              marginTop: 15,
-                              flexDirection: "row",
+                              marginStart: height / 60,
+                              marginEnd: height / 15,
                             }}
                           >
-                            <Text
-                              style={{
-                                fontFamily: "GlacialIndifference-Regular",
-                                fontSize: height / 75,
-                              }}
-                            >
-                              Top reviews {`    `}
-                            </Text>
-                            <MaterialCommunityIcons
-                              name="chevron-down"
-                              size={height / 50}
-                            />
-                          </View>
-                        </CollapseHeader>
-                        <CollapseBody>
-                          <View
-                            style={{
-                              marginTop: 10,
-                              flexDirection: "row",
-                              justifyContent: "space-between",
-                            }}
-                          >
-                            <Text
-                              style={{
-                                fontFamily: "GlacialIndifference-Regular",
-                                fontSize: height / 75,
-                              }}
-                            >
-                              5000 total ratings, 1500 with reviews
-                            </Text>
-                          </View>
-                          <View>
-                            <Text
-                              style={{
-                                fontFamily: "Mediums-Font",
-                                fontSize: height / 75,
-                                marginTop: 15,
-                              }}
-                            >
-                              From Canada
-                            </Text>
-
-                            <View
-                              style={{
-                                marginTop: 10,
-                              }}
-                            >
-                              <View
-                                style={{
-                                  flexDirection: "row",
-                                  alignItems: "center",
-                                }}
-                              >
-                                <MaterialCommunityIcons
-                                  name="checkbox-blank-circle"
-                                  size={height / 60}
-                                  color="gray"
-                                />
-                                <Text
-                                  style={{
-                                    fontFamily: "GlacialIndifference-Regular",
-                                    fontSize: height / 75,
-                                  }}
-                                >
-                                  {`    `}Customer123
-                                </Text>
-                              </View>
-
-                              <View
-                                style={{
-                                  flexDirection: "row",
-                                  alignItems: "center",
-                                  marginTop: 3,
-                                }}
-                              >
-                                <StarRating
-                                  rating={rating}
-                                  onChange={setRating}
-                                  starSize={height / 70}
-                                  color={colors.MAIN}
-                                  style={{ marginStart: height / 140 }}
-                                  maxStars={5}
-                                  starStyle={{
-                                    padding: 0,
-                                    margin: 0,
-                                    marginStart: -height / 170,
-                                  }}
-                                />
-                                <Text
-                                  style={{
-                                    fontFamily: "GlacialIndifference-Regular",
-                                    fontSize: height / 75,
-                                  }}
-                                >
-                                  {`    `}Verified Purchase
-                                </Text>
-                              </View>
-
+                            <TouchableOpacity style={{}}>
                               <Text
                                 style={{
                                   fontFamily: "Mediums-Font",
                                   fontSize: height / 75,
-                                  marginTop: 3,
                                 }}
                               >
-                                Lorem Ipsum is simply dummy text of the printing
-                                and typesetting
+                                Top reviews {`    `}
                               </Text>
+                            </TouchableOpacity>
+                          </View>
+                          <View
+                            style={{
+                              marginStart: height / 60,
+                              marginEnd: height / 15,
+                              marginTop: 10,
+                            }}
+                          >
+                            <TouchableOpacity style={{}}>
                               <Text
                                 style={{
-                                  fontFamily: "GlacialIndifference-Regular",
-                                  fontSize: height / 76,
-                                }}
-                              >
-                                Reviewed in Canada on August 15, 2023
-                              </Text>
-
-                              <Text
-                                style={{
-                                  fontFamily: "GlacialIndifference-Regular",
+                                  fontFamily: "Mediums-Font",
                                   fontSize: height / 75,
-                                  marginTop: 5,
+                                  color: "grey",
                                 }}
                               >
-                                Color:Black {`            `} Size:9.5
+                                Most recent {`    `}
                               </Text>
+                            </TouchableOpacity>
+                          </View>
+                        </Overlay>
+                        <TouchableOpacity
+                          onPress={() => setReviewSwitch(true)}
+                          style={{ flexDirection: "row", alignItems: "center" }}
+                        >
+                          <Text
+                            style={{
+                              fontFamily: "GlacialIndifference-Regular",
+                              fontSize: height / 75,
+                            }}
+                          >
+                            Top reviews {`    `}
+                          </Text>
+                          <MaterialCommunityIcons
+                            name="chevron-right"
+                            size={height / 50}
+                          />
+                        </TouchableOpacity>
+                      </View>
+                      <View
+                        style={{
+                          marginTop: 10,
+                          flexDirection: "row",
+                          justifyContent: "space-between",
+                        }}
+                      >
+                        <Text
+                          style={{
+                            fontFamily: "GlacialIndifference-Regular",
+                            fontSize: height / 75,
+                          }}
+                        >
+                          5000 total ratings, 1500 with reviews
+                        </Text>
+                      </View>
+                      <View>
+                        <Text
+                          style={{
+                            fontFamily: "Mediums-Font",
+                            fontSize: height / 75,
+                            marginTop: 15,
+                          }}
+                        >
+                          From Canada
+                        </Text>
 
-                              <Text
-                                style={{
-                                  fontFamily: "GlacialIndifference-Regular",
-                                  fontSize: height / 75,
-                                  marginTop: 5,
-                                  textAlign: "justify",
-                                }}
-                              >
-                                Lorem Ipsum is simply dummy text of the printing
-                                and typesetting industry. Lorem Ipsum has been
-                                the industry's standard dummy text ever since
-                                the 1500s, when an unknown printer took a galley
-                                of type and scrambled it to make a type specimen
-                                book. It has survived not only five centuries,
-                              </Text>
-                            </View>
+                        <View
+                          style={{
+                            marginTop: 10,
+                          }}
+                        >
+                          <View
+                            style={{
+                              flexDirection: "row",
+                              alignItems: "center",
+                            }}
+                          >
+                            <MaterialCommunityIcons
+                              name="checkbox-blank-circle"
+                              size={height / 60}
+                              color="gray"
+                            />
+                            <Text
+                              style={{
+                                fontFamily: "GlacialIndifference-Regular",
+                                fontSize: height / 75,
+                              }}
+                            >
+                              {`    `}Customer123
+                            </Text>
                           </View>
 
                           <View
                             style={{
-                              marginTop: 10,
                               flexDirection: "row",
-                              justifyContent: "space-between",
+                              alignItems: "center",
+                              marginTop: 3,
                             }}
                           >
-                            <View style={{ flexDirection: "row" }}>
-                              <View
-                                style={[
-                                  styles.filterBtnPrice,
-                                  { borderColor: "gray" },
-                                ]}
-                              >
-                                <Text
-                                  style={{
-                                    fontFamily: "GlacialIndifference-Regular",
-                                    fontSize: height / 75,
-                                    textAlign: "center",
-                                  }}
-                                >
-                                  Helpful
-                                </Text>
-                              </View>
+                            <StarRating
+                              rating={rating}
+                              onChange={setRating}
+                              starSize={height / 70}
+                              color={colors.MAIN}
+                              style={{ marginStart: height / 140 }}
+                              maxStars={5}
+                              starStyle={{
+                                padding: 0,
+                                margin: 0,
+                                marginStart: -height / 170,
+                              }}
+                            />
+                            <Text
+                              style={{
+                                fontFamily: "GlacialIndifference-Regular",
+                                fontSize: height / 75,
+                              }}
+                            >
+                              {`    `}Verified Purchase
+                            </Text>
+                          </View>
 
+                          <Text
+                            style={{
+                              fontFamily: "Mediums-Font",
+                              fontSize: height / 75,
+                              marginTop: 3,
+                            }}
+                          >
+                            Lorem Ipsum is simply dummy text of the printing and
+                            typesetting
+                          </Text>
+                          <Text
+                            style={{
+                              fontFamily: "GlacialIndifference-Regular",
+                              fontSize: height / 76,
+                            }}
+                          >
+                            Reviewed in Canada on August 15, 2023
+                          </Text>
+
+                          <Text
+                            style={{
+                              fontFamily: "GlacialIndifference-Regular",
+                              fontSize: height / 75,
+                              marginTop: 5,
+                            }}
+                          >
+                            Color:Black {`            `} Size:9.5
+                          </Text>
+
+                          <Text
+                            style={{
+                              fontFamily: "GlacialIndifference-Regular",
+                              fontSize: height / 75,
+                              marginTop: 5,
+                              textAlign: "justify",
+                            }}
+                          >
+                            Lorem Ipsum is simply dummy text of the printing and
+                            typesetting industry. Lorem Ipsum has been the
+                            industry's standard dummy text ever since the 1500s,
+                            when an unknown printer took a galley of type and
+                            scrambled it to make a type specimen book. It has
+                            survived not only five centuries,
+                          </Text>
+                        </View>
+                      </View>
+
+                      <View
+                        style={{
+                          marginTop: 10,
+                          flexDirection: "row",
+                          justifyContent: report ? null : "space-between",
+                        }}
+                      >
+                        <View
+                          style={{
+                            flexDirection: "row",
+                          }}
+                        >
+                          {feedback ? (
+                            report ? null : (
                               <View
                                 style={[
                                   styles.filterBtnPrice,
-                                  { borderWidth: 0 },
+                                  {
+                                    borderWidth: null,
+                                    paddingStart: 0,
+                                    flexDirection: "row",
+                                    alignItems: "center",
+                                    width: width / 3,
+                                  },
                                 ]}
                               >
+                                <MaterialCommunityIcons
+                                  name="check-circle"
+                                  color={colors.MAIN}
+                                  size={height / 90}
+                                />
                                 <Text
                                   style={{
                                     fontFamily: "GlacialIndifference-Regular",
-                                    fontSize: height / 75,
-                                    textAlign: "center",
+                                    fontSize: height / 80,
+                                    color: colors.MAIN,
                                   }}
                                 >
-                                  Share
+                                  {`  `}Thank you for your feedback
                                 </Text>
                               </View>
-                            </View>
-                            <View
+                            )
+                          ) : report ? null : (
+                            <TouchableOpacity
+                              onPress={() => setFeedback(true)}
                               style={[
                                 styles.filterBtnPrice,
-                                { borderWidth: 0 },
+                                {
+                                  borderColor: "gray",
+                                },
                               ]}
                             >
                               <Text
@@ -1320,12 +1719,271 @@ export default function ProductDetails(props) {
                                   textAlign: "center",
                                 }}
                               >
-                                Report
+                                Helpful
+                              </Text>
+                            </TouchableOpacity>
+                          )}
+                        </View>
+                        {report ? null : (
+                          <View
+                            style={[
+                              styles.filterBtnPrice,
+                              {
+                                borderWidth: 0,
+                                flexDirection: "row",
+                                alignItems: "center",
+                              },
+                            ]}
+                          >
+                            <Ionicons name="share-outline" size={height / 80} />
+                            <Text
+                              style={{
+                                fontFamily: "GlacialIndifference-Regular",
+                                fontSize: height / 75,
+                                textAlign: "center",
+                              }}
+                            >
+                              {`  `}Share
+                            </Text>
+                          </View>
+                        )}
+
+                        <Overlay
+                          visible={reportSwitch}
+                          overlayStyle={{
+                            borderRadius: 5,
+
+                            paddingStart: height / 60,
+                            backgroundColor: theme.colors.background,
+                          }}
+                        >
+                          <View
+                            style={{
+                              flexDirection: "row",
+                              justifyContent: "space-between",
+                              alignItems: "center",
+                              marginTop: 10,
+                            }}
+                          >
+                            <Text
+                              style={{
+                                fontFamily: "Mediums-Font",
+                                fontSize: height / 75,
+                                textAlign: "center",
+                              }}
+                            >
+                              Submit a report
+                            </Text>
+                            <TouchableOpacity
+                              onPress={() => setReportSwitch(false)}
+                            >
+                              <MaterialCommunityIcons name="close" />
+                            </TouchableOpacity>
+                          </View>
+                          <View
+                            style={{
+                              marginEnd: height / 15,
+                              marginTop: height / 20,
+                            }}
+                          >
+                            <Text
+                              style={{
+                                fontFamily: "Mediums-Font",
+                                fontSize: height / 75,
+                              }}
+                            >
+                              A few common reasons customers report review:
+                              {`     `}
+                            </Text>
+                          </View>
+
+                          <View
+                            style={{
+                              marginEnd: height / 15,
+                              marginTop: height / 40,
+                              flexDirection: "row",
+                              alignItems: "center",
+                            }}
+                          >
+                            <MaterialCommunityIcons
+                              name="checkbox-blank-circle"
+                              size={height / 180}
+                            />
+                            <Text
+                              style={{
+                                fontFamily: "GlacialIndifference-Regular",
+                                fontSize: height / 75,
+                              }}
+                            >
+                              {`  `}
+                              Harassmwnt, profanity
+                            </Text>
+                          </View>
+                          <View
+                            style={{
+                              marginEnd: height / 15,
+                              flexDirection: "row",
+                              alignItems: "center",
+                            }}
+                          >
+                            <MaterialCommunityIcons
+                              name="checkbox-blank-circle"
+                              size={height / 180}
+                            />
+                            <Text
+                              style={{
+                                fontFamily: "GlacialIndifference-Regular",
+                                fontSize: height / 75,
+                              }}
+                            >
+                              {`  `}
+                              Spam, ads, promotions
+                            </Text>
+                          </View>
+                          <View
+                            style={{
+                              flexDirection: "row",
+                              alignItems: "center",
+                            }}
+                          >
+                            <MaterialCommunityIcons
+                              name="checkbox-blank-circle"
+                              size={height / 180}
+                            />
+                            <Text
+                              style={{
+                                fontFamily: "GlacialIndifference-Regular",
+                                fontSize: height / 75,
+                              }}
+                            >
+                              {`  `}
+                              Given in exchange of cash, discount
+                            </Text>
+                          </View>
+
+                          <View
+                            style={{
+                              marginTop: height / 40,
+                              flexDirection: "row",
+                              alignItems: "center",
+                            }}
+                          >
+                            <Text
+                              style={{
+                                fontFamily: "GlacialIndifference-Regular",
+                                fontSize: height / 75,
+                              }}
+                            >
+                              When we get your report, we'll check if the review
+                              meets our{`\n`}community guidelines. If it
+                              doesn't, we'll remove it.
+                            </Text>
+                          </View>
+
+                          <TouchableOpacity
+                            onPress={() => [
+                              setReportSwitch(false),
+                              setReport(true),
+                            ]}
+                            style={{
+                              marginTop: height / 40,
+                              marginBottom: 10,
+                              flexDirection: "row",
+                              alignItems: "center",
+                            }}
+                          >
+                            <ImageBackground
+                              source={require("../assets/topbar.png")}
+                              style={styles.checkOutBtn}
+                            >
+                              <Text
+                                style={{
+                                  fontFamily: "Mediums-Font",
+                                  fontSize: height / 50,
+                                  textAlign: "center",
+                                  color: "white",
+                                  marginVertical: 2,
+                                }}
+                              >
+                                Submit
+                              </Text>
+                            </ImageBackground>
+                          </TouchableOpacity>
+                        </Overlay>
+                        {report ? (
+                          <View>
+                            <View
+                              style={[
+                                styles.filterBtnPrice,
+                                {
+                                  borderWidth: 0,
+                                  flexDirection: "row",
+                                  alignItems: "center",
+                                  marginStart: 0,
+                                  padding: 0,
+                                },
+                              ]}
+                            >
+                              <Ionicons
+                                name="share-outline"
+                                size={height / 80}
+                              />
+                              <Text
+                                style={{
+                                  fontFamily: "GlacialIndifference-Regular",
+                                  fontSize: height / 75,
+                                  textAlign: "center",
+                                }}
+                              >
+                                {`  `}Share
+                              </Text>
+                            </View>
+                            <View
+                              style={[
+                                styles.filterBtnPrice,
+                                {
+                                  borderWidth: null,
+                                  paddingStart: 0,
+                                  flexDirection: "row",
+                                  alignItems: "center",
+                                  width: width / 2,
+                                },
+                              ]}
+                            >
+                              <MaterialCommunityIcons
+                                name="check-circle"
+                                color={colors.MAIN}
+                                size={height / 90}
+                              />
+                              <Text
+                                style={{
+                                  fontFamily: "GlacialIndifference-Regular",
+                                  fontSize: height / 80,
+                                  color: colors.MAIN,
+                                }}
+                              >
+                                {`  `}Thanks, we'll investigate in the next few
+                                days.
                               </Text>
                             </View>
                           </View>
-                        </CollapseBody>
-                      </Collapse>
+                        ) : (
+                          <TouchableOpacity
+                            onPress={() => setReportSwitch(true)}
+                            style={[styles.filterBtnPrice, { borderWidth: 0 }]}
+                          >
+                            <Text
+                              style={{
+                                fontFamily: "GlacialIndifference-Regular",
+                                fontSize: height / 75,
+                                textAlign: "center",
+                              }}
+                            >
+                              Report
+                            </Text>
+                          </TouchableOpacity>
+                        )}
+                      </View>
                     </CollapseBody>
                   </Collapse>
                 </View>
@@ -1596,6 +2254,15 @@ const useStyle = () => {
       backgroundColor: "black",
       height: height / 50,
       width: width / 25,
+    },
+    checkOutBtn: {
+      paddingVertical: 5,
+      overflow: "hidden",
+      resizeMode: "contain",
+      borderRadius: 5,
+      justifyContent: "center",
+      width: width / 1.5,
+      alignSelf: "center",
     },
   });
   return { styles };

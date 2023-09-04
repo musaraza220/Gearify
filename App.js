@@ -36,6 +36,9 @@ import {
 import Filters from "./UI/Filter";
 import Search from "./UI/Search";
 import ProductDetails from "./UI/ProductDetails";
+import Cart from "./UI/Cart";
+import VideoReviews from "./UI/VideoReviews";
+import WriteReviews from "./UI/WriteReview";
 
 // const Tab = createMaterialBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -185,25 +188,49 @@ export default function App() {
       <NavigationContainer independent={true}>
         <Stack.Navigator>
           <Stack.Screen
+            name="Cart"
+            component={Cart}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
             name="ProductDetails"
             component={ProductDetails}
             options={{ headerShown: false }}
           />
           <Stack.Screen
-            name="Search"
-            component={Search}
+            name="WriteReviews"
+            component={WriteReviews}
             options={{ headerShown: false }}
           />
-          {/* <Stack.Screen
+          <Stack.Screen
+            name="VideoReviews"
+            component={VideoReviews}
+            options={{ headerShown: false }}
+          />
+
+          <Stack.Screen
             name="Filters"
             component={Filters}
             options={{ headerShown: false }}
-          /> */}
+          />
+
           <Stack.Screen
             name="Categories"
             component={Categories}
             options={{ headerShown: false }}
           />
+          <Stack.Screen
+            name="Home"
+            component={Home}
+            options={{ headerShown: false }}
+          />
+
+          <Stack.Screen
+            name="Search"
+            component={Search}
+            options={{ headerShown: false }}
+          />
+
           <Stack.Screen
             name="SubCat"
             component={SubCat}
@@ -214,11 +241,7 @@ export default function App() {
             component={Products}
             options={{ headerShown: false }}
           />
-          <Stack.Screen
-            name="Home"
-            component={Home}
-            options={{ headerShown: false }}
-          />
+
           <Stack.Screen
             name="Login"
             component={Login}
