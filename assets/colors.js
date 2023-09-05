@@ -1,6 +1,6 @@
 export const colors = {
   WHITE: "white",
-  MAIN: "#E21f27", //126882
+  MAIN: "#CC5053", //"#E21f27", //126882
   MAINSEC: "#b6d1d8",
   LIGHTGRAY: "lightgray",
   GRAY: "gray",

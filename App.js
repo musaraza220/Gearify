@@ -39,6 +39,15 @@ import ProductDetails from "./UI/ProductDetails";
 import Cart from "./UI/Cart";
 import VideoReviews from "./UI/VideoReviews";
 import WriteReviews from "./UI/WriteReview";
+import CheckoutCompleteInfo from "./UI/CheckoutCompleteInfo";
+import CheckoutInCompleteInfo from "./UI/CheckoutInCompleteInfo";
+import CardScreen from "./UI/CardScreen";
+import AddCardScreen from "./UI/AddCardScreen";
+import SelectBilingAddress from "./UI/SelectBilingAddress";
+import AddBillingAddress from "./UI/AddBillingAddress";
+import InAppLogin from "./UI/InAapLogin";
+import InAppLoginPassword from "./UI/InAppLoginPassword";
+import InAppOTP from "./UI/InAppOTP";
 
 // const Tab = createMaterialBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -187,6 +196,52 @@ export default function App() {
     <PaperProvider theme={scheme === "dark" ? MD3DarkTheme : MD3LightTheme}>
       <NavigationContainer independent={true}>
         <Stack.Navigator>
+          <Stack.Screen
+            name="InAppLogin"
+            component={InAppLogin}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="InAppOTP"
+            component={InAppOTP}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="InAppLoginPassword"
+            component={InAppLoginPassword}
+            options={{ headerShown: false }}
+          />
+
+          <Stack.Screen
+            name="AddBillingAddress"
+            component={AddBillingAddress}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="SelectBilingAddress"
+            component={SelectBilingAddress}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="AddCardScreen"
+            component={AddCardScreen}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="CardScreen"
+            component={CardScreen}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="CheckoutInCompleteInfo"
+            component={CheckoutInCompleteInfo}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="CheckoutCompleteInfo"
+            component={CheckoutCompleteInfo}
+            options={{ headerShown: false }}
+          />
           <Stack.Screen
             name="Cart"
             component={Cart}
