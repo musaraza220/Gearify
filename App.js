@@ -48,6 +48,9 @@ import AddBillingAddress from "./UI/AddBillingAddress";
 import InAppLogin from "./UI/InAapLogin";
 import InAppLoginPassword from "./UI/InAppLoginPassword";
 import InAppOTP from "./UI/InAppOTP";
+import AddressBook from "./UI/AddressBook";
+import AddNewAddress from "./UI/AddNewAddress";
+import NewPickupLocation from "./UI/NewPickupLocation";
 
 // const Tab = createMaterialBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -197,6 +200,31 @@ export default function App() {
       <NavigationContainer independent={true}>
         <Stack.Navigator>
           <Stack.Screen
+            name="Home"
+            component={Home}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="CheckoutCompleteInfo"
+            component={CheckoutCompleteInfo}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="NewPickupLocation"
+            component={NewPickupLocation}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="AddNewAddress"
+            component={AddNewAddress}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="AddressBook"
+            component={AddressBook}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
             name="InAppLogin"
             component={InAppLogin}
             options={{ headerShown: false }}
@@ -237,11 +265,7 @@ export default function App() {
             component={CheckoutInCompleteInfo}
             options={{ headerShown: false }}
           />
-          <Stack.Screen
-            name="CheckoutCompleteInfo"
-            component={CheckoutCompleteInfo}
-            options={{ headerShown: false }}
-          />
+
           <Stack.Screen
             name="Cart"
             component={Cart}
@@ -272,11 +296,6 @@ export default function App() {
           <Stack.Screen
             name="Categories"
             component={Categories}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="Home"
-            component={Home}
             options={{ headerShown: false }}
           />
 

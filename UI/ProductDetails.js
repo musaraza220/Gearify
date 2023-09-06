@@ -1991,17 +1991,109 @@ export default function ProductDetails(props) {
             </ScrollView>
           </View>
 
-          <View style={styles.bottomMenuMain}>
-            <Image
-              source={require("../assets/searchdock.png")}
+          <ImageBackground
+            source={require("../assets/sarchdock.png")}
+            style={styles.bottomMenuMain}
+          >
+            <View
               style={{
-                height: height / 8,
-                width: "100%",
-                resizeMode: "contain",
-                marginTop: -8,
+                flexDirection: "row",
+                justifyContent: "space-between",
+                marginStart: height / 20,
+                marginEnd: height / 20,
+                marginTop: height / 35,
               }}
-            />
-          </View>
+            >
+              <TouchableOpacity
+                onPress={() => props.navigation.navigate("Home")}
+              >
+                <Image
+                  source={require("../assets/homeicon.png")}
+                  style={styles.dockIconStyle}
+                />
+                <Text
+                  style={[
+                    styles.textSize,
+                    {
+                      fontSize: height / 110,
+                      paddingTop: 10,
+                      fontFamily: "Mediums-Font",
+                      textAlign: "center",
+                    },
+                  ]}
+                >
+                  Home
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => props.navigation.navigate("Categories")}
+              >
+                <Image
+                  source={require("../assets/exploreicon.png")}
+                  style={styles.dockIconStyle}
+                />
+                <Text
+                  style={[
+                    styles.textSize,
+                    {
+                      fontSize: height / 110,
+                      paddingTop: 10,
+                      fontFamily: "Mediums-Font",
+                      textAlign: "center",
+                    },
+                  ]}
+                >
+                  Explore
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => props.navigation.navigate("Search")}
+                style={styles.dockIconStyle}
+              ></TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => props.navigation.navigate("Wishlist")}
+              >
+                <Image
+                  source={require("../assets/whishlisticon.png")}
+                  style={styles.dockIconStyle}
+                />
+                <Text
+                  style={[
+                    styles.textSize,
+                    {
+                      fontSize: height / 110,
+                      paddingTop: 10,
+                      fontFamily: "Mediums-Font",
+                      textAlign: "center",
+                    },
+                  ]}
+                >
+                  Wishlist
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => props.navigation.navigate("Cart")}
+              >
+                <Image
+                  source={require("../assets/cart.png")}
+                  style={styles.dockIconStyle}
+                />
+                <Text
+                  style={[
+                    styles.textSize,
+                    {
+                      fontSize: height / 110,
+                      paddingTop: 10,
+                      fontFamily: "Mediums-Font",
+                      textAlign: "center",
+                    },
+                  ]}
+                >
+                  Cart
+                </Text>
+              </TouchableOpacity>
+            </View>
+          </ImageBackground>
         </View>
       )}
     </View>
@@ -2013,6 +2105,12 @@ const useStyle = () => {
   const styles = StyleSheet.create({
     container: {
       flex: 1,
+    },
+    dockIconStyle: {
+      resizeMode: "contain",
+      height: height / 40,
+      width: height / 40,
+      marginTop: 6,
     },
     centerItems: {
       flex: 8,

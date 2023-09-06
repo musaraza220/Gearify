@@ -13,7 +13,12 @@ import {
   ImageBackground,
   TextInput,
 } from "react-native";
-import { Text, useTheme, ActivityIndicator } from "react-native-paper";
+import {
+  Text,
+  useTheme,
+  ActivityIndicator,
+  RadioButton,
+} from "react-native-paper";
 import { colors } from "../assets/colors";
 import {
   MaterialCommunityIcons,
@@ -21,10 +26,14 @@ import {
   EvilIcons,
   SimpleLineIcons,
   Entypo,
+  Ionicons,
 } from "@expo/vector-icons";
 import { appleAuth } from "@invertase/react-native-apple-authentication";
-import Collapsible from "react-native-collapsible";
-
+import {
+  Collapse,
+  CollapseHeader,
+  CollapseBody,
+} from "accordion-collapse-react-native";
 // import AsyncStorage from "@react-native-async-storage/async-storage";
 import {
   GoogleSignin,
@@ -34,13 +43,15 @@ import {
 import * as WebBrowser from "expo-web-browser";
 import LinearGradient from "react-native-linear-gradient";
 import StarRating from "react-native-star-rating-widget";
-
+import RadioButtonRN from "radio-buttons-react-native";
+import PhoneInput from "react-native-phone-number-input";
+import { isValidNumber } from "react-native-phone-number-input";
 import axios from "axios";
 import * as Font from "expo-font";
 import { loginAPI, PersonalAccountAPI } from "./APIs";
 WebBrowser.maybeCompleteAuthSession();
 
-export default function Search(props) {
+export default function AddressBook(props) {
   const [email, setEmail] = React.useState("");
   const [emailError, setEmailError] = React.useState("");
   const [searchQry, setSearchQry] = React.useState("");
@@ -48,13 +59,20 @@ export default function Search(props) {
   const [error, setError] = React.useState("");
   const [authError, setAuthError] = React.useState("");
   const [loading, setLoading] = React.useState(true);
+  const [selectedValue, setSelectedValue] = useState("option1");
+  const [value, setValue] = React.useState("");
+  const [phone, setPhone] = React.useState("");
+  const [code, setCode] = React.useState("");
   const [gLoading, setGLoading] = React.useState(false);
   const [gridView, setGridView] = React.useState(true);
   const [listView, setListView] = React.useState(false);
   const [aLoading, setALoading] = React.useState(false);
   const [fLoading, setFLoading] = React.useState(false);
   const [authLoading, setAuthLoading] = React.useState(false);
+  const [showDetails, setShowDetails] = React.useState(false);
+  const [showSimilar, setShowSimilar] = React.useState(false);
   const [disable, setDisable] = React.useState(false);
+  const [orderDone, setOrderDone] = React.useState(false);
   const [secureEntry, setSecureEntry] = React.useState(true);
   const [rightIcon, setRightIcon] = React.useState("eye");
   const [rating, setRating] = useState(3.5);
@@ -63,9 +81,21 @@ export default function Search(props) {
   const { width, height } = useWindowDimensions();
   let customFonts = {
     "GlacialIndifference-Regular": require("../assets/AvenirNextCondensed.ttf"),
-    "GlacialIndifference-Bold": require("../assets/GlacialIndifference-Bold.otf"),
+    "GlacialIndifference-Bold": require("../assets/AvenirNextCondensedDemiBold.ttf"),
     "Mediums-Font": require("../assets/AvenirNextCondensedMedium.ttf"),
   };
+
+  const data = [
+    {
+      label: "Monday, Sept. 4",
+    },
+    {
+      label: "Friday, Sept. 1 and Sunday, Sept. 3",
+    },
+    {
+      label: "Thursday, Aug. 31 - Sunday, Sept. 3",
+    },
+  ];
 
   useEffect(() => {
     loadFonts();
@@ -107,23 +137,17 @@ export default function Search(props) {
                   }}
                 >
                   <View style={{ flexDirection: "row", alignItems: "center" }}>
-                    <MaterialIcons
-                      name="location-pin"
-                      color={"white"}
-                      size={height / 55}
-                    />
-                    <Text
-                      style={[
-                        styles.textSize,
-                        {
-                          color: "white",
-                          fontSize: height / 55,
-                          fontFamily: "Futura-CondensedMedium",
-                        },
-                      ]}
-                    >
-                      {` `}SASKATOON
-                    </Text>
+                    <TouchableOpacity onPress={() => props.navigation.goBack()}>
+                      <Image
+                        source={require("../assets/backwhite.png")}
+                        style={{
+                          resizeMode: "contain",
+                          height: height / 42,
+                          width: width / 19,
+                          marginStart: 2,
+                        }}
+                      />
+                    </TouchableOpacity>
                   </View>
                   <View>
                     <MaterialCommunityIcons
@@ -138,98 +162,250 @@ export default function Search(props) {
             {/* //////// TOP BUTTONS //////// */}
 
             <ScrollView showsVerticalScrollIndicator={false}>
-              <View
-                style={{
-                  marginHorizontal: height / 37,
-                  marginTop: 6,
-                }}
-              >
+              {orderDone ? (
                 <View
                   style={{
-                    flexDirection: "row",
-                    alignItems: "center",
-                    justifyContent: "space-between",
+                    marginHorizontal: height / 37,
+                    marginTop: 6,
                   }}
-                ></View>
-                <View
-                  style={[
-                    styles.txtView,
-                    {
-                      marginTop: height / 60,
-                      flex: 1,
-                      flexDirection: "row",
-                    },
-                  ]}
                 >
-                  <MaterialIcons size={height / 42} name={"search"} />
-                  <TextInput
-                    placeholder="Search"
-                    placeholderTextColor={theme.colors.secondary}
+                  <View
+                    style={{
+                      alignItems: "center",
+                    }}
+                  >
+                    <Text
+                      style={{
+                        fontFamily: "GlacialIndifference-Bold",
+                        fontSize: height / 65,
+                        marginTop: height / 7,
+                        textAlign: "center",
+                      }}
+                    >
+                      Payment Success
+                    </Text>
+                  </View>
+                  <Text
+                    style={{
+                      fontFamily: "GlacialIndifference-Regular",
+                      fontSize: height / 65,
+                      textAlign: "center",
+                      marginTop: 3,
+                      marginBottom: height / 16,
+                    }}
+                  >
+                    Thanks for purchasing with Gearify!
+                  </Text>
+                  <TouchableOpacity>
+                    <ImageBackground
+                      source={require("../assets/topbar.png")}
+                      style={styles.checkOutBtn}
+                    >
+                      <Text
+                        style={{
+                          fontFamily: "Mediums-Font",
+                          fontSize: height / 45,
+                          textAlign: "center",
+                          color: "white",
+                          paddingVertical: height / 100,
+                        }}
+                      >
+                        Continue
+                      </Text>
+                    </ImageBackground>
+                  </TouchableOpacity>
+                </View>
+              ) : (
+                <View
+                  style={{
+                    marginHorizontal: height / 37,
+                    marginTop: 6,
+                  }}
+                >
+                  <View style={{}}>
+                    <Text
+                      style={{
+                        fontFamily: "GlacialIndifference-Bold",
+                        fontSize: height / 50,
+                        marginTop: height / 70,
+                      }}
+                    >
+                      Your Addresses
+                    </Text>
+                  </View>
+                  <TouchableOpacity
+                    onPress={() => props.navigation.navigate("AddNewAddress")}
                     style={[
-                      styles.textSize,
+                      styles.txtView,
                       {
-                        backgroundColor: colors.grays,
-                        marginStart: 7,
-                        marginEnd: 7,
+                        width: width / 1.13,
+                        flexDirection: "row",
+                        justifyContent: "space-between",
+                        marginTop: height / 20,
                       },
                     ]}
-                    autoCorrect={false}
-                    value={searchQry}
-                    onChangeText={(value) => [setSearchQry(value)]}
-                    error={error}
-                  />
+                  >
+                    <Text
+                      style={{
+                        fontFamily: "GlacialIndifference-Regular",
+                        fontSize: height / 70,
+                      }}
+                    >
+                      Add a new address
+                    </Text>
+                    <MaterialIcons
+                      size={height / 50}
+                      name="keyboard-arrow-right"
+                      color={"gray"}
+                    />
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    onPress={() =>
+                      props.navigation.navigate("NewPickupLocation")
+                    }
+                    style={[
+                      styles.txtView,
+                      {
+                        width: width / 1.13,
+                        flexDirection: "row",
+                        justifyContent: "space-between",
+                        marginTop: height / 45,
+                      },
+                    ]}
+                  >
+                    <Text
+                      style={{
+                        fontFamily: "GlacialIndifference-Regular",
+                        fontSize: height / 70,
+                      }}
+                    >
+                      Add a new pickup location
+                    </Text>
+                    <MaterialIcons
+                      size={height / 50}
+                      name="keyboard-arrow-right"
+                      color={"gray"}
+                    />
+                  </TouchableOpacity>
+                  <View style={{}}>
+                    <Text
+                      style={{
+                        fontFamily: "GlacialIndifference-Bold",
+                        fontSize: height / 50,
+                        marginTop: height / 40,
+                      }}
+                    >
+                      Personal Addresses
+                    </Text>
+                  </View>
+                  <View
+                    style={[
+                      styles.txtView,
+                      {
+                        width: width / 1.13,
+                        marginTop: height / 120,
+                      },
+                    ]}
+                  >
+                    <Text
+                      style={{
+                        fontFamily: "GlacialIndifference-Regular",
+                        fontSize: height / 70,
+                      }}
+                    >
+                      Default:
+                    </Text>
+                    <Text
+                      style={{
+                        fontFamily: "Mediums-Font",
+                        fontSize: height / 70,
+                      }}
+                    >
+                      Name
+                    </Text>
+                    <Text
+                      style={{
+                        fontFamily: "Mediums-Font",
+                        fontSize: height / 70,
+                      }}
+                    >
+                      Address
+                    </Text>
+                    <Text
+                      style={{
+                        fontFamily: "Mediums-Font",
+                        fontSize: height / 70,
+                      }}
+                    >
+                      City, Province, Zip code
+                    </Text>
+                    <Text
+                      style={{
+                        fontFamily: "Mediums-Font",
+                        fontSize: height / 70,
+                      }}
+                    >
+                      Country
+                    </Text>
+                    <Text
+                      style={{
+                        fontFamily: "Mediums-Font",
+                        fontSize: height / 70,
+                      }}
+                    >
+                      Phone number
+                    </Text>
+                    <View
+                      style={{
+                        flexDirection: "row",
+                        alignItems: "center",
+                        marginTop: height / 80,
+                      }}
+                    >
+                      <TouchableOpacity
+                        style={{
+                          backgroundColor: "white",
+                          paddingVertical: height / 65,
+                          width: height / 10,
+                        }}
+                      >
+                        <Text
+                          style={{
+                            fontFamily: "GlacialIndifference-Regular",
+                            fontSize: height / 70,
+                            textAlign: "center",
+                          }}
+                        >
+                          Edit
+                        </Text>
+                      </TouchableOpacity>
+                      <TouchableOpacity
+                        style={{
+                          backgroundColor: "white",
+                          paddingVertical: height / 65,
+                          width: height / 10,
+                          marginStart: height / 80,
+                        }}
+                      >
+                        <Text
+                          style={{
+                            fontFamily: "GlacialIndifference-Regular",
+                            fontSize: height / 70,
+                            textAlign: "center",
+                          }}
+                        >
+                          Remove
+                        </Text>
+                      </TouchableOpacity>
+                    </View>
+                  </View>
                 </View>
-                <Text
-                  style={{
-                    fontFamily: "GlacialIndifference-Regular",
-                    fontSize: height / 55,
-                    marginTop: height / 45,
-                  }}
-                >
-                  Suggestions
-                </Text>
-
-                <View style={{ flexDirection: "row", alignItems: "center" }}>
-                  <TouchableOpacity style={styles.filterBtn}>
-                    <Text
-                      style={{
-                        fontFamily: "GlacialIndifference-Regular",
-                        fontSize: height / 60,
-                        textAlign: "center",
-                      }}
-                    >
-                      Phone Case
-                    </Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity style={styles.filterBtn}>
-                    <Text
-                      style={{
-                        fontFamily: "GlacialIndifference-Regular",
-                        fontSize: height / 60,
-                        textAlign: "center",
-                      }}
-                    >
-                      Laptop Bags
-                    </Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity style={styles.filterBtn}>
-                    <Text
-                      style={{
-                        fontFamily: "GlacialIndifference-Regular",
-                        fontSize: height / 60,
-                        textAlign: "center",
-                      }}
-                    >
-                      Headphones
-                    </Text>
-                  </TouchableOpacity>
-                </View>
-              </View>
+              )}
             </ScrollView>
           </View>
 
           <ImageBackground
-            source={require("../assets/sarchdock.png")}
+            source={require("../assets/cartdock.png")}
             style={styles.bottomMenuMain}
           >
             <View
@@ -285,8 +461,25 @@ export default function Search(props) {
               </TouchableOpacity>
               <TouchableOpacity
                 onPress={() => props.navigation.navigate("Search")}
-                style={styles.dockIconStyle}
-              ></TouchableOpacity>
+              >
+                <Image
+                  source={require("../assets/searchicon.png")}
+                  style={styles.dockIconStyle}
+                />
+                <Text
+                  style={[
+                    styles.textSize,
+                    {
+                      fontSize: height / 110,
+                      paddingTop: 10,
+                      fontFamily: "Mediums-Font",
+                      textAlign: "center",
+                    },
+                  ]}
+                >
+                  Search
+                </Text>
+              </TouchableOpacity>
               <TouchableOpacity
                 onPress={() => props.navigation.navigate("Wishlist")}
               >
@@ -310,25 +503,8 @@ export default function Search(props) {
               </TouchableOpacity>
               <TouchableOpacity
                 onPress={() => props.navigation.navigate("Cart")}
-              >
-                <Image
-                  source={require("../assets/cart.png")}
-                  style={styles.dockIconStyle}
-                />
-                <Text
-                  style={[
-                    styles.textSize,
-                    {
-                      fontSize: height / 110,
-                      paddingTop: 10,
-                      fontFamily: "Mediums-Font",
-                      textAlign: "center",
-                    },
-                  ]}
-                >
-                  Cart
-                </Text>
-              </TouchableOpacity>
+                style={styles.dockIconStyle}
+              ></TouchableOpacity>
             </View>
           </ImageBackground>
         </View>
@@ -343,14 +519,14 @@ const useStyle = () => {
     container: {
       flex: 1,
     },
-    centerItems: {
-      flex: 8,
-    },
     dockIconStyle: {
       resizeMode: "contain",
       height: height / 40,
       width: height / 40,
       marginTop: 6,
+    },
+    centerItems: {
+      flex: 8,
     },
     centerText: {
       textAlign: "center",
@@ -372,8 +548,13 @@ const useStyle = () => {
     txtView: {
       padding: 13,
       backgroundColor: colors.grays,
-      marginTop: height / 30,
-      borderRadius: 4,
+      marginTop: 2,
+      borderRadius: 3,
+    },
+    txtView1: {
+      padding: 8,
+      borderWidth: 0.4,
+      height: height / 23,
     },
     btnStyles: {
       padding: 8,
@@ -381,7 +562,7 @@ const useStyle = () => {
       width: width / 1.1,
       overflow: "hidden",
       resizeMode: "contain",
-      borderRadius: 3,
+      borderRadius: 2,
       justifyContent: "center",
     },
     topBar: {
@@ -392,8 +573,17 @@ const useStyle = () => {
       borderRadius: 3,
       justifyContent: "center",
     },
+    checkOutBtn: {
+      paddingVertical: 1,
+      overflow: "hidden",
+      resizeMode: "contain",
+      borderRadius: 4,
+      justifyContent: "center",
+      width: width / 1.3,
+      alignSelf: "center",
+    },
     textSize: {
-      fontSize: height / 55,
+      fontSize: height / 70,
       fontFamily: "GlacialIndifference-Regular",
     },
     iconImgStyle: {
@@ -421,8 +611,30 @@ const useStyle = () => {
       borderRadius: 4,
       borderColor: "gray",
       marginTop: 2,
-      padding: 10,
-      width: height / 5.1,
+      paddingHorizontal: height / 45,
+      paddingVertical: height / 90,
+    },
+    sellerCircle: {
+      padding: 34.4,
+      borderRadius: 100,
+      backgroundColor: "white",
+      borderWidth: 0.2,
+      borderColor: "gray",
+      position: "absolute",
+      left: 1,
+      top: height / 70,
+      opacity: 0.9,
+    },
+    sellerButtons: {
+      width: width / 3.5,
+      height: height / 35,
+      resizeMode: "contain",
+      marginEnd: 10,
+    },
+    sellerButtonsBottom: {
+      width: width / 2.3,
+      height: height / 25,
+      resizeMode: "contain",
     },
 
     bestSellerBackList: {
@@ -432,17 +644,10 @@ const useStyle = () => {
       marginBottom: height / 80,
       padding: 10,
     },
-    sellerCircle: {
-      padding: 34.4,
-      borderRadius: 100,
-      backgroundColor: "white",
-      borderWidth: 0.2,
-      borderColor: "gray",
-      opacity: 0.9,
-    },
-    sellerButtons: {
-      width: width / 7,
-      height: height / 16,
+
+    freqButtons: {
+      width: width / 4,
+      height: height / 25,
       resizeMode: "contain",
     },
     addToCartTxt: {
@@ -513,12 +718,27 @@ const useStyle = () => {
       opacity: 0.9,
     },
     catCircle: {
-      padding: 10.4,
+      padding: 9.4,
       borderRadius: 100,
       backgroundColor: "white",
       borderWidth: 0.2,
       borderColor: "gray",
       opacity: 0.9,
+      width: width / 5,
+      justifyContent: "center",
+      alignItems: "center",
+    },
+    infoStyles: {
+      padding: 9.4,
+      borderRadius: 3,
+      backgroundColor: "white",
+      borderWidth: 0.2,
+      borderColor: "gray",
+      opacity: 0.9,
+      width: width / 4,
+      height: height / 9,
+      justifyContent: "center",
+      alignItems: "center",
     },
     filterBtn: {
       borderRadius: 2,
@@ -531,13 +751,11 @@ const useStyle = () => {
       width: height / 7.83,
     },
     filterBtnPrice: {
-      borderRadius: 2,
-      borderWidth: 0.7,
+      borderRadius: 4,
+      borderWidth: 0.5,
       borderColor: colors.MAIN,
-      paddingHorizontal: 10,
-      marginEnd: 5,
-      marginTop: 2,
-      width: height / 9,
+      width: height / 8.4,
+      padding: 3,
     },
     filterBtnColor: {
       borderRadius: 2,

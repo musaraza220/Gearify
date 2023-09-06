@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { StatusBar } from "expo-status-bar";
 import {
   StyleSheet,
@@ -22,6 +22,7 @@ import {
   SimpleLineIcons,
   Entypo,
   Ionicons,
+  FontAwesome,
 } from "@expo/vector-icons";
 import { appleAuth } from "@invertase/react-native-apple-authentication";
 import {
@@ -38,6 +39,7 @@ import {
 import * as WebBrowser from "expo-web-browser";
 import LinearGradient from "react-native-linear-gradient";
 import StarRating from "react-native-star-rating-widget";
+import RBSheet from "react-native-raw-bottom-sheet";
 
 import axios from "axios";
 import * as Font from "expo-font";
@@ -45,6 +47,8 @@ import { loginAPI, PersonalAccountAPI } from "./APIs";
 WebBrowser.maybeCompleteAuthSession();
 
 export default function Cart(props) {
+  const refRBSheet = useRef();
+
   const [email, setEmail] = React.useState("");
   const [emailError, setEmailError] = React.useState("");
   const [searchQry, setSearchQry] = React.useState("");
@@ -64,6 +68,7 @@ export default function Cart(props) {
   const [secureEntry, setSecureEntry] = React.useState(true);
   const [rightIcon, setRightIcon] = React.useState("eye");
   const [rating, setRating] = useState(3.5);
+  const [qty, setQty] = useState(1);
   const [user, setUser] = useState({});
   const { styles } = useStyle();
   const { width, height } = useWindowDimensions();
@@ -103,7 +108,8 @@ export default function Cart(props) {
                 source={require("../assets/topbar.png")}
                 style={styles.topBar}
               >
-                <View
+                <TouchableOpacity
+                  onPress={() => refRBSheet.current.open()}
                   style={{
                     flexDirection: "row",
                     alignItems: "center",
@@ -134,8 +140,13 @@ export default function Cart(props) {
                         },
                       ]}
                     >
-                      {` `}Deliver to Name - City zip code
+                      {` `}Deliver to Name - City zip code{` `}
                     </Text>
+                    <MaterialCommunityIcons
+                      name="chevron-down"
+                      size={height / 50}
+                      color="white"
+                    />
                   </View>
                   <View>
                     <MaterialCommunityIcons
@@ -144,7 +155,7 @@ export default function Cart(props) {
                       size={height / 25}
                     />
                   </View>
-                </View>
+                </TouchableOpacity>
               </ImageBackground>
             </View>
             {/* //////// TOP BUTTONS //////// */}
@@ -178,11 +189,16 @@ export default function Cart(props) {
                       marginTop: height / 70,
                     }}
                   >
-                    $ 207.80
+                    $ {(qty * 51.95).toFixed(2)}
                   </Text>
                 </View>
 
-                <View style={{ marginTop: height / 60 }}>
+                <TouchableOpacity
+                  onPress={() =>
+                    props.navigation.navigate("CheckoutCompleteInfo")
+                  }
+                  style={{ marginTop: height / 60 }}
+                >
                   <ImageBackground
                     source={require("../assets/button.png")}
                     style={styles.checkOutBtn}
@@ -196,10 +212,10 @@ export default function Cart(props) {
                         marginVertical: 2,
                       }}
                     >
-                      Proceed to Checkout (3 items)
+                      Proceed to Checkout (1 item)
                     </Text>
                   </ImageBackground>
-                </View>
+                </TouchableOpacity>
 
                 <View style={{ marginTop: height / 170 }}>
                   <View
@@ -208,7 +224,11 @@ export default function Cart(props) {
                     }}
                   >
                     {/* ////goto product details//// */}
-                    <TouchableOpacity>
+                    <TouchableOpacity
+                      onPress={() =>
+                        props.navigation.navigate("ProductDetails")
+                      }
+                    >
                       <LinearGradient
                         colors={["#ffffff", "lightgray"]}
                         style={styles.bestSellerBack}
@@ -318,10 +338,16 @@ export default function Cart(props) {
                           },
                         ]}
                       >
-                        <MaterialCommunityIcons
-                          name="chevron-up"
-                          size={height / 50}
-                        />
+                        <TouchableOpacity
+                          activeOpacity={0.5}
+                          disabled={qty > 1 ? false : true}
+                          onPress={() => setQty(qty - 1)}
+                        >
+                          <MaterialCommunityIcons
+                            name="chevron-down"
+                            size={height / 50}
+                          />
+                        </TouchableOpacity>
                         <Text
                           style={{
                             fontFamily: "GlacialIndifference-Regular",
@@ -329,12 +355,17 @@ export default function Cart(props) {
                             textAlign: "center",
                           }}
                         >
-                          10
+                          {qty}
                         </Text>
-                        <MaterialCommunityIcons
-                          name="chevron-down"
-                          size={height / 50}
-                        />
+                        <TouchableOpacity
+                          activeOpacity={0.5}
+                          onPress={() => setQty(qty + 1)}
+                        >
+                          <MaterialCommunityIcons
+                            name="chevron-up"
+                            size={height / 50}
+                          />
+                        </TouchableOpacity>
                       </View>
                     </View>
                     <View
@@ -351,10 +382,17 @@ export default function Cart(props) {
                           setShowSimilar(true),
                         ]}
                       >
-                        <Image
-                          source={require("../assets/addsimilar.png")}
-                          style={styles.sellerButtonsBottom}
-                        />
+                        {showSimilar ? (
+                          <Image
+                            source={require("../assets/addsimilar.png")}
+                            style={styles.sellerButtonsBottom}
+                          />
+                        ) : (
+                          <Image
+                            source={require("../assets/addsimilar1.jpg")}
+                            style={styles.sellerButtonsBottom}
+                          />
+                        )}
                       </TouchableOpacity>
                       <TouchableOpacity
                         onPress={() => [
@@ -362,10 +400,17 @@ export default function Cart(props) {
                           setShowSimilar(false),
                         ]}
                       >
-                        <Image
-                          source={require("../assets/viewdetailbtn.png")}
-                          style={styles.sellerButtonsBottom}
-                        />
+                        {showDetails ? (
+                          <Image
+                            source={require("../assets/viewdetailbtn1.png")}
+                            style={styles.sellerButtonsBottom}
+                          />
+                        ) : (
+                          <Image
+                            source={require("../assets/viewdetailbtn.png")}
+                            style={styles.sellerButtonsBottom}
+                          />
+                        )}
                       </TouchableOpacity>
                     </View>
                     {showDetails ? (
@@ -1057,19 +1102,288 @@ export default function Cart(props) {
                 </View>
               </View>
             </ScrollView>
+            <RBSheet
+              ref={refRBSheet}
+              closeOnDragDown={true}
+              closeOnPressMask={true}
+              height={height / 3}
+              customStyles={{
+                wrapper: {
+                  backgroundColor: "rgba(0, 0, 0, 0.5)",
+                },
+                draggableIcon: {
+                  backgroundColor: "#000",
+                },
+              }}
+            >
+              <View style={{ paddingHorizontal: height / 40 }}>
+                <Text
+                  style={{
+                    fontFamily: "GlacialIndifference-Bold",
+                    fontSize: height / 65,
+                  }}
+                >
+                  Choose your location
+                </Text>
+                <Text
+                  style={{
+                    fontFamily: "GlacialIndifference-Regular",
+                    fontSize: height / 70,
+                  }}
+                >
+                  Delivery options and delivery speeds may vary for different
+                  locations
+                </Text>
+
+                <View
+                  style={{
+                    marginTop: height / 50,
+                    alignItems: "center",
+                    flexDirection: "row",
+                  }}
+                >
+                  <TouchableOpacity
+                    onPress={() => refRBSheet.current.close()}
+                    style={{
+                      borderWidth: 1,
+                      borderColor: colors.MAIN,
+                      justifyContent: "center",
+                      width: height / 8,
+                      padding: 10,
+                    }}
+                  >
+                    <Text
+                      style={{
+                        fontFamily: "GlacialIndifference-Bold",
+                        fontSize: height / 70,
+                      }}
+                    >
+                      Name
+                    </Text>
+                    <Text
+                      style={{
+                        fontFamily: "GlacialIndifference-Regular",
+                        fontSize: height / 70,
+                        marginTop: 2,
+                      }}
+                    >
+                      Address
+                    </Text>
+                    <Text
+                      style={{
+                        fontFamily: "GlacialIndifference-Regular",
+                        fontSize: height / 70,
+                        marginTop: 2,
+                      }}
+                    >
+                      City, Zipcode
+                    </Text>
+                    <Text
+                      style={{
+                        fontFamily: "GlacialIndifference-Regular",
+                        fontSize: height / 70,
+                        marginTop: height / 40,
+                      }}
+                    >
+                      Default address
+                    </Text>
+                  </TouchableOpacity>
+
+                  <TouchableOpacity
+                    onPress={() => [
+                      refRBSheet.current.close(),
+                      props.navigation.navigate("AddressBook"),
+                    ]}
+                    style={{
+                      borderWidth: 1,
+                      borderColor: "lightgray",
+                      justifyContent: "center",
+                      width: height / 8,
+                      padding: 10,
+                      marginStart: height / 70,
+                    }}
+                  >
+                    <Text
+                      style={{
+                        fontFamily: "GlacialIndifference-Bold",
+                        fontSize: height / 70,
+                        color: colors.MAIN,
+                        paddingVertical: height / 31,
+                        textAlign: "center",
+                      }}
+                    >
+                      Manage Address Book
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+                <View
+                  style={{
+                    flexDirection: "row",
+                    alignItems: "center",
+                    marginTop: height / 60,
+                  }}
+                >
+                  <MaterialIcons
+                    name="location-pin"
+                    color={colors.MAIN}
+                    size={height / 70}
+                  />
+                  <Text
+                    style={[
+                      styles.textSize,
+                      {
+                        color: colors.MAIN,
+                        fontSize: height / 70,
+                        fontFamily: "Mediums-Font",
+                      },
+                    ]}
+                  >
+                    {`  `}Enter Canada zip code
+                  </Text>
+                  <MaterialCommunityIcons
+                    name="chevron-down"
+                    size={height / 50}
+                    color="white"
+                  />
+                </View>
+
+                <View
+                  style={{
+                    flexDirection: "row",
+                    alignItems: "center",
+                    marginTop: height / 90,
+                  }}
+                >
+                  <Ionicons
+                    name="globe"
+                    color={colors.MAIN}
+                    size={height / 70}
+                  />
+                  <Text
+                    style={[
+                      styles.textSize,
+                      {
+                        color: colors.MAIN,
+                        fontSize: height / 70,
+                        fontFamily: "Mediums-Font",
+                      },
+                    ]}
+                  >
+                    {`  `}Ship outside Canada
+                  </Text>
+                  <MaterialCommunityIcons
+                    name="chevron-down"
+                    size={height / 50}
+                    color="white"
+                  />
+                </View>
+              </View>
+            </RBSheet>
           </View>
 
-          <View style={styles.bottomMenuMain}>
-            <Image
-              source={require("../assets/searchdock.png")}
+          <ImageBackground
+            source={require("../assets/cartdock.png")}
+            style={styles.bottomMenuMain}
+          >
+            <View
               style={{
-                height: height / 8,
-                width: "100%",
-                resizeMode: "contain",
-                marginTop: -8,
+                flexDirection: "row",
+                justifyContent: "space-between",
+                marginStart: height / 20,
+                marginEnd: height / 20,
+                marginTop: height / 35,
               }}
-            />
-          </View>
+            >
+              <TouchableOpacity
+                onPress={() => props.navigation.navigate("Home")}
+              >
+                <Image
+                  source={require("../assets/homeicon.png")}
+                  style={styles.dockIconStyle}
+                />
+                <Text
+                  style={[
+                    styles.textSize,
+                    {
+                      fontSize: height / 110,
+                      paddingTop: 10,
+                      fontFamily: "Mediums-Font",
+                      textAlign: "center",
+                    },
+                  ]}
+                >
+                  Home
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => props.navigation.navigate("Categories")}
+              >
+                <Image
+                  source={require("../assets/exploreicon.png")}
+                  style={styles.dockIconStyle}
+                />
+                <Text
+                  style={[
+                    styles.textSize,
+                    {
+                      fontSize: height / 110,
+                      paddingTop: 10,
+                      fontFamily: "Mediums-Font",
+                      textAlign: "center",
+                    },
+                  ]}
+                >
+                  Explore
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => props.navigation.navigate("Search")}
+              >
+                <Image
+                  source={require("../assets/searchicon.png")}
+                  style={styles.dockIconStyle}
+                />
+                <Text
+                  style={[
+                    styles.textSize,
+                    {
+                      fontSize: height / 110,
+                      paddingTop: 10,
+                      fontFamily: "Mediums-Font",
+                      textAlign: "center",
+                    },
+                  ]}
+                >
+                  Search
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => props.navigation.navigate("Wishlist")}
+              >
+                <Image
+                  source={require("../assets/whishlisticon.png")}
+                  style={styles.dockIconStyle}
+                />
+                <Text
+                  style={[
+                    styles.textSize,
+                    {
+                      fontSize: height / 110,
+                      paddingTop: 10,
+                      fontFamily: "Mediums-Font",
+                      textAlign: "center",
+                    },
+                  ]}
+                >
+                  Wishlist
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => props.navigation.navigate("Cart")}
+                style={styles.dockIconStyle}
+              ></TouchableOpacity>
+            </View>
+          </ImageBackground>
         </View>
       )}
     </View>
@@ -1084,6 +1398,12 @@ const useStyle = () => {
     },
     centerItems: {
       flex: 8,
+    },
+    dockIconStyle: {
+      resizeMode: "contain",
+      height: height / 40,
+      width: height / 40,
+      marginTop: 6,
     },
     centerText: {
       textAlign: "center",

@@ -265,6 +265,7 @@ export default function Products(props) {
                     </TouchableOpacity>
 
                     <TouchableOpacity
+                      onPress={() => props.navigation.navigate("Filters")}
                       style={{
                         paddingStart: height / 40,
                       }}
@@ -285,130 +286,137 @@ export default function Products(props) {
                         justifyContent: "space-between",
                       }}
                     >
-                      <LinearGradient
-                        colors={["#ffffff", "lightgray"]}
-                        style={styles.bestSellerBack}
+                      <TouchableOpacity
+                        onPress={() =>
+                          props.navigation.navigate("ProductDetails")
+                        }
                       >
-                        <Text
-                          style={{
-                            fontSize: height / 80,
-                            fontFamily: "GlacialIndifference-Regular",
-                          }}
-                        >
-                          BRAND NAME
-                        </Text>
-                        <View
-                          style={{
-                            padding: 2,
-                            alignSelf: "center",
-                            marginVertical: 10,
-                          }}
-                        >
-                          <Image
-                            source={require("../assets/product.png")}
-                            style={{
-                              height: 80,
-                              width: 80,
-                              resizeMode: "contain",
-                            }}
-                          />
-                        </View>
-
-                        <View
-                          style={{
-                            flexDirection: "row",
-                            alignItems: "center",
-                          }}
+                        <LinearGradient
+                          colors={["#ffffff", "lightgray"]}
+                          style={styles.bestSellerBack}
                         >
                           <Text
                             style={{
-                              fontSize: height / 55,
-                              fontFamily: "Mediums-Font",
+                              fontSize: height / 80,
+                              fontFamily: "GlacialIndifference-Regular",
                             }}
                           >
-                            $51.95
+                            BRAND NAME
                           </Text>
                           <View
                             style={{
-                              flexDirection: "row",
-                              alignItems: "center",
-                              marginStart: height / 24.5,
+                              padding: 2,
+                              alignSelf: "center",
+                              marginVertical: 10,
                             }}
                           >
-                            <Text
+                            <Image
+                              source={require("../assets/product.png")}
                               style={{
-                                fontSize: height / 80,
-                                fontFamily: "Mediums-Font",
-                              }}
-                            >
-                              {rating}
-                            </Text>
-                            <StarRating
-                              rating={rating}
-                              onChange={setRating}
-                              starSize={height / 60}
-                              style={{ marginStart: height / 80 }}
-                              maxStars={5}
-                              starStyle={{
-                                padding: 0,
-                                margin: 0,
-                                marginStart: -height / 100,
+                                height: 80,
+                                width: 80,
+                                resizeMode: "contain",
                               }}
                             />
                           </View>
-                        </View>
 
-                        <Text
-                          style={{
-                            fontSize: height / 55,
-                            fontFamily: "Mediums-Font",
-                            marginVertical: 4,
-                          }}
-                        >
-                          Short Product Name
-                        </Text>
+                          <View
+                            style={{
+                              flexDirection: "row",
+                              alignItems: "center",
+                            }}
+                          >
+                            <Text
+                              style={{
+                                fontSize: height / 55,
+                                fontFamily: "Mediums-Font",
+                              }}
+                            >
+                              $51.95
+                            </Text>
+                            <View
+                              style={{
+                                flexDirection: "row",
+                                alignItems: "center",
+                                marginStart: height / 24.5,
+                              }}
+                            >
+                              <Text
+                                style={{
+                                  fontSize: height / 80,
+                                  fontFamily: "Mediums-Font",
+                                }}
+                              >
+                                {rating}
+                              </Text>
+                              <StarRating
+                                rating={rating}
+                                onChange={setRating}
+                                starSize={height / 60}
+                                style={{ marginStart: height / 80 }}
+                                color={colors.MAIN}
+                                maxStars={5}
+                                starStyle={{
+                                  padding: 0,
+                                  margin: 0,
+                                  marginStart: -height / 100,
+                                }}
+                              />
+                            </View>
+                          </View>
 
-                        <Text
-                          style={{
-                            fontSize: height / 80,
-                            fontFamily: "GlacialIndifference-Regular",
-                          }}
-                        >
-                          Type
-                        </Text>
-                        <Text
-                          style={{
-                            fontSize: height / 80,
-                            fontFamily: "GlacialIndifference-Regular",
-                            marginTop: 2,
-                          }}
-                        >
-                          Category
-                        </Text>
-                        <Text
-                          style={{
-                            fontSize: height / 80,
-                            fontFamily: "GlacialIndifference-Regular",
-                            marginTop: 2,
-                          }}
-                        >
-                          Discount
-                        </Text>
-                        <TouchableOpacity
-                          style={{
-                            position: "absolute",
-                            top: height / 90,
-                            right: 10,
-                            opacity: 0.5,
-                          }}
-                        >
-                          <EvilIcons
-                            name="heart"
-                            color={colors.MAIN}
-                            size={height / 31}
-                          />
-                        </TouchableOpacity>
-                      </LinearGradient>
+                          <Text
+                            style={{
+                              fontSize: height / 55,
+                              fontFamily: "Mediums-Font",
+                              marginVertical: 4,
+                            }}
+                          >
+                            Short Product Name
+                          </Text>
+
+                          <Text
+                            style={{
+                              fontSize: height / 80,
+                              fontFamily: "GlacialIndifference-Regular",
+                            }}
+                          >
+                            Type
+                          </Text>
+                          <Text
+                            style={{
+                              fontSize: height / 80,
+                              fontFamily: "GlacialIndifference-Regular",
+                              marginTop: 2,
+                            }}
+                          >
+                            Category
+                          </Text>
+                          <Text
+                            style={{
+                              fontSize: height / 80,
+                              fontFamily: "GlacialIndifference-Regular",
+                              marginTop: 2,
+                            }}
+                          >
+                            Discount
+                          </Text>
+                          <TouchableOpacity
+                            style={{
+                              position: "absolute",
+                              top: height / 90,
+                              right: 10,
+                              opacity: 0.5,
+                            }}
+                          >
+                            <EvilIcons
+                              name="heart"
+                              color={colors.MAIN}
+                              size={height / 31}
+                            />
+                          </TouchableOpacity>
+                        </LinearGradient>
+                      </TouchableOpacity>
 
                       <LinearGradient
                         colors={["#ffffff", "lightgray"]}
@@ -473,6 +481,7 @@ export default function Products(props) {
                               onChange={setRating}
                               starSize={height / 60}
                               style={{ marginStart: height / 80 }}
+                              color={colors.MAIN}
                               maxStars={5}
                               starStyle={{
                                 padding: 0,
@@ -1068,17 +1077,109 @@ export default function Products(props) {
             </ScrollView>
           </View>
 
-          <View style={styles.bottomMenuMain}>
-            <Image
-              source={require("../assets/bottommenu.png")}
+          <ImageBackground
+            source={require("../assets/sarchdock.png")}
+            style={styles.bottomMenuMain}
+          >
+            <View
               style={{
-                height: height / 8,
-                width: "100%",
-                resizeMode: "contain",
-                marginTop: -8,
+                flexDirection: "row",
+                justifyContent: "space-between",
+                marginStart: height / 20,
+                marginEnd: height / 20,
+                marginTop: height / 35,
               }}
-            />
-          </View>
+            >
+              <TouchableOpacity
+                onPress={() => props.navigation.navigate("Home")}
+              >
+                <Image
+                  source={require("../assets/homeicon.png")}
+                  style={styles.dockIconStyle}
+                />
+                <Text
+                  style={[
+                    styles.textSize,
+                    {
+                      fontSize: height / 110,
+                      paddingTop: 10,
+                      fontFamily: "Mediums-Font",
+                      textAlign: "center",
+                    },
+                  ]}
+                >
+                  Home
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => props.navigation.navigate("Categories")}
+              >
+                <Image
+                  source={require("../assets/exploreicon.png")}
+                  style={styles.dockIconStyle}
+                />
+                <Text
+                  style={[
+                    styles.textSize,
+                    {
+                      fontSize: height / 110,
+                      paddingTop: 10,
+                      fontFamily: "Mediums-Font",
+                      textAlign: "center",
+                    },
+                  ]}
+                >
+                  Explore
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => props.navigation.navigate("Search")}
+                style={styles.dockIconStyle}
+              ></TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => props.navigation.navigate("Wishlist")}
+              >
+                <Image
+                  source={require("../assets/whishlisticon.png")}
+                  style={styles.dockIconStyle}
+                />
+                <Text
+                  style={[
+                    styles.textSize,
+                    {
+                      fontSize: height / 110,
+                      paddingTop: 10,
+                      fontFamily: "Mediums-Font",
+                      textAlign: "center",
+                    },
+                  ]}
+                >
+                  Wishlist
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => props.navigation.navigate("Cart")}
+              >
+                <Image
+                  source={require("../assets/cart.png")}
+                  style={styles.dockIconStyle}
+                />
+                <Text
+                  style={[
+                    styles.textSize,
+                    {
+                      fontSize: height / 110,
+                      paddingTop: 10,
+                      fontFamily: "Mediums-Font",
+                      textAlign: "center",
+                    },
+                  ]}
+                >
+                  Cart
+                </Text>
+              </TouchableOpacity>
+            </View>
+          </ImageBackground>
         </View>
       )}
     </View>
@@ -1093,6 +1194,12 @@ const useStyle = () => {
     },
     centerItems: {
       flex: 8,
+    },
+    dockIconStyle: {
+      resizeMode: "contain",
+      height: height / 40,
+      width: height / 40,
+      marginTop: 6,
     },
     centerText: {
       textAlign: "center",
