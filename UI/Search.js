@@ -190,7 +190,10 @@ export default function Search(props) {
                 </Text>
 
                 <View style={{ flexDirection: "row", alignItems: "center" }}>
-                  <TouchableOpacity style={styles.filterBtn}>
+                  <TouchableOpacity
+                    style={styles.filterBtn}
+                    onPress={() => props.navigation.navigate("Products")}
+                  >
                     <Text
                       style={{
                         fontFamily: "GlacialIndifference-Regular",

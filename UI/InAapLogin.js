@@ -149,7 +149,8 @@ export default function InAppLogin(props) {
                     marginTop: height / 13,
                   }}
                 >
-                  <View
+                  <TouchableOpacity
+                    onPress={() => props.navigation.goBack()}
                     style={{
                       flexDirection: "row",
                       alignItems: "center",
@@ -168,7 +169,7 @@ export default function InAppLogin(props) {
                     >
                       {` `}CANCEL
                     </Text>
-                  </View>
+                  </TouchableOpacity>
                   <View>
                     <MaterialCommunityIcons
                       name="menu"
@@ -450,7 +451,13 @@ export default function InAppLogin(props) {
                     </View>
                   )}
 
-                  <TouchableOpacity onPress={() => setOrderDone(true)}>
+                  <TouchableOpacity
+                    onPress={() =>
+                      showCreate
+                        ? props.navigation.navigate("InAppOTP")
+                        : props.navigation.navigate("InAppLoginPassword")
+                    }
+                  >
                     <ImageBackground
                       source={require("../assets/topbar.png")}
                       style={[styles.checkOutBtn, { marginTop: height / 17 }]}
@@ -469,7 +476,9 @@ export default function InAppLogin(props) {
                     </ImageBackground>
                   </TouchableOpacity>
                   {showCreate ? null : (
-                    <TouchableOpacity onPress={() => setOrderDone(true)}>
+                    <TouchableOpacity
+                      onPress={() => props.navigation.navigate("GuestAddress")}
+                    >
                       <ImageBackground
                         source={require("../assets/topbar.png")}
                         style={[styles.checkOutBtn, { marginTop: height / 50 }]}

@@ -59,7 +59,7 @@ export default function Cart(props) {
   const [gLoading, setGLoading] = React.useState(false);
   const [gridView, setGridView] = React.useState(true);
   const [listView, setListView] = React.useState(false);
-  const [aLoading, setALoading] = React.useState(false);
+  const [loggedIn, setLoggedIn] = React.useState(true);
   const [fLoading, setFLoading] = React.useState(false);
   const [authLoading, setAuthLoading] = React.useState(false);
   const [showDetails, setShowDetails] = React.useState(false);
@@ -140,7 +140,9 @@ export default function Cart(props) {
                         },
                       ]}
                     >
-                      {` `}Deliver to Name - City zip code{` `}
+                      {loggedIn
+                        ? ` Deliver to Name - City zip code`
+                        : ` Deliver to country`}
                     </Text>
                     <MaterialCommunityIcons
                       name="chevron-down"
@@ -194,9 +196,7 @@ export default function Cart(props) {
                 </View>
 
                 <TouchableOpacity
-                  onPress={() =>
-                    props.navigation.navigate("CheckoutCompleteInfo")
-                  }
+                  onPress={() => refRBSheet.current.open()}
                   style={{ marginTop: height / 60 }}
                 >
                   <ImageBackground
@@ -226,7 +226,7 @@ export default function Cart(props) {
                     {/* ////goto product details//// */}
                     <TouchableOpacity
                       onPress={() =>
-                        props.navigation.navigate("ProductDetails")
+                        props.navigation.navigate("CartProductDetails")
                       }
                     >
                       <LinearGradient
@@ -1135,87 +1135,121 @@ export default function Cart(props) {
                   locations
                 </Text>
 
-                <View
-                  style={{
-                    marginTop: height / 50,
-                    alignItems: "center",
-                    flexDirection: "row",
-                  }}
-                >
-                  <TouchableOpacity
-                    onPress={() => refRBSheet.current.close()}
+                {loggedIn ? (
+                  <View
                     style={{
-                      borderWidth: 1,
-                      borderColor: colors.MAIN,
-                      justifyContent: "center",
-                      width: height / 8,
-                      padding: 10,
+                      marginTop: height / 50,
+                      alignItems: "center",
+                      flexDirection: "row",
                     }}
                   >
-                    <Text
+                    <TouchableOpacity
+                      onPress={() => [
+                        refRBSheet.current.close(),
+                        props.navigation.navigate("CheckoutCompleteInfo"),
+                      ]}
                       style={{
-                        fontFamily: "GlacialIndifference-Bold",
-                        fontSize: height / 70,
+                        borderWidth: 1,
+                        borderColor: colors.MAIN,
+                        justifyContent: "center",
+                        width: height / 8,
+                        padding: 10,
                       }}
                     >
-                      Name
-                    </Text>
-                    <Text
-                      style={{
-                        fontFamily: "GlacialIndifference-Regular",
-                        fontSize: height / 70,
-                        marginTop: 2,
-                      }}
-                    >
-                      Address
-                    </Text>
-                    <Text
-                      style={{
-                        fontFamily: "GlacialIndifference-Regular",
-                        fontSize: height / 70,
-                        marginTop: 2,
-                      }}
-                    >
-                      City, Zipcode
-                    </Text>
-                    <Text
-                      style={{
-                        fontFamily: "GlacialIndifference-Regular",
-                        fontSize: height / 70,
-                        marginTop: height / 40,
-                      }}
-                    >
-                      Default address
-                    </Text>
-                  </TouchableOpacity>
+                      <Text
+                        style={{
+                          fontFamily: "GlacialIndifference-Bold",
+                          fontSize: height / 70,
+                        }}
+                      >
+                        Name
+                      </Text>
+                      <Text
+                        style={{
+                          fontFamily: "GlacialIndifference-Regular",
+                          fontSize: height / 70,
+                          marginTop: 2,
+                        }}
+                      >
+                        Address
+                      </Text>
+                      <Text
+                        style={{
+                          fontFamily: "GlacialIndifference-Regular",
+                          fontSize: height / 70,
+                          marginTop: 2,
+                        }}
+                      >
+                        City, Zipcode
+                      </Text>
+                      <Text
+                        style={{
+                          fontFamily: "GlacialIndifference-Regular",
+                          fontSize: height / 70,
+                          marginTop: height / 40,
+                        }}
+                      >
+                        Default address
+                      </Text>
+                    </TouchableOpacity>
 
+                    <TouchableOpacity
+                      onPress={() => [
+                        refRBSheet.current.close(),
+                        props.navigation.navigate("AddressBook"),
+                      ]}
+                      style={{
+                        borderWidth: 1,
+                        borderColor: "lightgray",
+                        justifyContent: "center",
+                        width: height / 8,
+                        padding: 10,
+                        marginStart: height / 70,
+                      }}
+                    >
+                      <Text
+                        style={{
+                          fontFamily: "GlacialIndifference-Bold",
+                          fontSize: height / 70,
+                          color: colors.MAIN,
+                          paddingVertical: height / 31,
+                          textAlign: "center",
+                        }}
+                      >
+                        Manage Address Book
+                      </Text>
+                    </TouchableOpacity>
+                  </View>
+                ) : (
                   <TouchableOpacity
                     onPress={() => [
+                      props.navigation.navigate("InAppLogin"),
                       refRBSheet.current.close(),
-                      props.navigation.navigate("AddressBook"),
                     ]}
-                    style={{
-                      borderWidth: 1,
-                      borderColor: "lightgray",
-                      justifyContent: "center",
-                      width: height / 8,
-                      padding: 10,
-                      marginStart: height / 70,
-                    }}
+                    style={{ marginTop: height / 60 }}
                   >
-                    <Text
-                      style={{
-                        fontFamily: "GlacialIndifference-Bold",
-                        fontSize: height / 70,
-                        color: colors.MAIN,
-                        paddingVertical: height / 31,
-                        textAlign: "center",
-                      }}
+                    <ImageBackground
+                      source={require("../assets/topbar.png")}
+                      style={[
+                        styles.checkOutBtn,
+                        { borderRadius: 4, paddingVertical: height / 120 },
+                      ]}
                     >
-                      Manage Address Book
-                    </Text>
+                      <Text
+                        style={{
+                          fontFamily: "Mediums-Font",
+                          fontSize: height / 50,
+                          textAlign: "center",
+                          color: "white",
+                          marginVertical: 2,
+                        }}
+                      >
+                        Sign in to see your addresses
+                      </Text>
+                    </ImageBackground>
                   </TouchableOpacity>
-                </View>
+                )}
+
                 <View
                   style={{
                     flexDirection: "row",

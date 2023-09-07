@@ -141,7 +141,8 @@ export default function AddCardScreen(props) {
                     marginTop: height / 13,
                   }}
                 >
-                  <View
+                  <TouchableOpacity
+                    onPress={() => props.navigation.goBack()}
                     style={{
                       flexDirection: "row",
                       alignItems: "center",
@@ -160,7 +161,7 @@ export default function AddCardScreen(props) {
                     >
                       {` `}CANCEL
                     </Text>
-                  </View>
+                  </TouchableOpacity>
                   <View>
                     <MaterialCommunityIcons
                       name="menu"
@@ -206,9 +207,13 @@ export default function AddCardScreen(props) {
                       marginBottom: height / 16,
                     }}
                   >
-                    Thanks for purchasing with Gearify!
+                    Your card successfully added to your wallet
                   </Text>
-                  <TouchableOpacity>
+                  <TouchableOpacity
+                    onPress={() =>
+                      props.navigation.navigate("CheckoutCompleteInfo")
+                    }
+                  >
                     <ImageBackground
                       source={require("../assets/topbar.png")}
                       style={styles.checkOutBtn}
@@ -561,17 +566,109 @@ export default function AddCardScreen(props) {
             </ScrollView>
           </View>
 
-          <View style={styles.bottomMenuMain}>
-            <Image
-              source={require("../assets/searchdock.png")}
+          <ImageBackground
+            source={require("../assets/cartdock.png")}
+            style={styles.bottomMenuMain}
+          >
+            <View
               style={{
-                height: height / 8,
-                width: "100%",
-                resizeMode: "contain",
-                marginTop: -8,
+                flexDirection: "row",
+                justifyContent: "space-between",
+                marginStart: height / 20,
+                marginEnd: height / 20,
+                marginTop: height / 35,
               }}
-            />
-          </View>
+            >
+              <TouchableOpacity
+                onPress={() => props.navigation.navigate("Home")}
+              >
+                <Image
+                  source={require("../assets/homeicon.png")}
+                  style={styles.dockIconStyle}
+                />
+                <Text
+                  style={[
+                    styles.textSize,
+                    {
+                      fontSize: height / 110,
+                      paddingTop: 10,
+                      fontFamily: "Mediums-Font",
+                      textAlign: "center",
+                    },
+                  ]}
+                >
+                  Home
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => props.navigation.navigate("Categories")}
+              >
+                <Image
+                  source={require("../assets/exploreicon.png")}
+                  style={styles.dockIconStyle}
+                />
+                <Text
+                  style={[
+                    styles.textSize,
+                    {
+                      fontSize: height / 110,
+                      paddingTop: 10,
+                      fontFamily: "Mediums-Font",
+                      textAlign: "center",
+                    },
+                  ]}
+                >
+                  Explore
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => props.navigation.navigate("Search")}
+              >
+                <Image
+                  source={require("../assets/searchicon.png")}
+                  style={styles.dockIconStyle}
+                />
+                <Text
+                  style={[
+                    styles.textSize,
+                    {
+                      fontSize: height / 110,
+                      paddingTop: 10,
+                      fontFamily: "Mediums-Font",
+                      textAlign: "center",
+                    },
+                  ]}
+                >
+                  Search
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => props.navigation.navigate("Wishlist")}
+              >
+                <Image
+                  source={require("../assets/whishlisticon.png")}
+                  style={styles.dockIconStyle}
+                />
+                <Text
+                  style={[
+                    styles.textSize,
+                    {
+                      fontSize: height / 110,
+                      paddingTop: 10,
+                      fontFamily: "Mediums-Font",
+                      textAlign: "center",
+                    },
+                  ]}
+                >
+                  Wishlist
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => props.navigation.navigate("Cart")}
+                style={styles.dockIconStyle}
+              ></TouchableOpacity>
+            </View>
+          </ImageBackground>
         </View>
       )}
     </View>
@@ -586,6 +683,12 @@ const useStyle = () => {
     },
     centerItems: {
       flex: 8,
+    },
+    dockIconStyle: {
+      resizeMode: "contain",
+      height: height / 40,
+      width: height / 40,
+      marginTop: 6,
     },
     centerText: {
       textAlign: "center",

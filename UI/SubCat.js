@@ -162,7 +162,9 @@ export default function SubCat(props) {
             <ScrollView showsVerticalScrollIndicator={false}>
               <View style={{ marginHorizontal: height / 37, marginTop: 0 }}>
                 <TouchableOpacity
-                  onPress={() => props.navigation.navigate("Products")}
+                  onPress={() =>
+                    props.navigation.navigate("ExploreProductScreen")
+                  }
                 >
                   <LinearGradient
                     colors={["#ffffff", "lightgray"]}

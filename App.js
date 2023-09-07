@@ -51,6 +51,12 @@ import InAppOTP from "./UI/InAppOTP";
 import AddressBook from "./UI/AddressBook";
 import AddNewAddress from "./UI/AddNewAddress";
 import NewPickupLocation from "./UI/NewPickupLocation";
+import GuestAddress from "./UI/GuestAddress";
+import GuestAddCardScreen from "./UI/GuestAddCardScreen";
+import CartProductDetails from "./UI/CartProductDetails";
+import NewAccountAddAddress from "./UI/NewAccountAddAddress";
+import ExploreProductScreen from "./UI/ExploreProductScreen";
+import ExploreProductDetails from "./UI/ExploreProductDetails";
 
 // const Tab = createMaterialBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -205,8 +211,38 @@ export default function App() {
             options={{ headerShown: false }}
           />
           <Stack.Screen
+            name="ExploreProductDetails"
+            component={ExploreProductDetails}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="ExploreProductScreen"
+            component={ExploreProductScreen}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
             name="CheckoutCompleteInfo"
             component={CheckoutCompleteInfo}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="NewAccountAddAddress"
+            component={NewAccountAddAddress}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="CartProductDetails"
+            component={CartProductDetails}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="GuestAddCardScreen"
+            component={GuestAddCardScreen}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="GuestAddress"
+            component={GuestAddress}
             options={{ headerShown: false }}
           />
           <Stack.Screen
@@ -239,7 +275,6 @@ export default function App() {
             component={InAppLoginPassword}
             options={{ headerShown: false }}
           />
-
           <Stack.Screen
             name="AddBillingAddress"
             component={AddBillingAddress}
@@ -265,7 +300,6 @@ export default function App() {
             component={CheckoutInCompleteInfo}
             options={{ headerShown: false }}
           />
-
           <Stack.Screen
             name="Cart"
             component={Cart}
@@ -286,25 +320,21 @@ export default function App() {
             component={VideoReviews}
             options={{ headerShown: false }}
           />
-
           <Stack.Screen
             name="Filters"
             component={Filters}
             options={{ headerShown: false }}
           />
-
           <Stack.Screen
             name="Categories"
             component={Categories}
             options={{ headerShown: false }}
           />
-
           <Stack.Screen
             name="Search"
             component={Search}
             options={{ headerShown: false }}
           />
-
           <Stack.Screen
             name="SubCat"
             component={SubCat}
@@ -315,13 +345,11 @@ export default function App() {
             component={Products}
             options={{ headerShown: false }}
           />
-
           <Stack.Screen
             name="Login"
             component={Login}
             options={{ headerShown: false }}
           />
-
           <Stack.Screen
             name="ForgotPassword"
             component={ForgotPassword}

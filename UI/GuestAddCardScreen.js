@@ -54,7 +54,7 @@ import CheckBox from "@react-native-community/checkbox";
 import { loginAPI, PersonalAccountAPI } from "./APIs";
 WebBrowser.maybeCompleteAuthSession();
 
-export default function InAppLoginPassword(props) {
+export default function GuestAddCardScreen(props) {
   const [email, setEmail] = React.useState("");
   const [emailError, setEmailError] = React.useState("");
   const [searchQry, setSearchQry] = React.useState("");
@@ -67,7 +67,6 @@ export default function InAppLoginPassword(props) {
   const [phone, setPhone] = React.useState("");
   const [code, setCode] = React.useState("");
   const [toggleCheckBox, setToggleCheckBox] = useState(false);
-  const [password, setPassword] = React.useState("");
 
   const [gLoading, setGLoading] = React.useState(false);
   const [gridView, setGridView] = React.useState(true);
@@ -90,21 +89,16 @@ export default function InAppLoginPassword(props) {
     "GlacialIndifference-Bold": require("../assets/AvenirNextCondensedDemiBold.ttf"),
     "Mediums-Font": require("../assets/AvenirNextCondensedMedium.ttf"),
   };
-  const handleVisibility = () => {
-    if (secureEntry) {
-      setSecureEntry(false);
-      setRightIcon("eye-off");
-    } else {
-      setSecureEntry(true);
-      setRightIcon("eye");
-    }
-  };
+
   const data = [
     {
-      label: "Create Account.",
+      label: "Monday, Sept. 4",
     },
     {
-      label: "Sign in",
+      label: "Friday, Sept. 1 and Sunday, Sept. 3",
+    },
+    {
+      label: "Thursday, Aug. 31 - Sunday, Sept. 3",
     },
   ];
 
@@ -147,27 +141,19 @@ export default function InAppLoginPassword(props) {
                     marginTop: height / 13,
                   }}
                 >
-                  <TouchableOpacity
-                    onPress={() => props.navigation.goBack()}
-                    style={{
-                      flexDirection: "row",
-                      alignItems: "center",
-                      marginTop: 10,
-                    }}
-                  >
-                    <Text
-                      style={[
-                        styles.textSize,
-                        {
-                          color: "white",
-                          fontSize: height / 80,
-                          fontFamily: "Mediums-Font",
-                        },
-                      ]}
-                    >
-                      {` `}CANCEL
-                    </Text>
-                  </TouchableOpacity>
+                  <View style={{ flexDirection: "row", alignItems: "center" }}>
+                    <TouchableOpacity onPress={() => props.navigation.goBack()}>
+                      <Image
+                        source={require("../assets/backwhite.png")}
+                        style={{
+                          resizeMode: "contain",
+                          height: height / 42,
+                          width: width / 19,
+                          marginStart: 2,
+                        }}
+                      />
+                    </TouchableOpacity>
+                  </View>
                   <View>
                     <MaterialCommunityIcons
                       name="menu"
@@ -215,7 +201,9 @@ export default function InAppLoginPassword(props) {
                   >
                     Thanks for purchasing with Gearify!
                   </Text>
-                  <TouchableOpacity>
+                  <TouchableOpacity
+                    onPress={() => props.navigation.navigate("Home")}
+                  >
                     <ImageBackground
                       source={require("../assets/topbar.png")}
                       style={styles.checkOutBtn}
@@ -249,100 +237,177 @@ export default function InAppLoginPassword(props) {
                         marginTop: height / 70,
                       }}
                     >
-                      Sign in
-                    </Text>
-                  </View>
-                  <View
-                    style={{
-                      marginTop: height / 25,
-                    }}
-                  >
-                    <Text
-                      style={{
-                        fontFamily: "GlacialIndifference-Regular",
-                        fontSize: height / 65,
-                      }}
-                    >
-                      musaraza@gmail.com
+                      Add card details
                     </Text>
                   </View>
 
-                  <Text
-                    style={{
-                      fontFamily: "GlacialIndifference-Bold",
-                      fontSize: height / 70,
-                      marginVertical: height / 40,
-                    }}
-                  >
-                    Password
-                  </Text>
                   <View
                     style={[
                       styles.txtView,
                       {
-                        borderWidth: passwordError !== "" ? 0.3 : 0,
-                        borderColor: passwordError !== "" ? colors.MAIN : null,
-                        flexDirection: "row",
-                        justifyContent: "space-between",
+                        borderWidth: emailError !== "" ? 0.3 : 0,
+                        borderColor: emailError !== "" ? colors.MAIN : null,
+                        marginTop: height / 25,
                       },
                     ]}
                   >
                     <TextInput
-                      placeholder="Enter Password"
+                      placeholder="Name on card"
                       placeholderTextColor={theme.colors.secondary}
                       style={[
                         styles.textSize,
                         {
                           backgroundColor: colors.grays,
-                          width: width / 1.4,
                         },
                       ]}
                       autoCorrect={false}
-                      secureTextEntry={secureEntry}
-                      value={password}
+                      value={email}
                       onChangeText={(value) => [
-                        setPassword(value),
-                        setPasswordError(""),
+                        setEmail(value),
+                        setEmailError(""),
                       ]}
-                      error={error}
                     />
-                    <TouchableOpacity
-                      activeOpacity={0.6}
-                      onPress={() => handleVisibility()}
-                    >
-                      <MaterialCommunityIcons
-                        size={height / 50}
-                        name={rightIcon}
-                      />
-                    </TouchableOpacity>
                   </View>
 
-                  <TouchableOpacity
-                    style={{
-                      alignItems: "flex-end",
-                      marginTop: height / 80,
-                    }}
-                    onPress={() => [
-                      props.navigation.navigate("ForgotPassword"),
-                      setEmail(""),
-                      setPassword(""),
-                      setAuthError(""),
-                      setEmailError(""),
-                      setPasswordError(""),
+                  <View
+                    style={[
+                      styles.txtView,
+                      {
+                        borderWidth: emailError !== "" ? 0.3 : 0,
+                        borderColor: emailError !== "" ? colors.MAIN : null,
+                        marginTop: height / 50,
+                      },
                     ]}
                   >
-                    <View>
-                      <Text style={styles.textSize}>
-                        Forgot password?{`  `}
-                      </Text>
-                    </View>
-                  </TouchableOpacity>
-
-                  <TouchableOpacity
-                    onPress={() =>
-                      props.navigation.navigate("SelectBilingAddress")
-                    }
+                    <TextInput
+                      placeholder="Card number"
+                      placeholderTextColor={theme.colors.secondary}
+                      style={[
+                        styles.textSize,
+                        {
+                          backgroundColor: colors.grays,
+                        },
+                      ]}
+                      autoCorrect={false}
+                      value={email}
+                      onChangeText={(value) => [
+                        setEmail(value),
+                        setEmailError(""),
+                      ]}
+                    />
+                  </View>
+                  <Text
+                    style={{
+                      fontFamily: "GlacialIndifference-Bold",
+                      fontSize: height / 50,
+                      marginVertical: height / 70,
+                      marginTop: height / 30,
+                    }}
                   >
+                    Expiration Date
+                  </Text>
+
+                  <View
+                    style={{
+                      flexDirection: "row",
+                      justifyContent: "space-between",
+                      alignItems: "center",
+                    }}
+                  >
+                    <View>
+                      <View
+                        style={[
+                          styles.txtView,
+                          {
+                            borderWidth: emailError !== "" ? 0.3 : 0,
+                            borderColor: emailError !== "" ? colors.MAIN : null,
+                            width: width / 2.5,
+                            flexDirection: "row",
+                            justifyContent: "space-between",
+                            marginTop: 0,
+                          },
+                        ]}
+                      >
+                        <TextInput
+                          placeholder="01"
+                          placeholderTextColor={theme.colors.secondary}
+                          style={[
+                            styles.textSize,
+                            {
+                              backgroundColor: colors.grays,
+                            },
+                          ]}
+                          autoCorrect={false}
+                          value={email}
+                          onChangeText={(value) => [
+                            setEmail(value),
+                            setEmailError(""),
+                          ]}
+                        />
+                        <MaterialIcons
+                          size={height / 60}
+                          name="keyboard-arrow-down"
+                          color={"gray"}
+                        />
+                      </View>
+                    </View>
+
+                    <View>
+                      <View
+                        style={[
+                          styles.txtView,
+                          {
+                            borderWidth: emailError !== "" ? 0.3 : 0,
+                            borderColor: emailError !== "" ? colors.MAIN : null,
+                            width: width / 2.5,
+                            flexDirection: "row",
+                            justifyContent: "space-between",
+                            marginTop: 0,
+                          },
+                        ]}
+                      >
+                        <TextInput
+                          placeholder="2023"
+                          placeholderTextColor={theme.colors.secondary}
+                          style={[
+                            styles.textSize,
+                            {
+                              backgroundColor: colors.grays,
+                            },
+                          ]}
+                          autoCorrect={false}
+                          value={email}
+                          onChangeText={(value) => [
+                            setEmail(value),
+                            setEmailError(""),
+                          ]}
+                        />
+                        <MaterialIcons
+                          size={height / 60}
+                          name="keyboard-arrow-down"
+                          color={"gray"}
+                        />
+                      </View>
+                    </View>
+                  </View>
+                  {/* <View
+                    style={{
+                      flexDirection: "row",
+                      alignItems: "center",
+                      marginTop: height / 25,
+                    }}
+                  >
+                    <FontAwesome name="square-o" size={height / 50} />
+                    <Text
+                      style={{
+                        fontFamily: "GlacialIndifference-Regular",
+                        fontSize: height / 70,
+                      }}
+                    >
+                      {`  `}Set as default payment method.
+                    </Text>
+                  </View> */}
+                  <TouchableOpacity onPress={() => setOrderDone(true)}>
                     <ImageBackground
                       source={require("../assets/topbar.png")}
                       style={[styles.checkOutBtn, { marginTop: height / 17 }]}
@@ -356,52 +421,10 @@ export default function InAppLoginPassword(props) {
                           paddingVertical: height / 100,
                         }}
                       >
-                        Sign in
+                        Continue payment
                       </Text>
                     </ImageBackground>
                   </TouchableOpacity>
-
-                  <View
-                    style={{
-                      flexDirection: "row",
-                      alignItems: "center",
-                      justifyContent: "center",
-
-                      marginTop: height / 16,
-                      marginStart: height / 33,
-                      marginEnd: height / 33,
-                    }}
-                  >
-                    <Text
-                      style={{
-                        fontFamily: "GlacialIndifference-Regular",
-                        fontSize: height / 65,
-                        color: colors.MAIN,
-                        marginEnd: height / 20,
-                      }}
-                    >
-                      Conditions of Use
-                    </Text>
-                    <Text
-                      style={{
-                        fontFamily: "GlacialIndifference-Regular",
-                        fontSize: height / 65,
-                        color: colors.MAIN,
-                        marginEnd: height / 20,
-                      }}
-                    >
-                      Privacy Notice
-                    </Text>
-                    <Text
-                      style={{
-                        fontFamily: "GlacialIndifference-Regular",
-                        fontSize: height / 65,
-                        color: colors.MAIN,
-                      }}
-                    >
-                      Help
-                    </Text>
-                  </View>
 
                   {/*  <View style={{ marginTop: height / 33 }}>
                     <View
@@ -516,6 +539,110 @@ export default function InAppLoginPassword(props) {
               )}
             </ScrollView>
           </View>
+
+          <ImageBackground
+            source={require("../assets/cartdock.png")}
+            style={styles.bottomMenuMain}
+          >
+            <View
+              style={{
+                flexDirection: "row",
+                justifyContent: "space-between",
+                marginStart: height / 20,
+                marginEnd: height / 20,
+                marginTop: height / 35,
+              }}
+            >
+              <TouchableOpacity
+                onPress={() => props.navigation.navigate("Home")}
+              >
+                <Image
+                  source={require("../assets/homeicon.png")}
+                  style={styles.dockIconStyle}
+                />
+                <Text
+                  style={[
+                    styles.textSize,
+                    {
+                      fontSize: height / 110,
+                      paddingTop: 10,
+                      fontFamily: "Mediums-Font",
+                      textAlign: "center",
+                    },
+                  ]}
+                >
+                  Home
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => props.navigation.navigate("Categories")}
+              >
+                <Image
+                  source={require("../assets/exploreicon.png")}
+                  style={styles.dockIconStyle}
+                />
+                <Text
+                  style={[
+                    styles.textSize,
+                    {
+                      fontSize: height / 110,
+                      paddingTop: 10,
+                      fontFamily: "Mediums-Font",
+                      textAlign: "center",
+                    },
+                  ]}
+                >
+                  Explore
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => props.navigation.navigate("Search")}
+              >
+                <Image
+                  source={require("../assets/searchicon.png")}
+                  style={styles.dockIconStyle}
+                />
+                <Text
+                  style={[
+                    styles.textSize,
+                    {
+                      fontSize: height / 110,
+                      paddingTop: 10,
+                      fontFamily: "Mediums-Font",
+                      textAlign: "center",
+                    },
+                  ]}
+                >
+                  Search
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => props.navigation.navigate("Wishlist")}
+              >
+                <Image
+                  source={require("../assets/whishlisticon.png")}
+                  style={styles.dockIconStyle}
+                />
+                <Text
+                  style={[
+                    styles.textSize,
+                    {
+                      fontSize: height / 110,
+                      paddingTop: 10,
+                      fontFamily: "Mediums-Font",
+                      textAlign: "center",
+                    },
+                  ]}
+                >
+                  Wishlist
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => props.navigation.navigate("Cart")}
+                style={styles.dockIconStyle}
+              ></TouchableOpacity>
+            </View>
+          </ImageBackground>
         </View>
       )}
     </View>
@@ -530,6 +657,12 @@ const useStyle = () => {
     },
     centerItems: {
       flex: 8,
+    },
+    dockIconStyle: {
+      resizeMode: "contain",
+      height: height / 40,
+      width: height / 40,
+      marginTop: 6,
     },
     centerText: {
       textAlign: "center",

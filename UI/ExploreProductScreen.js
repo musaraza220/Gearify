@@ -38,7 +38,7 @@ import * as Font from "expo-font";
 import { loginAPI, PersonalAccountAPI } from "./APIs";
 WebBrowser.maybeCompleteAuthSession();
 
-export default function Products(props) {
+export default function ExploreProductScreen(props) {
   const [email, setEmail] = React.useState("");
   const [emailError, setEmailError] = React.useState("");
   const [password, setPassword] = React.useState("");
@@ -288,7 +288,7 @@ export default function Products(props) {
                     >
                       <TouchableOpacity
                         onPress={() =>
-                          props.navigation.navigate("ProductDetails")
+                          props.navigation.navigate("ExploreProductDetails")
                         }
                       >
                         <LinearGradient
@@ -613,9 +613,9 @@ export default function Products(props) {
                               rating={rating}
                               onChange={setRating}
                               starSize={height / 60}
+                              color={colors.MAIN}
                               style={{ marginStart: height / 80 }}
                               maxStars={5}
-                              color={colors.MAIN}
                               starStyle={{
                                 padding: 0,
                                 margin: 0,
@@ -876,8 +876,8 @@ export default function Products(props) {
                                 <StarRating
                                   rating={rating}
                                   onChange={setRating}
-                                  starSize={height / 60}
                                   color={colors.MAIN}
+                                  starSize={height / 60}
                                   style={{ marginStart: height / 80 }}
                                   maxStars={5}
                                   starStyle={{
@@ -1007,8 +1007,8 @@ export default function Products(props) {
                                 <StarRating
                                   rating={rating}
                                   onChange={setRating}
-                                  color={colors.MAIN}
                                   starSize={height / 60}
+                                  color={colors.MAIN}
                                   style={{ marginStart: height / 80 }}
                                   maxStars={5}
                                   starStyle={{
@@ -1082,7 +1082,7 @@ export default function Products(props) {
           </View>
 
           <ImageBackground
-            source={require("../assets/sarchdock.png")}
+            source={require("../assets/exploredock.png")}
             style={styles.bottomMenuMain}
           >
             <View
@@ -1117,9 +1117,13 @@ export default function Products(props) {
               </TouchableOpacity>
               <TouchableOpacity
                 onPress={() => props.navigation.navigate("Categories")}
+                style={styles.dockIconStyle}
+              ></TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => props.navigation.navigate("Search")}
               >
                 <Image
-                  source={require("../assets/exploreicon.png")}
+                  source={require("../assets/searchicon.png")}
                   style={styles.dockIconStyle}
                 />
                 <Text
@@ -1133,13 +1137,9 @@ export default function Products(props) {
                     },
                   ]}
                 >
-                  Explore
+                  Search
                 </Text>
               </TouchableOpacity>
-              <TouchableOpacity
-                onPress={() => props.navigation.navigate("Search")}
-                style={styles.dockIconStyle}
-              ></TouchableOpacity>
               <TouchableOpacity
                 onPress={() => props.navigation.navigate("Wishlist")}
               >

@@ -27,7 +27,6 @@ import {
   SimpleLineIcons,
   Entypo,
   Ionicons,
-  FontAwesome,
 } from "@expo/vector-icons";
 import { appleAuth } from "@invertase/react-native-apple-authentication";
 import {
@@ -49,12 +48,10 @@ import PhoneInput from "react-native-phone-number-input";
 import { isValidNumber } from "react-native-phone-number-input";
 import axios from "axios";
 import * as Font from "expo-font";
-import CheckBox from "@react-native-community/checkbox";
-
 import { loginAPI, PersonalAccountAPI } from "./APIs";
 WebBrowser.maybeCompleteAuthSession();
 
-export default function InAppLoginPassword(props) {
+export default function NewAccountAddAddress(props) {
   const [email, setEmail] = React.useState("");
   const [emailError, setEmailError] = React.useState("");
   const [searchQry, setSearchQry] = React.useState("");
@@ -66,9 +63,6 @@ export default function InAppLoginPassword(props) {
   const [value, setValue] = React.useState("");
   const [phone, setPhone] = React.useState("");
   const [code, setCode] = React.useState("");
-  const [toggleCheckBox, setToggleCheckBox] = useState(false);
-  const [password, setPassword] = React.useState("");
-
   const [gLoading, setGLoading] = React.useState(false);
   const [gridView, setGridView] = React.useState(true);
   const [listView, setListView] = React.useState(false);
@@ -90,21 +84,16 @@ export default function InAppLoginPassword(props) {
     "GlacialIndifference-Bold": require("../assets/AvenirNextCondensedDemiBold.ttf"),
     "Mediums-Font": require("../assets/AvenirNextCondensedMedium.ttf"),
   };
-  const handleVisibility = () => {
-    if (secureEntry) {
-      setSecureEntry(false);
-      setRightIcon("eye-off");
-    } else {
-      setSecureEntry(true);
-      setRightIcon("eye");
-    }
-  };
+
   const data = [
     {
-      label: "Create Account.",
+      label: "Monday, Sept. 4",
     },
     {
-      label: "Sign in",
+      label: "Friday, Sept. 1 and Sunday, Sept. 3",
+    },
+    {
+      label: "Thursday, Aug. 31 - Sunday, Sept. 3",
     },
   ];
 
@@ -147,27 +136,19 @@ export default function InAppLoginPassword(props) {
                     marginTop: height / 13,
                   }}
                 >
-                  <TouchableOpacity
-                    onPress={() => props.navigation.goBack()}
-                    style={{
-                      flexDirection: "row",
-                      alignItems: "center",
-                      marginTop: 10,
-                    }}
-                  >
-                    <Text
-                      style={[
-                        styles.textSize,
-                        {
-                          color: "white",
-                          fontSize: height / 80,
-                          fontFamily: "Mediums-Font",
-                        },
-                      ]}
-                    >
-                      {` `}CANCEL
-                    </Text>
-                  </TouchableOpacity>
+                  <View style={{ flexDirection: "row", alignItems: "center" }}>
+                    <TouchableOpacity onPress={() => props.navigation.goBack()}>
+                      <Image
+                        source={require("../assets/backwhite.png")}
+                        style={{
+                          resizeMode: "contain",
+                          height: height / 42,
+                          width: width / 19,
+                          marginStart: 2,
+                        }}
+                      />
+                    </TouchableOpacity>
+                  </View>
                   <View>
                     <MaterialCommunityIcons
                       name="menu"
@@ -201,7 +182,7 @@ export default function InAppLoginPassword(props) {
                         textAlign: "center",
                       }}
                     >
-                      Visa *****1234 added
+                      Payment Success
                     </Text>
                   </View>
                   <Text
@@ -249,99 +230,391 @@ export default function InAppLoginPassword(props) {
                         marginTop: height / 70,
                       }}
                     >
-                      Sign in
-                    </Text>
-                  </View>
-                  <View
-                    style={{
-                      marginTop: height / 25,
-                    }}
-                  >
-                    <Text
-                      style={{
-                        fontFamily: "GlacialIndifference-Regular",
-                        fontSize: height / 65,
-                      }}
-                    >
-                      musaraza@gmail.com
+                      Add address
                     </Text>
                   </View>
 
-                  <Text
-                    style={{
-                      fontFamily: "GlacialIndifference-Bold",
-                      fontSize: height / 70,
-                      marginVertical: height / 40,
-                    }}
-                  >
-                    Password
-                  </Text>
                   <View
                     style={[
                       styles.txtView,
                       {
-                        borderWidth: passwordError !== "" ? 0.3 : 0,
-                        borderColor: passwordError !== "" ? colors.MAIN : null,
-                        flexDirection: "row",
-                        justifyContent: "space-between",
+                        borderWidth: emailError !== "" ? 0.3 : 0,
+                        borderColor: emailError !== "" ? colors.MAIN : null,
+                        marginTop: height / 20,
                       },
                     ]}
                   >
                     <TextInput
-                      placeholder="Enter Password"
+                      placeholder="Use current location"
+                      editable={false}
                       placeholderTextColor={theme.colors.secondary}
                       style={[
                         styles.textSize,
                         {
                           backgroundColor: colors.grays,
-                          width: width / 1.4,
+                          textAlign: "center",
                         },
                       ]}
                       autoCorrect={false}
-                      secureTextEntry={secureEntry}
-                      value={password}
+                      value={email}
                       onChangeText={(value) => [
-                        setPassword(value),
-                        setPasswordError(""),
+                        setEmail(value),
+                        setEmailError(""),
                       ]}
-                      error={error}
                     />
-                    <TouchableOpacity
-                      activeOpacity={0.6}
-                      onPress={() => handleVisibility()}
-                    >
-                      <MaterialCommunityIcons
-                        size={height / 50}
-                        name={rightIcon}
-                      />
-                    </TouchableOpacity>
+                  </View>
+                  <Text
+                    style={{
+                      fontFamily: "GlacialIndifference-Regular",
+                      fontSize: height / 65,
+                      textAlign: "center",
+                      marginVertical: 8,
+                    }}
+                  >
+                    OR
+                  </Text>
+
+                  <View
+                    style={[
+                      styles.txtView,
+                      {
+                        borderWidth: emailError !== "" ? 0.3 : 0,
+                        borderColor: emailError !== "" ? colors.MAIN : null,
+                        flexDirection: "row",
+                        alignitems: "center",
+                        justifyContent: "space-between",
+                      },
+                    ]}
+                  >
+                    <TextInput
+                      placeholder="Pakistan"
+                      editable={false}
+                      placeholderTextColor={theme.colors.secondary}
+                      style={[
+                        styles.textSize,
+                        {
+                          backgroundColor: colors.grays,
+                        },
+                      ]}
+                      autoCorrect={false}
+                      value={email}
+                      onChangeText={(value) => [
+                        setEmail(value),
+                        setEmailError(""),
+                      ]}
+                    />
+                    <MaterialIcons
+                      size={height / 60}
+                      name="keyboard-arrow-down"
+                      color={"gray"}
+                    />
+                  </View>
+                  <Text
+                    style={{
+                      fontFamily: "GlacialIndifference-Bold",
+                      fontSize: height / 50,
+                      marginTop: height / 40,
+                      marginBottom: 6,
+                    }}
+                  >
+                    Full name (First and Last name)
+                  </Text>
+
+                  <View
+                    style={[
+                      styles.txtView,
+                      {
+                        borderWidth: emailError !== "" ? 0.3 : 0,
+                        borderColor: emailError !== "" ? colors.MAIN : null,
+                      },
+                    ]}
+                  >
+                    <TextInput
+                      placeholder="Musa raza"
+                      placeholderTextColor={theme.colors.secondary}
+                      style={[
+                        styles.textSize,
+                        {
+                          backgroundColor: colors.grays,
+                        },
+                      ]}
+                      autoCorrect={false}
+                      value={email}
+                      onChangeText={(value) => [
+                        setEmail(value),
+                        setEmailError(""),
+                      ]}
+                    />
+                  </View>
+                  <Text
+                    style={{
+                      fontFamily: "GlacialIndifference-Bold",
+                      fontSize: height / 50,
+                      marginTop: height / 40,
+                    }}
+                  >
+                    Phone number
+                  </Text>
+
+                  <View
+                    style={[
+                      styles.txtView,
+                      {
+                        marginTop: height / 100,
+                        padding: 0,
+                        borderWidth: 0,
+                        //borderColor: phoneError !== "" ? colors.MAIN : null,
+                      },
+                    ]}
+                  >
+                    <PhoneInput
+                      defaultCode="CA"
+                      layout="first"
+                      defaultValue={value}
+                      onChangeText={(text) => {
+                        setValue(text);
+                        setPhoneError("");
+                      }}
+                      onChangeFormattedText={(text) => {
+                        setPhone(text);
+                      }}
+                      onChangeCountry={(text) => {
+                        setCode(text.cca2);
+                      }}
+                      textInputStyle={{
+                        color: theme.colors.secondary,
+                        fontSize: height / 65,
+                        height: height / 90,
+                        padding: 0,
+                        fontFamily: "GlacialIndifference-Regular",
+                      }}
+                      containerStyle={{
+                        backgroundColor: theme.colors.backgroundColor,
+                        padding: 0,
+                        height: height / 19,
+                      }}
+                      textContainerStyle={{
+                        backgroundColor: theme.colors.backgroundColor,
+                      }}
+                      codeTextStyle={{
+                        color: theme.colors.secondary,
+                        fontSize: height / 65,
+                        height: height / 60,
+                        fontFamily: "GlacialIndifference-Regular",
+                      }}
+                      flagButtonStyle={{ height: height / 20 }}
+                    />
+                  </View>
+                  <Text
+                    style={{
+                      fontFamily: "GlacialIndifference-Regular",
+                      fontSize: height / 80,
+                      marginVertical: 4,
+                    }}
+                  >
+                    May be used to assist delivery
+                  </Text>
+
+                  <Text
+                    style={{
+                      fontFamily: "GlacialIndifference-Bold",
+                      fontSize: height / 50,
+                      marginTop: height / 40,
+                      marginBottom: 6,
+                    }}
+                  >
+                    Address
+                  </Text>
+
+                  <View
+                    style={[
+                      styles.txtView,
+                      {
+                        borderWidth: emailError !== "" ? 0.3 : 0,
+                        borderColor: emailError !== "" ? colors.MAIN : null,
+                      },
+                    ]}
+                  >
+                    <TextInput
+                      placeholder="Street address or P.O Box"
+                      placeholderTextColor={theme.colors.secondary}
+                      style={[
+                        styles.textSize,
+                        {
+                          backgroundColor: colors.grays,
+                        },
+                      ]}
+                      autoCorrect={false}
+                      value={email}
+                      onChangeText={(value) => [
+                        setEmail(value),
+                        setEmailError(""),
+                      ]}
+                    />
+                  </View>
+                  <View
+                    style={[
+                      styles.txtView,
+                      {
+                        borderWidth: emailError !== "" ? 0.3 : 0,
+                        borderColor: emailError !== "" ? colors.MAIN : null,
+                        marginTop: height / 60,
+                      },
+                    ]}
+                  >
+                    <TextInput
+                      placeholder="Apt, Suite, Unit, Building (Optional)"
+                      placeholderTextColor={theme.colors.secondary}
+                      style={[
+                        styles.textSize,
+                        {
+                          backgroundColor: colors.grays,
+                        },
+                      ]}
+                      autoCorrect={false}
+                      value={email}
+                      onChangeText={(value) => [
+                        setEmail(value),
+                        setEmailError(""),
+                      ]}
+                    />
+                  </View>
+
+                  <Text
+                    style={{
+                      fontFamily: "GlacialIndifference-Bold",
+                      fontSize: height / 50,
+                      marginTop: height / 40,
+                      marginBottom: 6,
+                    }}
+                  >
+                    City
+                  </Text>
+
+                  <View
+                    style={[
+                      styles.txtView,
+                      {
+                        borderWidth: emailError !== "" ? 0.3 : 0,
+                        borderColor: emailError !== "" ? colors.MAIN : null,
+                      },
+                    ]}
+                  >
+                    <TextInput
+                      placeholder="Sialkot"
+                      placeholderTextColor={theme.colors.secondary}
+                      style={[
+                        styles.textSize,
+                        {
+                          backgroundColor: colors.grays,
+                        },
+                      ]}
+                      autoCorrect={false}
+                      value={email}
+                      onChangeText={(value) => [
+                        setEmail(value),
+                        setEmailError(""),
+                      ]}
+                    />
+                  </View>
+
+                  <View
+                    style={{
+                      flexDirection: "row",
+                      justifyContent: "space-between",
+                      alignItems: "center",
+                    }}
+                  >
+                    <View>
+                      <Text
+                        style={{
+                          fontFamily: "GlacialIndifference-Bold",
+                          fontSize: height / 50,
+                          marginTop: height / 40,
+                          marginBottom: 6,
+                        }}
+                      >
+                        State
+                      </Text>
+                      <View
+                        style={[
+                          styles.txtView,
+                          {
+                            borderWidth: emailError !== "" ? 0.3 : 0,
+                            borderColor: emailError !== "" ? colors.MAIN : null,
+                            width: width / 2.5,
+                            flexDirection: "row",
+                            justifyContent: "space-between",
+                          },
+                        ]}
+                      >
+                        <TextInput
+                          placeholder="Select"
+                          placeholderTextColor={theme.colors.secondary}
+                          style={[
+                            styles.textSize,
+                            {
+                              backgroundColor: colors.grays,
+                            },
+                          ]}
+                          autoCorrect={false}
+                          value={email}
+                          onChangeText={(value) => [
+                            setEmail(value),
+                            setEmailError(""),
+                          ]}
+                        />
+                        <MaterialIcons
+                          size={height / 60}
+                          name="keyboard-arrow-down"
+                          color={"gray"}
+                        />
+                      </View>
+                    </View>
+
+                    <View>
+                      <Text
+                        style={{
+                          fontFamily: "GlacialIndifference-Bold",
+                          fontSize: height / 50,
+                          marginTop: height / 40,
+                          marginBottom: 6,
+                        }}
+                      >
+                        Zip Code
+                      </Text>
+                      <View
+                        style={[
+                          styles.txtView,
+                          {
+                            borderWidth: emailError !== "" ? 0.3 : 0,
+                            borderColor: emailError !== "" ? colors.MAIN : null,
+                            width: width / 2.5,
+                          },
+                        ]}
+                      >
+                        <TextInput
+                          placeholder="Zip code"
+                          placeholderTextColor={theme.colors.secondary}
+                          style={[
+                            styles.textSize,
+                            {
+                              backgroundColor: colors.grays,
+                            },
+                          ]}
+                          autoCorrect={false}
+                          value={email}
+                          onChangeText={(value) => [
+                            setEmail(value),
+                            setEmailError(""),
+                          ]}
+                        />
+                      </View>
+                    </View>
                   </View>
 
                   <TouchableOpacity
-                    style={{
-                      alignItems: "flex-end",
-                      marginTop: height / 80,
-                    }}
-                    onPress={() => [
-                      props.navigation.navigate("ForgotPassword"),
-                      setEmail(""),
-                      setPassword(""),
-                      setAuthError(""),
-                      setEmailError(""),
-                      setPasswordError(""),
-                    ]}
-                  >
-                    <View>
-                      <Text style={styles.textSize}>
-                        Forgot password?{`  `}
-                      </Text>
-                    </View>
-                  </TouchableOpacity>
-
-                  <TouchableOpacity
-                    onPress={() =>
-                      props.navigation.navigate("SelectBilingAddress")
-                    }
+                    onPress={() => props.navigation.navigate("CardScreen")}
                   >
                     <ImageBackground
                       source={require("../assets/topbar.png")}
@@ -356,52 +629,35 @@ export default function InAppLoginPassword(props) {
                           paddingVertical: height / 100,
                         }}
                       >
-                        Sign in
+                        Use this address
                       </Text>
                     </ImageBackground>
                   </TouchableOpacity>
-
-                  <View
+                  <Text
                     style={{
-                      flexDirection: "row",
-                      alignItems: "center",
-                      justifyContent: "center",
-
-                      marginTop: height / 16,
-                      marginStart: height / 33,
-                      marginEnd: height / 33,
+                      fontFamily: "GlacialIndifference-Regular",
+                      fontSize: height / 65,
+                      textAlign: "center",
+                      marginVertical: height / 60,
                     }}
+                  >
+                    OR
+                  </Text>
+                  <TouchableOpacity
+                    onPress={() => props.navigation.navigate("Cart")}
                   >
                     <Text
                       style={{
-                        fontFamily: "GlacialIndifference-Regular",
-                        fontSize: height / 65,
-                        color: colors.MAIN,
-                        marginEnd: height / 20,
+                        fontFamily: "GlacialIndifference-Bold",
+                        fontSize: height / 50,
+                        marginBottom: 6,
+                        textAlign: "center",
+                        marginTop: -5,
                       }}
                     >
-                      Conditions of Use
+                      Back to cart
                     </Text>
-                    <Text
-                      style={{
-                        fontFamily: "GlacialIndifference-Regular",
-                        fontSize: height / 65,
-                        color: colors.MAIN,
-                        marginEnd: height / 20,
-                      }}
-                    >
-                      Privacy Notice
-                    </Text>
-                    <Text
-                      style={{
-                        fontFamily: "GlacialIndifference-Regular",
-                        fontSize: height / 65,
-                        color: colors.MAIN,
-                      }}
-                    >
-                      Help
-                    </Text>
-                  </View>
+                  </TouchableOpacity>
 
                   {/*  <View style={{ marginTop: height / 33 }}>
                     <View
@@ -516,6 +772,8 @@ export default function InAppLoginPassword(props) {
               )}
             </ScrollView>
           </View>
+
+          <View style={styles.bottomMenuMain}></View>
         </View>
       )}
     </View>
@@ -530,6 +788,12 @@ const useStyle = () => {
     },
     centerItems: {
       flex: 8,
+    },
+    dockIconStyle: {
+      resizeMode: "contain",
+      height: height / 40,
+      width: height / 40,
+      marginTop: 6,
     },
     centerText: {
       textAlign: "center",

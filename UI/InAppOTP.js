@@ -300,7 +300,11 @@ export default function InAppOTP(props) {
                     />
                   </View>
 
-                  <TouchableOpacity onPress={() => setOrderDone(true)}>
+                  <TouchableOpacity
+                    onPress={() =>
+                      props.navigation.navigate("NewAccountAddAddress")
+                    }
+                  >
                     <ImageBackground
                       source={require("../assets/topbar.png")}
                       style={[styles.checkOutBtn, { marginTop: height / 17 }]}
