@@ -345,7 +345,7 @@ export default function InAppOTP(props) {
                         color: colors.MAIN,
                       }}
                     >
-                      Conditions of Use
+                      Terms & Conditions
                     </Text>
                     <Text
                       style={{
@@ -365,7 +365,7 @@ export default function InAppOTP(props) {
                       marginStart: height / 33,
                     }}
                   >
-                    Privacy Notice.
+                    Privacy Policy.
                   </Text>
 
                   <Text
@@ -397,7 +397,7 @@ export default function InAppOTP(props) {
                         marginEnd: height / 20,
                       }}
                     >
-                      Conditions of Use
+                      Terms & Conditions
                     </Text>
                     <Text
                       style={{
@@ -407,7 +407,7 @@ export default function InAppOTP(props) {
                         marginEnd: height / 20,
                       }}
                     >
-                      Privacy Notice
+                      Privacy Policy
                     </Text>
                     <Text
                       style={{

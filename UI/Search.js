@@ -233,7 +233,7 @@ export default function Search(props) {
 
           <ImageBackground
             source={require("../assets/sarchdock.png")}
-            style={styles.bottomMenuMain}
+            style={[styles.bottomMenuMain, { padding: 1 }]}
           >
             <View
               style={{

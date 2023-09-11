@@ -380,7 +380,7 @@ export default function InAppLoginPassword(props) {
                         marginEnd: height / 20,
                       }}
                     >
-                      Conditions of Use
+                      Terms & Conditions
                     </Text>
                     <Text
                       style={{
@@ -390,7 +390,7 @@ export default function InAppLoginPassword(props) {
                         marginEnd: height / 20,
                       }}
                     >
-                      Privacy Notice
+                      Privacy Policy
                     </Text>
                     <Text
                       style={{

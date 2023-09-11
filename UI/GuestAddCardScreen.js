@@ -79,6 +79,7 @@ export default function GuestAddCardScreen(props) {
   const [disable, setDisable] = React.useState(false);
   const [orderDone, setOrderDone] = React.useState(false);
   const [secureEntry, setSecureEntry] = React.useState(true);
+  const [checkBoxAccount, setCheckBoxAccount] = React.useState(false);
   const [rightIcon, setRightIcon] = React.useState("eye");
   const [rating, setRating] = useState(3.5);
   const [user, setUser] = useState({});
@@ -174,53 +175,499 @@ export default function GuestAddCardScreen(props) {
                     marginTop: 6,
                   }}
                 >
-                  <View
-                    style={{
-                      alignItems: "center",
-                    }}
-                  >
-                    <Text
-                      style={{
-                        fontFamily: "GlacialIndifference-Bold",
-                        fontSize: height / 65,
-                        marginTop: height / 7,
-                        textAlign: "center",
-                      }}
-                    >
-                      Visa *****1234 added
-                    </Text>
-                  </View>
-                  <Text
-                    style={{
-                      fontFamily: "GlacialIndifference-Regular",
-                      fontSize: height / 65,
-                      textAlign: "center",
-                      marginTop: 3,
-                      marginBottom: height / 16,
-                    }}
-                  >
-                    Thanks for purchasing with Gearify!
-                  </Text>
-                  <TouchableOpacity
-                    onPress={() => props.navigation.navigate("Home")}
-                  >
-                    <ImageBackground
-                      source={require("../assets/topbar.png")}
-                      style={styles.checkOutBtn}
-                    >
-                      <Text
+                  {checkBoxAccount ? (
+                    <View>
+                      <View
                         style={{
-                          fontFamily: "Mediums-Font",
-                          fontSize: height / 45,
-                          textAlign: "center",
-                          color: "white",
-                          paddingVertical: height / 100,
+                          alignItems: "center",
                         }}
                       >
-                        Continue
+                        <Text
+                          style={{
+                            fontFamily: "GlacialIndifference-Bold",
+                            fontSize: height / 65,
+                            marginTop: height / 7,
+                            textAlign: "center",
+                          }}
+                        >
+                          Great News!
+                        </Text>
+                      </View>
+                      <Text
+                        style={{
+                          fontFamily: "GlacialIndifference-Regular",
+                          fontSize: height / 65,
+                          textAlign: "center",
+                          marginTop: height / 30,
+                        }}
+                      >
+                        Your order is confirmed, and your account has been
+                        created.
                       </Text>
-                    </ImageBackground>
-                  </TouchableOpacity>
+                      <Text
+                        style={{
+                          fontFamily: "GlacialIndifference-Regular",
+                          fontSize: height / 65,
+                          textAlign: "center",
+                          marginTop: 3,
+                        }}
+                      >
+                        Look out for an email invitation to complete your
+                        profile and set your password.
+                      </Text>
+                      <Text
+                        style={{
+                          fontFamily: "GlacialIndifference-Regular",
+                          fontSize: height / 65,
+                          textAlign: "center",
+                          marginBottom: height / 16,
+                          marginTop: 10,
+                        }}
+                      >
+                        Happy Shopping!
+                      </Text>
+                      <TouchableOpacity
+                        onPress={() => props.navigation.navigate("Home")}
+                      >
+                        <ImageBackground
+                          source={require("../assets/topbar.png")}
+                          style={styles.checkOutBtn}
+                        >
+                          <Text
+                            style={{
+                              fontFamily: "Mediums-Font",
+                              fontSize: height / 45,
+                              textAlign: "center",
+                              color: "white",
+                              paddingVertical: height / 100,
+                            }}
+                          >
+                            Continue
+                          </Text>
+                        </ImageBackground>
+                      </TouchableOpacity>
+
+                      <View style={{ marginTop: height / 33 }}>
+                        <Text
+                          style={{
+                            fontFamily: "GlacialIndifference-Bold",
+                            fontSize: height / 47,
+                          }}
+                        >
+                          Deal of the Day
+                        </Text>
+
+                        <View
+                          style={{
+                            flexDirection: "row",
+                            alignItems: "center",
+                            justifyContent: "space-between",
+                          }}
+                        >
+                          <View
+                            style={{
+                              marginTop: 5,
+                              width: width / 2.4,
+                            }}
+                          >
+                            <View style={styles.dealCircle}>
+                              <Image
+                                source={require("../assets/product.png")}
+                                style={{
+                                  height: 80,
+                                  width: 80,
+                                  resizeMode: "contain",
+                                }}
+                              />
+                            </View>
+                            <LinearGradient
+                              colors={["#ffffff", "lightgray"]}
+                              style={styles.dealOfDayBack}
+                            >
+                              <View
+                                style={{
+                                  flexDirection: "row",
+                                  alignItems: "center",
+                                }}
+                              >
+                                <Text
+                                  style={{
+                                    fontSize: height / 55,
+                                    marginTop: height / 11.4,
+                                    fontFamily: "GlacialIndifference-Bold",
+                                  }}
+                                >
+                                  $51.95
+                                </Text>
+                                <View
+                                  style={{
+                                    position: "absolute",
+                                    right: -width / 9,
+                                    bottom: 2,
+                                  }}
+                                >
+                                  <Text
+                                    style={{
+                                      fontSize: height / 90,
+                                      marginTop: height / 11.3,
+                                      fontFamily: "GlacialIndifference-Regular",
+                                      color: colors.MAIN,
+                                    }}
+                                  >
+                                    30% OFF
+                                  </Text>
+                                </View>
+                              </View>
+
+                              <Text
+                                style={{
+                                  fontSize: height / 55,
+                                  fontFamily: "GlacialIndifference-Regular",
+                                }}
+                              >
+                                Short Product Name
+                              </Text>
+
+                              <View
+                                style={{
+                                  flexDirection: "row",
+                                  alignItems: "center",
+                                  marginTop: height / 88,
+                                }}
+                              >
+                                <TouchableOpacity>
+                                  <Image
+                                    source={require("../assets/addtocartcircle.png")}
+                                    style={styles.sellerButtonss}
+                                  />
+                                </TouchableOpacity>
+
+                                <TouchableOpacity
+                                  style={{ marginStart: height / 30 }}
+                                >
+                                  <Image
+                                    source={require("../assets/buynowcircle.png")}
+                                    style={styles.sellerButtonss}
+                                  />
+                                </TouchableOpacity>
+                              </View>
+                            </LinearGradient>
+                          </View>
+
+                          <View
+                            style={{
+                              marginTop: 5,
+                              width: width / 2.4,
+                            }}
+                          >
+                            <View style={styles.dealCircle}>
+                              <Image
+                                source={require("../assets/product.png")}
+                                style={{
+                                  height: 80,
+                                  width: 80,
+                                  resizeMode: "contain",
+                                }}
+                              />
+                            </View>
+                            <LinearGradient
+                              colors={["#ffffff", "lightgray"]}
+                              style={styles.dealOfDayBack}
+                            >
+                              <View
+                                style={{
+                                  flexDirection: "row",
+                                  alignItems: "center",
+                                }}
+                              >
+                                <Text
+                                  style={{
+                                    fontSize: height / 55,
+                                    marginTop: height / 11.4,
+                                    fontFamily: "GlacialIndifference-Bold",
+                                  }}
+                                >
+                                  $51.95
+                                </Text>
+                                <View
+                                  style={{
+                                    position: "absolute",
+                                    right: -width / 9,
+                                    bottom: 2,
+                                  }}
+                                >
+                                  <Text
+                                    style={{
+                                      fontSize: height / 90,
+                                      marginTop: height / 11.3,
+                                      fontFamily: "GlacialIndifference-Regular",
+                                      color: colors.MAIN,
+                                    }}
+                                  >
+                                    30% OFF
+                                  </Text>
+                                </View>
+                              </View>
+
+                              <Text
+                                style={{
+                                  fontSize: height / 55,
+                                  fontFamily: "GlacialIndifference-Regular",
+                                }}
+                              >
+                                Short Product Name
+                              </Text>
+
+                              <View
+                                style={{
+                                  flexDirection: "row",
+                                  alignItems: "center",
+                                  marginTop: height / 88,
+                                }}
+                              >
+                                <TouchableOpacity>
+                                  <Image
+                                    source={require("../assets/addtocartcircle.png")}
+                                    style={styles.sellerButtonss}
+                                  />
+                                </TouchableOpacity>
+
+                                <TouchableOpacity
+                                  style={{ marginStart: height / 30 }}
+                                >
+                                  <Image
+                                    source={require("../assets/buynowcircle.png")}
+                                    style={styles.sellerButtonss}
+                                  />
+                                </TouchableOpacity>
+                              </View>
+                            </LinearGradient>
+                          </View>
+                        </View>
+
+                        <View
+                          style={{
+                            alignSelf: "flex-end",
+                            marginTop: height / 100,
+                            marginEnd: 4,
+                          }}
+                        >
+                          <Text
+                            style={[styles.textSize, { fontSize: height / 90 }]}
+                          >
+                            VIEW ALL
+                          </Text>
+                        </View>
+                      </View>
+                    </View>
+                  ) : (
+                    <View>
+                      <View
+                        style={{
+                          alignItems: "center",
+                        }}
+                      >
+                        <Text
+                          style={{
+                            fontFamily: "GlacialIndifference-Bold",
+                            fontSize: height / 65,
+                            marginTop: height / 7,
+                            textAlign: "center",
+                          }}
+                        >
+                          Success! Your is order is Confirmed
+                        </Text>
+                      </View>
+                      <Text
+                        style={{
+                          fontFamily: "GlacialIndifference-Regular",
+                          fontSize: height / 65,
+                          textAlign: "center",
+                          marginTop: height / 30,
+                        }}
+                      >
+                        Your order confirmation will be sent to your email
+                        shortly.
+                      </Text>
+                      <Text
+                        style={{
+                          fontFamily: "GlacialIndifference-Regular",
+                          fontSize: height / 65,
+                          textAlign: "center",
+                          marginTop: 3,
+                          marginBottom: height / 16,
+                        }}
+                      >
+                        Thank you for shopping with us!
+                      </Text>
+                      <TouchableOpacity
+                        onPress={() => props.navigation.navigate("Home")}
+                      >
+                        <ImageBackground
+                          source={require("../assets/topbar.png")}
+                          style={styles.checkOutBtn}
+                        >
+                          <Text
+                            style={{
+                              fontFamily: "Mediums-Font",
+                              fontSize: height / 45,
+                              textAlign: "center",
+                              color: "white",
+                              paddingVertical: height / 100,
+                            }}
+                          >
+                            Continue
+                          </Text>
+                        </ImageBackground>
+                      </TouchableOpacity>
+
+                      <View>
+                        <Text
+                          style={{
+                            fontFamily: "GlacialIndifference-Bold",
+                            fontSize: height / 50,
+                            marginTop: height / 40,
+                          }}
+                        >
+                          Continue Shopping
+                        </Text>
+
+                        <Text
+                          style={{
+                            fontFamily: "GlacialIndifference-Bold",
+                            fontSize: height / 50,
+                            marginTop: height / 80,
+                          }}
+                        >
+                          Similar Products
+                        </Text>
+                        <View
+                          style={{
+                            marginTop: 4,
+                          }}
+                        >
+                          <View
+                            style={{
+                              flexDirection: "row",
+                              alignItems: "center",
+                              justifyContent: "space-between",
+                            }}
+                          >
+                            <View
+                              style={{
+                                marginTop: 5,
+                                width: width / 2.3,
+                              }}
+                            >
+                              <LinearGradient
+                                colors={["#ffffff", "lightgray"]}
+                                style={styles.recommendBack}
+                              >
+                                <View
+                                  style={{
+                                    flexDirection: "row",
+                                    alignItems: "center",
+                                  }}
+                                >
+                                  <View style={styles.recomandircle}>
+                                    <Image
+                                      source={require("../assets/product.png")}
+                                      style={{
+                                        height: 80,
+                                        width: 80,
+                                        resizeMode: "contain",
+                                      }}
+                                    />
+                                  </View>
+                                </View>
+                                <Text
+                                  style={{
+                                    fontSize: height / 55,
+                                    marginTop: height / 90,
+                                    fontFamily: "GlacialIndifference-Bold",
+                                  }}
+                                >
+                                  $79.95
+                                </Text>
+                                <Text
+                                  style={{
+                                    fontSize: height / 55,
+                                    fontFamily: "GlacialIndifference-Regular",
+                                  }}
+                                >
+                                  Short Product Name
+                                </Text>
+                              </LinearGradient>
+                            </View>
+
+                            <View
+                              style={{
+                                marginTop: 5,
+                                width: width / 2.3,
+                              }}
+                            >
+                              <LinearGradient
+                                colors={["#ffffff", "lightgray"]}
+                                style={styles.recommendBack}
+                              >
+                                <View
+                                  style={{
+                                    flexDirection: "row",
+                                    alignItems: "center",
+                                  }}
+                                >
+                                  <View style={styles.recomandircle}>
+                                    <Image
+                                      source={require("../assets/product.png")}
+                                      style={{
+                                        height: 80,
+                                        width: 80,
+                                        resizeMode: "contain",
+                                      }}
+                                    />
+                                  </View>
+                                </View>
+                                <Text
+                                  style={{
+                                    fontSize: height / 55,
+                                    marginTop: height / 90,
+                                    fontFamily: "GlacialIndifference-Bold",
+                                  }}
+                                >
+                                  $79.95
+                                </Text>
+                                <Text
+                                  style={{
+                                    fontSize: height / 55,
+                                    fontFamily: "GlacialIndifference-Regular",
+                                  }}
+                                >
+                                  Short Product Name
+                                </Text>
+                              </LinearGradient>
+                            </View>
+                          </View>
+
+                          <View
+                            style={{
+                              alignSelf: "flex-end",
+                              marginTop: height / 100,
+                              marginEnd: 4,
+                            }}
+                          >
+                            <Text
+                              style={[
+                                styles.textSize,
+                                { fontSize: height / 90 },
+                              ]}
+                            >
+                              VIEW ALL
+                            </Text>
+                          </View>
+                        </View>
+                      </View>
+                    </View>
+                  )}
                 </View>
               ) : (
                 <View
@@ -240,7 +687,6 @@ export default function GuestAddCardScreen(props) {
                       Add card details
                     </Text>
                   </View>
-
                   <View
                     style={[
                       styles.txtView,
@@ -268,7 +714,6 @@ export default function GuestAddCardScreen(props) {
                       ]}
                     />
                   </View>
-
                   <View
                     style={[
                       styles.txtView,
@@ -306,7 +751,6 @@ export default function GuestAddCardScreen(props) {
                   >
                     Expiration Date
                   </Text>
-
                   <View
                     style={{
                       flexDirection: "row",
@@ -390,6 +834,38 @@ export default function GuestAddCardScreen(props) {
                       </View>
                     </View>
                   </View>
+                  <TouchableOpacity
+                    onPress={() => [
+                      checkBoxAccount == false
+                        ? setCheckBoxAccount(true)
+                        : setCheckBoxAccount(false),
+                    ]}
+                    style={{
+                      flexDirection: "row",
+                      alignItems: "center",
+                      marginTop: height / 25,
+                      marginBottom: 6,
+                    }}
+                  >
+                    {checkBoxAccount ? (
+                      <FontAwesome
+                        name="check-square-o"
+                        color={colors.MAIN}
+                        size={height / 50}
+                      />
+                    ) : (
+                      <FontAwesome name="square-o" size={height / 50} />
+                    )}
+
+                    <Text
+                      style={{
+                        fontFamily: "GlacialIndifference-Bold",
+                        fontSize: height / 70,
+                      }}
+                    >
+                      {`  `}Create Account
+                    </Text>
+                  </TouchableOpacity>
                   {/* <View
                     style={{
                       flexDirection: "row",
@@ -425,7 +901,6 @@ export default function GuestAddCardScreen(props) {
                       </Text>
                     </ImageBackground>
                   </TouchableOpacity>
-
                   {/*  <View style={{ marginTop: height / 33 }}>
                     <View
                       style={{
@@ -740,6 +1215,11 @@ const useStyle = () => {
       fontSize: height / 58,
       fontFamily: "GlacialIndifference-Regular",
       textAlign: "center",
+    },
+    sellerButtonss: {
+      width: width / 8.3,
+      height: height / 16,
+      resizeMode: "contain",
     },
 
     bestSellerBack: {

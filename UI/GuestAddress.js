@@ -19,6 +19,8 @@ import {
   ActivityIndicator,
   RadioButton,
 } from "react-native-paper";
+import { Overlay } from "react-native-elements";
+
 import { colors } from "../assets/colors";
 import {
   MaterialCommunityIcons,
@@ -27,6 +29,7 @@ import {
   SimpleLineIcons,
   Entypo,
   Ionicons,
+  FontAwesome,
 } from "@expo/vector-icons";
 import { appleAuth } from "@invertase/react-native-apple-authentication";
 import {
@@ -58,14 +61,19 @@ export default function GuestAddress(props) {
   const [passwordError, setPasswordError] = React.useState("");
   const [error, setError] = React.useState("");
   const [authError, setAuthError] = React.useState("");
+  const [types, setTypes] = React.useState("");
   const [loading, setLoading] = React.useState(true);
   const [selectedValue, setSelectedValue] = useState("option1");
   const [value, setValue] = React.useState("");
   const [phone, setPhone] = React.useState("");
   const [code, setCode] = React.useState("");
-  const [gLoading, setGLoading] = React.useState(false);
+  const [checkBoxInst, setCheckBoxInst] = React.useState(false);
   const [gridView, setGridView] = React.useState(true);
-  const [listView, setListView] = React.useState(false);
+  const [typeSwitch, setTypeSwitch] = React.useState(false);
+  const [house, setHouse] = React.useState(false);
+  const [appartment, setappartment] = React.useState(false);
+  const [business, setBusiness] = React.useState(false);
+  const [others, setOthers] = React.useState(false);
   const [aLoading, setALoading] = React.useState(false);
   const [fLoading, setFLoading] = React.useState(false);
   const [authLoading, setAuthLoading] = React.useState(false);
@@ -230,7 +238,7 @@ export default function GuestAddress(props) {
                         marginTop: height / 70,
                       }}
                     >
-                      Add address
+                      Guest Shipping Address
                     </Text>
                   </View>
 
@@ -331,6 +339,44 @@ export default function GuestAddress(props) {
                   >
                     <TextInput
                       placeholder="Musa raza"
+                      placeholderTextColor={theme.colors.secondary}
+                      style={[
+                        styles.textSize,
+                        {
+                          backgroundColor: colors.grays,
+                        },
+                      ]}
+                      autoCorrect={false}
+                      value={email}
+                      onChangeText={(value) => [
+                        setEmail(value),
+                        setEmailError(""),
+                      ]}
+                    />
+                  </View>
+
+                  <Text
+                    style={{
+                      fontFamily: "GlacialIndifference-Bold",
+                      fontSize: height / 50,
+                      marginTop: height / 40,
+                      marginBottom: 6,
+                    }}
+                  >
+                    Email
+                  </Text>
+
+                  <View
+                    style={[
+                      styles.txtView,
+                      {
+                        borderWidth: emailError !== "" ? 0.3 : 0,
+                        borderColor: emailError !== "" ? colors.MAIN : null,
+                      },
+                    ]}
+                  >
+                    <TextInput
+                      placeholder="musaraza@gmail.com"
                       placeholderTextColor={theme.colors.secondary}
                       style={[
                         styles.textSize,
@@ -518,13 +564,7 @@ export default function GuestAddress(props) {
                     />
                   </View>
 
-                  <View
-                    style={{
-                      flexDirection: "row",
-                      justifyContent: "space-between",
-                      alignItems: "center",
-                    }}
-                  >
+                  <View style={{}}>
                     <View>
                       <Text
                         style={{
@@ -534,7 +574,7 @@ export default function GuestAddress(props) {
                           marginBottom: 6,
                         }}
                       >
-                        State
+                        Province/Territory
                       </Text>
                       <View
                         style={[
@@ -542,7 +582,7 @@ export default function GuestAddress(props) {
                           {
                             borderWidth: emailError !== "" ? 0.3 : 0,
                             borderColor: emailError !== "" ? colors.MAIN : null,
-                            width: width / 2.5,
+
                             flexDirection: "row",
                             justifyContent: "space-between",
                           },
@@ -581,7 +621,7 @@ export default function GuestAddress(props) {
                           marginBottom: 6,
                         }}
                       >
-                        Zip Code
+                        Postal code
                       </Text>
                       <View
                         style={[
@@ -589,12 +629,11 @@ export default function GuestAddress(props) {
                           {
                             borderWidth: emailError !== "" ? 0.3 : 0,
                             borderColor: emailError !== "" ? colors.MAIN : null,
-                            width: width / 2.5,
                           },
                         ]}
                       >
                         <TextInput
-                          placeholder="Zip code"
+                          placeholder="Postal code"
                           placeholderTextColor={theme.colors.secondary}
                           style={[
                             styles.textSize,
@@ -611,7 +650,2048 @@ export default function GuestAddress(props) {
                         />
                       </View>
                     </View>
+                    <TouchableOpacity
+                      onPress={() => [
+                        checkBoxInst == false
+                          ? setCheckBoxInst(true)
+                          : setCheckBoxInst(false),
+                        setHouse(true),
+                        setOthers(false),
+                        setappartment(false),
+                        setBusiness(false),
+                        setTypes("House"),
+                      ]}
+                      style={{
+                        flexDirection: "row",
+                        alignItems: "center",
+                        marginTop: height / 40,
+                        marginBottom: 6,
+                      }}
+                    >
+                      {checkBoxInst ? (
+                        <FontAwesome
+                          name="check-square-o"
+                          color={colors.MAIN}
+                          size={height / 50}
+                        />
+                      ) : (
+                        <FontAwesome name="square-o" size={height / 50} />
+                      )}
+
+                      <Text
+                        style={{
+                          fontFamily: "GlacialIndifference-Bold",
+                          fontSize: height / 50,
+                        }}
+                      >
+                        {checkBoxInst
+                          ? ` Delivery instructions (optional)`
+                          : "  Delivery instructions (optional)"}
+                      </Text>
+                    </TouchableOpacity>
                   </View>
+                  {checkBoxInst ? (
+                    <View>
+                      <Overlay
+                        visible={typeSwitch}
+                        overlayStyle={{
+                          borderRadius: 5,
+
+                          backgroundColor: theme.colors.background,
+                          marginTop: height / 10,
+                          marginStart: -height / 70,
+                        }}
+                      >
+                        <View style={{}}>
+                          <TouchableOpacity
+                            style={{ alignSelf: "flex-end" }}
+                            onPress={() => setTypeSwitch(false)}
+                          >
+                            <MaterialCommunityIcons name="close" />
+                          </TouchableOpacity>
+                        </View>
+                        <View
+                          style={{
+                            marginStart: height / 60,
+                            marginEnd: height / 15,
+                          }}
+                        >
+                          <TouchableOpacity
+                            style={{}}
+                            onPress={() => [
+                              setHouse(true),
+                              setTypeSwitch(false),
+                              setappartment(false),
+                              setBusiness(false),
+                              setOthers(false),
+                              setTypes("House"),
+                            ]}
+                          >
+                            <Text
+                              style={{
+                                fontFamily: "Mediums-Font",
+                                fontSize: height / 75,
+                                color: house ? null : "gray",
+                              }}
+                            >
+                              House {`    `}
+                            </Text>
+                          </TouchableOpacity>
+                        </View>
+                        <View
+                          style={{
+                            marginStart: height / 60,
+                            marginEnd: height / 15,
+                            marginTop: 10,
+                          }}
+                        >
+                          <TouchableOpacity
+                            style={{}}
+                            onPress={() => [
+                              setHouse(false),
+                              setTypeSwitch(false),
+                              setappartment(true),
+                              setBusiness(false),
+                              setOthers(false),
+                              setTypes("Appartment"),
+                            ]}
+                          >
+                            <Text
+                              style={{
+                                fontFamily: "Mediums-Font",
+                                fontSize: height / 75,
+                                color: appartment ? null : "gray",
+                              }}
+                            >
+                              Appartment {`    `}
+                            </Text>
+                          </TouchableOpacity>
+                        </View>
+                        <View
+                          style={{
+                            marginStart: height / 60,
+                            marginEnd: height / 15,
+                            marginTop: 10,
+                          }}
+                        >
+                          <TouchableOpacity
+                            style={{}}
+                            onPress={() => [
+                              setHouse(false),
+                              setTypeSwitch(false),
+                              setappartment(false),
+                              setBusiness(true),
+                              setOthers(false),
+                              setTypes("Business"),
+                            ]}
+                          >
+                            <Text
+                              style={{
+                                fontFamily: "Mediums-Font",
+                                fontSize: height / 75,
+                                color: business ? null : "gray",
+                              }}
+                            >
+                              Business {`    `}
+                            </Text>
+                          </TouchableOpacity>
+                        </View>
+                        <View
+                          style={{
+                            marginStart: height / 60,
+                            marginEnd: height / 15,
+                            marginTop: 10,
+                          }}
+                        >
+                          <TouchableOpacity
+                            style={{}}
+                            onPress={() => [
+                              setHouse(false),
+                              setTypeSwitch(false),
+                              setappartment(false),
+                              setBusiness(false),
+                              setOthers(true),
+                              setTypes("others"),
+                            ]}
+                          >
+                            <Text
+                              style={{
+                                fontFamily: "Mediums-Font",
+                                fontSize: height / 75,
+                                color: others ? null : "gray",
+                              }}
+                            >
+                              Others {`    `}
+                            </Text>
+                          </TouchableOpacity>
+                        </View>
+                      </Overlay>
+                      <View>
+                        <Text
+                          style={{
+                            fontFamily: "GlacialIndifference-Bold",
+                            fontSize: height / 50,
+                            marginTop: height / 70,
+                            marginBottom: 6,
+                          }}
+                        >
+                          Property Type
+                        </Text>
+                        <TouchableOpacity
+                          onPress={() => setTypeSwitch(true)}
+                          style={[
+                            styles.txtView,
+                            {
+                              borderWidth: emailError !== "" ? 0.3 : 0,
+                              borderColor:
+                                emailError !== "" ? colors.MAIN : null,
+
+                              flexDirection: "row",
+                              justifyContent: "space-between",
+                            },
+                          ]}
+                        >
+                          <TextInput
+                            placeholder={types}
+                            editable={false}
+                            placeholderTextColor={theme.colors.secondary}
+                            style={[
+                              styles.textSize,
+                              {
+                                backgroundColor: colors.grays,
+                              },
+                            ]}
+                            autoCorrect={false}
+                            value={email}
+                            onChangeText={(value) => [
+                              setEmail(value),
+                              setEmailError(""),
+                            ]}
+                          />
+                          <MaterialIcons
+                            size={height / 60}
+                            name="keyboard-arrow-down"
+                            color={"gray"}
+                          />
+                        </TouchableOpacity>
+                        {house ? (
+                          <View>
+                            <Text
+                              style={{
+                                fontFamily: "GlacialIndifference-Bold",
+                                fontSize: height / 50,
+                                marginTop: height / 70,
+                                marginBottom: 6,
+                              }}
+                            >
+                              Where should we leave packages?
+                            </Text>
+                            <View
+                              style={[
+                                styles.txtView,
+                                {
+                                  borderWidth: emailError !== "" ? 0.3 : 0,
+                                  borderColor:
+                                    emailError !== "" ? colors.MAIN : null,
+
+                                  flexDirection: "row",
+                                  justifyContent: "space-between",
+                                },
+                              ]}
+                            >
+                              <TextInput
+                                placeholder="Front Door"
+                                editable={false}
+                                placeholderTextColor={theme.colors.secondary}
+                                style={[
+                                  styles.textSize,
+                                  {
+                                    backgroundColor: colors.grays,
+                                  },
+                                ]}
+                                autoCorrect={false}
+                                value={email}
+                                onChangeText={(value) => [
+                                  setEmail(value),
+                                  setEmailError(""),
+                                ]}
+                              />
+                              <MaterialIcons
+                                size={height / 60}
+                                name="keyboard-arrow-down"
+                                color={"gray"}
+                              />
+                            </View>
+
+                            <Text
+                              style={{
+                                fontFamily: "GlacialIndifference-Bold",
+                                fontSize: height / 50,
+                                marginTop: height / 60,
+                                marginBottom: 1,
+                              }}
+                            >
+                              Entry Requirements
+                            </Text>
+                            <View
+                              style={{
+                                flexDirection: "row",
+                                alignItems: "center",
+                                justifyContent: "space-between",
+                              }}
+                            >
+                              <View>
+                                <Text
+                                  style={{
+                                    fontFamily: "GlacialIndifference-Regular",
+                                    fontSize: height / 80,
+                                    marginTop: height / 100,
+                                    marginBottom: 6,
+                                  }}
+                                >
+                                  Security Code
+                                </Text>
+                                <View
+                                  style={[
+                                    styles.txtView,
+                                    {
+                                      borderWidth: emailError !== "" ? 0.3 : 0,
+                                      borderColor:
+                                        emailError !== "" ? colors.MAIN : null,
+
+                                      flexDirection: "row",
+                                      justifyContent: "space-between",
+                                      width: height / 8.7,
+                                    },
+                                  ]}
+                                >
+                                  <TextInput
+                                    placeholder="429"
+                                    editable={false}
+                                    placeholderTextColor={
+                                      theme.colors.secondary
+                                    }
+                                    style={[
+                                      styles.textSize,
+                                      {
+                                        backgroundColor: colors.grays,
+                                      },
+                                    ]}
+                                    autoCorrect={false}
+                                    value={email}
+                                    onChangeText={(value) => [
+                                      setEmail(value),
+                                      setEmailError(""),
+                                    ]}
+                                  />
+                                </View>
+                              </View>
+
+                              <View>
+                                <Text
+                                  style={{
+                                    fontFamily: "GlacialIndifference-Regular",
+                                    fontSize: height / 80,
+                                    marginTop: height / 100,
+                                    marginBottom: 6,
+                                  }}
+                                >
+                                  Call Box
+                                </Text>
+                                <View
+                                  style={[
+                                    styles.txtView,
+                                    {
+                                      borderWidth: emailError !== "" ? 0.3 : 0,
+                                      borderColor:
+                                        emailError !== "" ? colors.MAIN : null,
+
+                                      flexDirection: "row",
+                                      justifyContent: "space-between",
+                                      width: height / 8.7,
+                                    },
+                                  ]}
+                                >
+                                  <TextInput
+                                    placeholder="123"
+                                    editable={false}
+                                    placeholderTextColor={
+                                      theme.colors.secondary
+                                    }
+                                    style={[
+                                      styles.textSize,
+                                      {
+                                        backgroundColor: colors.grays,
+                                      },
+                                    ]}
+                                    autoCorrect={false}
+                                    value={email}
+                                    onChangeText={(value) => [
+                                      setEmail(value),
+                                      setEmailError(""),
+                                    ]}
+                                  />
+                                </View>
+                              </View>
+
+                              <View>
+                                <Text
+                                  style={{
+                                    fontFamily: "GlacialIndifference-Regular",
+                                    fontSize: height / 80,
+                                    marginTop: height / 100,
+                                    marginBottom: 6,
+                                  }}
+                                >
+                                  Key or Fob
+                                </Text>
+                                <View
+                                  style={[
+                                    styles.txtView,
+                                    {
+                                      borderWidth: emailError !== "" ? 0.3 : 0,
+                                      borderColor:
+                                        emailError !== "" ? colors.MAIN : null,
+
+                                      flexDirection: "row",
+                                      justifyContent: "space-between",
+                                      width: height / 8.7,
+                                    },
+                                  ]}
+                                >
+                                  <TextInput
+                                    placeholder="Yes"
+                                    editable={false}
+                                    placeholderTextColor={
+                                      theme.colors.secondary
+                                    }
+                                    style={[
+                                      styles.textSize,
+                                      {
+                                        backgroundColor: colors.grays,
+                                      },
+                                    ]}
+                                    autoCorrect={false}
+                                    value={email}
+                                    onChangeText={(value) => [
+                                      setEmail(value),
+                                      setEmailError(""),
+                                    ]}
+                                  />
+                                  <MaterialIcons
+                                    size={height / 60}
+                                    name="keyboard-arrow-down"
+                                    color={"gray"}
+                                  />
+                                </View>
+                              </View>
+                            </View>
+
+                            <Text
+                              style={{
+                                fontFamily: "GlacialIndifference-Bold",
+                                fontSize: height / 50,
+                                marginTop: height / 60,
+                                marginBottom: 1,
+                              }}
+                            >
+                              Weekend Availability
+                            </Text>
+                            <View
+                              style={{
+                                flexDirection: "row",
+                                alignItems: "center",
+                                justifyContent: "space-between",
+                              }}
+                            >
+                              <View>
+                                <View
+                                  style={[
+                                    styles.txtView,
+                                    {
+                                      borderWidth: emailError !== "" ? 0.3 : 0,
+                                      borderColor:
+                                        emailError !== "" ? colors.MAIN : null,
+
+                                      flexDirection: "row",
+                                      justifyContent: "space-between",
+                                      width: height / 3.7,
+                                    },
+                                  ]}
+                                >
+                                  <TextInput
+                                    placeholder="Saturday"
+                                    editable={false}
+                                    placeholderTextColor={
+                                      theme.colors.secondary
+                                    }
+                                    style={[
+                                      styles.textSize,
+                                      {
+                                        backgroundColor: colors.grays,
+                                      },
+                                    ]}
+                                    autoCorrect={false}
+                                    value={email}
+                                    onChangeText={(value) => [
+                                      setEmail(value),
+                                      setEmailError(""),
+                                    ]}
+                                  />
+                                </View>
+                              </View>
+
+                              <View>
+                                <View
+                                  style={[
+                                    styles.txtView,
+                                    {
+                                      borderWidth: emailError !== "" ? 0.3 : 0,
+                                      borderColor:
+                                        emailError !== "" ? colors.MAIN : null,
+
+                                      flexDirection: "row",
+                                      justifyContent: "space-between",
+                                      width: height / 8.7,
+                                    },
+                                  ]}
+                                >
+                                  <TextInput
+                                    placeholder="Yes"
+                                    editable={false}
+                                    placeholderTextColor={
+                                      theme.colors.secondary
+                                    }
+                                    style={[
+                                      styles.textSize,
+                                      {
+                                        backgroundColor: colors.grays,
+                                      },
+                                    ]}
+                                    autoCorrect={false}
+                                    value={email}
+                                    onChangeText={(value) => [
+                                      setEmail(value),
+                                      setEmailError(""),
+                                    ]}
+                                  />
+                                  <MaterialIcons
+                                    size={height / 60}
+                                    name="keyboard-arrow-down"
+                                    color={"gray"}
+                                  />
+                                </View>
+                              </View>
+                            </View>
+
+                            <View
+                              style={{
+                                flexDirection: "row",
+                                alignItems: "center",
+                                justifyContent: "space-between",
+                                marginTop: 5,
+                              }}
+                            >
+                              <View>
+                                <View
+                                  style={[
+                                    styles.txtView,
+                                    {
+                                      borderWidth: emailError !== "" ? 0.3 : 0,
+                                      borderColor:
+                                        emailError !== "" ? colors.MAIN : null,
+
+                                      flexDirection: "row",
+                                      justifyContent: "space-between",
+                                      width: height / 3.7,
+                                    },
+                                  ]}
+                                >
+                                  <TextInput
+                                    placeholder="Sunday"
+                                    editable={false}
+                                    placeholderTextColor={
+                                      theme.colors.secondary
+                                    }
+                                    style={[
+                                      styles.textSize,
+                                      {
+                                        backgroundColor: colors.grays,
+                                      },
+                                    ]}
+                                    autoCorrect={false}
+                                    value={email}
+                                    onChangeText={(value) => [
+                                      setEmail(value),
+                                      setEmailError(""),
+                                    ]}
+                                  />
+                                </View>
+                              </View>
+
+                              <View>
+                                <View
+                                  style={[
+                                    styles.txtView,
+                                    {
+                                      borderWidth: emailError !== "" ? 0.3 : 0,
+                                      borderColor:
+                                        emailError !== "" ? colors.MAIN : null,
+
+                                      flexDirection: "row",
+                                      justifyContent: "space-between",
+                                      width: height / 8.7,
+                                    },
+                                  ]}
+                                >
+                                  <TextInput
+                                    placeholder="Yes"
+                                    editable={false}
+                                    placeholderTextColor={
+                                      theme.colors.secondary
+                                    }
+                                    style={[
+                                      styles.textSize,
+                                      {
+                                        backgroundColor: colors.grays,
+                                      },
+                                    ]}
+                                    autoCorrect={false}
+                                    value={email}
+                                    onChangeText={(value) => [
+                                      setEmail(value),
+                                      setEmailError(""),
+                                    ]}
+                                  />
+                                  <MaterialIcons
+                                    size={height / 60}
+                                    name="keyboard-arrow-down"
+                                    color={"gray"}
+                                  />
+                                </View>
+                              </View>
+                            </View>
+                          </View>
+                        ) : null}
+
+                        {appartment ? (
+                          <View>
+                            <Text
+                              style={{
+                                fontFamily: "GlacialIndifference-Bold",
+                                fontSize: height / 50,
+                                marginTop: height / 70,
+                                marginBottom: 1,
+                              }}
+                            >
+                              Entry Requirements
+                            </Text>
+                            <View
+                              style={{
+                                flexDirection: "row",
+                                alignItems: "center",
+                                justifyContent: "space-between",
+                              }}
+                            >
+                              <View>
+                                <Text
+                                  style={{
+                                    fontFamily: "GlacialIndifference-Regular",
+                                    fontSize: height / 80,
+                                    marginTop: height / 100,
+                                    marginBottom: 6,
+                                  }}
+                                >
+                                  Security Code
+                                </Text>
+                                <View
+                                  style={[
+                                    styles.txtView,
+                                    {
+                                      borderWidth: emailError !== "" ? 0.3 : 0,
+                                      borderColor:
+                                        emailError !== "" ? colors.MAIN : null,
+
+                                      flexDirection: "row",
+                                      justifyContent: "space-between",
+                                      width: height / 8.7,
+                                    },
+                                  ]}
+                                >
+                                  <TextInput
+                                    placeholder="429"
+                                    editable={false}
+                                    placeholderTextColor={
+                                      theme.colors.secondary
+                                    }
+                                    style={[
+                                      styles.textSize,
+                                      {
+                                        backgroundColor: colors.grays,
+                                      },
+                                    ]}
+                                    autoCorrect={false}
+                                    value={email}
+                                    onChangeText={(value) => [
+                                      setEmail(value),
+                                      setEmailError(""),
+                                    ]}
+                                  />
+                                </View>
+                              </View>
+
+                              <View>
+                                <Text
+                                  style={{
+                                    fontFamily: "GlacialIndifference-Regular",
+                                    fontSize: height / 80,
+                                    marginTop: height / 100,
+                                    marginBottom: 6,
+                                  }}
+                                >
+                                  Call Box
+                                </Text>
+                                <View
+                                  style={[
+                                    styles.txtView,
+                                    {
+                                      borderWidth: emailError !== "" ? 0.3 : 0,
+                                      borderColor:
+                                        emailError !== "" ? colors.MAIN : null,
+
+                                      flexDirection: "row",
+                                      justifyContent: "space-between",
+                                      width: height / 8.7,
+                                    },
+                                  ]}
+                                >
+                                  <TextInput
+                                    placeholder="123"
+                                    editable={false}
+                                    placeholderTextColor={
+                                      theme.colors.secondary
+                                    }
+                                    style={[
+                                      styles.textSize,
+                                      {
+                                        backgroundColor: colors.grays,
+                                      },
+                                    ]}
+                                    autoCorrect={false}
+                                    value={email}
+                                    onChangeText={(value) => [
+                                      setEmail(value),
+                                      setEmailError(""),
+                                    ]}
+                                  />
+                                </View>
+                              </View>
+
+                              <View>
+                                <Text
+                                  style={{
+                                    fontFamily: "GlacialIndifference-Regular",
+                                    fontSize: height / 80,
+                                    marginTop: height / 100,
+                                    marginBottom: 6,
+                                  }}
+                                >
+                                  Key or Fob
+                                </Text>
+                                <View
+                                  style={[
+                                    styles.txtView,
+                                    {
+                                      borderWidth: emailError !== "" ? 0.3 : 0,
+                                      borderColor:
+                                        emailError !== "" ? colors.MAIN : null,
+
+                                      flexDirection: "row",
+                                      justifyContent: "space-between",
+                                      width: height / 8.7,
+                                    },
+                                  ]}
+                                >
+                                  <TextInput
+                                    placeholder="Yes"
+                                    editable={false}
+                                    placeholderTextColor={
+                                      theme.colors.secondary
+                                    }
+                                    style={[
+                                      styles.textSize,
+                                      {
+                                        backgroundColor: colors.grays,
+                                      },
+                                    ]}
+                                    autoCorrect={false}
+                                    value={email}
+                                    onChangeText={(value) => [
+                                      setEmail(value),
+                                      setEmailError(""),
+                                    ]}
+                                  />
+                                  <MaterialIcons
+                                    size={height / 60}
+                                    name="keyboard-arrow-down"
+                                    color={"gray"}
+                                  />
+                                </View>
+                              </View>
+                            </View>
+                            <Text
+                              style={{
+                                fontFamily: "GlacialIndifference-Bold",
+                                fontSize: height / 50,
+                                marginTop: height / 70,
+                                marginBottom: 6,
+                              }}
+                            >
+                              Where should we leave packages?
+                            </Text>
+                            <View
+                              style={[
+                                styles.txtView,
+                                {
+                                  borderWidth: emailError !== "" ? 0.3 : 0,
+                                  borderColor:
+                                    emailError !== "" ? colors.MAIN : null,
+
+                                  flexDirection: "row",
+                                  justifyContent: "space-between",
+                                },
+                              ]}
+                            >
+                              <TextInput
+                                placeholder="Front Door"
+                                editable={false}
+                                placeholderTextColor={theme.colors.secondary}
+                                style={[
+                                  styles.textSize,
+                                  {
+                                    backgroundColor: colors.grays,
+                                  },
+                                ]}
+                                autoCorrect={false}
+                                value={email}
+                                onChangeText={(value) => [
+                                  setEmail(value),
+                                  setEmailError(""),
+                                ]}
+                              />
+                              <MaterialIcons
+                                size={height / 60}
+                                name="keyboard-arrow-down"
+                                color={"gray"}
+                              />
+                            </View>
+                            <Text
+                              style={{
+                                fontFamily: "GlacialIndifference-Bold",
+                                fontSize: height / 50,
+                                marginTop: height / 60,
+                                marginBottom: 1,
+                              }}
+                            >
+                              Weekend Availability
+                            </Text>
+                            <View
+                              style={{
+                                flexDirection: "row",
+                                alignItems: "center",
+                                justifyContent: "space-between",
+                              }}
+                            >
+                              <View>
+                                <View
+                                  style={[
+                                    styles.txtView,
+                                    {
+                                      borderWidth: emailError !== "" ? 0.3 : 0,
+                                      borderColor:
+                                        emailError !== "" ? colors.MAIN : null,
+
+                                      flexDirection: "row",
+                                      justifyContent: "space-between",
+                                      width: height / 3.7,
+                                    },
+                                  ]}
+                                >
+                                  <TextInput
+                                    placeholder="Saturday"
+                                    editable={false}
+                                    placeholderTextColor={
+                                      theme.colors.secondary
+                                    }
+                                    style={[
+                                      styles.textSize,
+                                      {
+                                        backgroundColor: colors.grays,
+                                      },
+                                    ]}
+                                    autoCorrect={false}
+                                    value={email}
+                                    onChangeText={(value) => [
+                                      setEmail(value),
+                                      setEmailError(""),
+                                    ]}
+                                  />
+                                </View>
+                              </View>
+
+                              <View>
+                                <View
+                                  style={[
+                                    styles.txtView,
+                                    {
+                                      borderWidth: emailError !== "" ? 0.3 : 0,
+                                      borderColor:
+                                        emailError !== "" ? colors.MAIN : null,
+
+                                      flexDirection: "row",
+                                      justifyContent: "space-between",
+                                      width: height / 8.7,
+                                    },
+                                  ]}
+                                >
+                                  <TextInput
+                                    placeholder="Yes"
+                                    editable={false}
+                                    placeholderTextColor={
+                                      theme.colors.secondary
+                                    }
+                                    style={[
+                                      styles.textSize,
+                                      {
+                                        backgroundColor: colors.grays,
+                                      },
+                                    ]}
+                                    autoCorrect={false}
+                                    value={email}
+                                    onChangeText={(value) => [
+                                      setEmail(value),
+                                      setEmailError(""),
+                                    ]}
+                                  />
+                                  <MaterialIcons
+                                    size={height / 60}
+                                    name="keyboard-arrow-down"
+                                    color={"gray"}
+                                  />
+                                </View>
+                              </View>
+                            </View>
+
+                            <View
+                              style={{
+                                flexDirection: "row",
+                                alignItems: "center",
+                                justifyContent: "space-between",
+                                marginTop: 5,
+                              }}
+                            >
+                              <View>
+                                <View
+                                  style={[
+                                    styles.txtView,
+                                    {
+                                      borderWidth: emailError !== "" ? 0.3 : 0,
+                                      borderColor:
+                                        emailError !== "" ? colors.MAIN : null,
+
+                                      flexDirection: "row",
+                                      justifyContent: "space-between",
+                                      width: height / 3.7,
+                                    },
+                                  ]}
+                                >
+                                  <TextInput
+                                    placeholder="Sunday"
+                                    editable={false}
+                                    placeholderTextColor={
+                                      theme.colors.secondary
+                                    }
+                                    style={[
+                                      styles.textSize,
+                                      {
+                                        backgroundColor: colors.grays,
+                                      },
+                                    ]}
+                                    autoCorrect={false}
+                                    value={email}
+                                    onChangeText={(value) => [
+                                      setEmail(value),
+                                      setEmailError(""),
+                                    ]}
+                                  />
+                                </View>
+                              </View>
+
+                              <View>
+                                <View
+                                  style={[
+                                    styles.txtView,
+                                    {
+                                      borderWidth: emailError !== "" ? 0.3 : 0,
+                                      borderColor:
+                                        emailError !== "" ? colors.MAIN : null,
+
+                                      flexDirection: "row",
+                                      justifyContent: "space-between",
+                                      width: height / 8.7,
+                                    },
+                                  ]}
+                                >
+                                  <TextInput
+                                    placeholder="Yes"
+                                    editable={false}
+                                    placeholderTextColor={
+                                      theme.colors.secondary
+                                    }
+                                    style={[
+                                      styles.textSize,
+                                      {
+                                        backgroundColor: colors.grays,
+                                      },
+                                    ]}
+                                    autoCorrect={false}
+                                    value={email}
+                                    onChangeText={(value) => [
+                                      setEmail(value),
+                                      setEmailError(""),
+                                    ]}
+                                  />
+                                  <MaterialIcons
+                                    size={height / 60}
+                                    name="keyboard-arrow-down"
+                                    color={"gray"}
+                                  />
+                                </View>
+                              </View>
+                            </View>
+                          </View>
+                        ) : null}
+
+                        {business ? (
+                          <View>
+                            <Text
+                              style={{
+                                fontFamily: "GlacialIndifference-Bold",
+                                fontSize: height / 50,
+                                marginTop: height / 70,
+                                marginBottom: 1,
+                              }}
+                            >
+                              Days Open for Delivery
+                            </Text>
+                            <View
+                              style={{
+                                flexDirection: "row",
+                                alignItems: "center",
+                                justifyContent: "space-between",
+                              }}
+                            >
+                              <View>
+                                <Text
+                                  style={{
+                                    fontFamily: "GlacialIndifference-Regular",
+                                    fontSize: height / 80,
+                                    marginTop: height / 100,
+                                    marginBottom: 6,
+                                  }}
+                                >
+                                  Day
+                                </Text>
+                                <View
+                                  style={[
+                                    styles.txtView,
+                                    {
+                                      borderWidth: emailError !== "" ? 0.3 : 0,
+                                      borderColor:
+                                        emailError !== "" ? colors.MAIN : null,
+
+                                      flexDirection: "row",
+                                      justifyContent: "space-between",
+                                      width: height / 6.7,
+                                    },
+                                  ]}
+                                >
+                                  <TextInput
+                                    placeholder="Monday"
+                                    editable={false}
+                                    placeholderTextColor={
+                                      theme.colors.secondary
+                                    }
+                                    style={[
+                                      styles.textSize,
+                                      {
+                                        backgroundColor: colors.grays,
+                                      },
+                                    ]}
+                                    autoCorrect={false}
+                                    value={email}
+                                    onChangeText={(value) => [
+                                      setEmail(value),
+                                      setEmailError(""),
+                                    ]}
+                                  />
+                                  <MaterialIcons
+                                    size={height / 60}
+                                    name="keyboard-arrow-down"
+                                    color={"gray"}
+                                  />
+                                </View>
+                              </View>
+                              <View>
+                                <Text
+                                  style={{
+                                    fontFamily: "GlacialIndifference-Regular",
+                                    fontSize: height / 80,
+                                    marginTop: height / 100,
+                                    marginBottom: 6,
+                                  }}
+                                >
+                                  Open Time
+                                </Text>
+                                <View
+                                  style={[
+                                    styles.txtView,
+                                    {
+                                      borderWidth: emailError !== "" ? 0.3 : 0,
+                                      borderColor:
+                                        emailError !== "" ? colors.MAIN : null,
+
+                                      flexDirection: "row",
+                                      justifyContent: "space-between",
+                                      width: height / 8.7,
+                                    },
+                                  ]}
+                                >
+                                  <TextInput
+                                    placeholder="00:00 PM"
+                                    editable={false}
+                                    placeholderTextColor={
+                                      theme.colors.secondary
+                                    }
+                                    style={[
+                                      styles.textSize,
+                                      {
+                                        backgroundColor: colors.grays,
+                                      },
+                                    ]}
+                                    autoCorrect={false}
+                                    value={email}
+                                    onChangeText={(value) => [
+                                      setEmail(value),
+                                      setEmailError(""),
+                                    ]}
+                                  />
+                                  <MaterialIcons
+                                    size={height / 60}
+                                    name="keyboard-arrow-down"
+                                    color={"gray"}
+                                  />
+                                </View>
+                              </View>
+                              <View>
+                                <Text
+                                  style={{
+                                    fontFamily: "GlacialIndifference-Regular",
+                                    fontSize: height / 80,
+                                    marginTop: height / 100,
+                                    marginBottom: 6,
+                                  }}
+                                >
+                                  Close Time
+                                </Text>
+                                <View
+                                  style={[
+                                    styles.txtView,
+                                    {
+                                      borderWidth: emailError !== "" ? 0.3 : 0,
+                                      borderColor:
+                                        emailError !== "" ? colors.MAIN : null,
+
+                                      flexDirection: "row",
+                                      justifyContent: "space-between",
+                                      width: height / 8.7,
+                                    },
+                                  ]}
+                                >
+                                  <TextInput
+                                    placeholder="00:00 PM"
+                                    editable={false}
+                                    placeholderTextColor={
+                                      theme.colors.secondary
+                                    }
+                                    style={[
+                                      styles.textSize,
+                                      {
+                                        backgroundColor: colors.grays,
+                                      },
+                                    ]}
+                                    autoCorrect={false}
+                                    value={email}
+                                    onChangeText={(value) => [
+                                      setEmail(value),
+                                      setEmailError(""),
+                                    ]}
+                                  />
+                                  <MaterialIcons
+                                    size={height / 60}
+                                    name="keyboard-arrow-down"
+                                    color={"gray"}
+                                  />
+                                </View>
+                              </View>
+                            </View>
+                            <Text
+                              style={{
+                                fontFamily: "GlacialIndifference-Regular",
+                                fontSize: height / 80,
+                                marginTop: height / 100,
+                                marginBottom: -10,
+                                textAlign: "right",
+                              }}
+                            >
+                              Add +
+                            </Text>
+                            <Text
+                              style={{
+                                fontFamily: "GlacialIndifference-Bold",
+                                fontSize: height / 50,
+                                marginTop: height / 70,
+                                marginBottom: 6,
+                              }}
+                            >
+                              Where should we leave packages?
+                            </Text>
+                            <View
+                              style={[
+                                styles.txtView,
+                                {
+                                  borderWidth: emailError !== "" ? 0.3 : 0,
+                                  borderColor:
+                                    emailError !== "" ? colors.MAIN : null,
+
+                                  flexDirection: "row",
+                                  justifyContent: "space-between",
+                                },
+                              ]}
+                            >
+                              <TextInput
+                                placeholder="Front Door"
+                                editable={false}
+                                placeholderTextColor={theme.colors.secondary}
+                                style={[
+                                  styles.textSize,
+                                  {
+                                    backgroundColor: colors.grays,
+                                  },
+                                ]}
+                                autoCorrect={false}
+                                value={email}
+                                onChangeText={(value) => [
+                                  setEmail(value),
+                                  setEmailError(""),
+                                ]}
+                              />
+                              <MaterialIcons
+                                size={height / 60}
+                                name="keyboard-arrow-down"
+                                color={"gray"}
+                              />
+                            </View>
+                            <Text
+                              style={{
+                                fontFamily: "GlacialIndifference-Bold",
+                                fontSize: height / 50,
+                                marginTop: height / 60,
+                                marginBottom: 1,
+                              }}
+                            >
+                              Weekend Availability
+                            </Text>
+                            <View
+                              style={{
+                                flexDirection: "row",
+                                alignItems: "center",
+                                justifyContent: "space-between",
+                              }}
+                            >
+                              <View>
+                                <View
+                                  style={[
+                                    styles.txtView,
+                                    {
+                                      borderWidth: emailError !== "" ? 0.3 : 0,
+                                      borderColor:
+                                        emailError !== "" ? colors.MAIN : null,
+
+                                      flexDirection: "row",
+                                      justifyContent: "space-between",
+                                      width: height / 3.7,
+                                    },
+                                  ]}
+                                >
+                                  <TextInput
+                                    placeholder="Saturday"
+                                    editable={false}
+                                    placeholderTextColor={
+                                      theme.colors.secondary
+                                    }
+                                    style={[
+                                      styles.textSize,
+                                      {
+                                        backgroundColor: colors.grays,
+                                      },
+                                    ]}
+                                    autoCorrect={false}
+                                    value={email}
+                                    onChangeText={(value) => [
+                                      setEmail(value),
+                                      setEmailError(""),
+                                    ]}
+                                  />
+                                </View>
+                              </View>
+
+                              <View>
+                                <View
+                                  style={[
+                                    styles.txtView,
+                                    {
+                                      borderWidth: emailError !== "" ? 0.3 : 0,
+                                      borderColor:
+                                        emailError !== "" ? colors.MAIN : null,
+
+                                      flexDirection: "row",
+                                      justifyContent: "space-between",
+                                      width: height / 8.7,
+                                    },
+                                  ]}
+                                >
+                                  <TextInput
+                                    placeholder="Yes"
+                                    editable={false}
+                                    placeholderTextColor={
+                                      theme.colors.secondary
+                                    }
+                                    style={[
+                                      styles.textSize,
+                                      {
+                                        backgroundColor: colors.grays,
+                                      },
+                                    ]}
+                                    autoCorrect={false}
+                                    value={email}
+                                    onChangeText={(value) => [
+                                      setEmail(value),
+                                      setEmailError(""),
+                                    ]}
+                                  />
+                                  <MaterialIcons
+                                    size={height / 60}
+                                    name="keyboard-arrow-down"
+                                    color={"gray"}
+                                  />
+                                </View>
+                              </View>
+                            </View>
+
+                            <View
+                              style={{
+                                flexDirection: "row",
+                                alignItems: "center",
+                                justifyContent: "space-between",
+                                marginTop: 5,
+                              }}
+                            >
+                              <View>
+                                <View
+                                  style={[
+                                    styles.txtView,
+                                    {
+                                      borderWidth: emailError !== "" ? 0.3 : 0,
+                                      borderColor:
+                                        emailError !== "" ? colors.MAIN : null,
+
+                                      flexDirection: "row",
+                                      justifyContent: "space-between",
+                                      width: height / 3.7,
+                                    },
+                                  ]}
+                                >
+                                  <TextInput
+                                    placeholder="Sunday"
+                                    editable={false}
+                                    placeholderTextColor={
+                                      theme.colors.secondary
+                                    }
+                                    style={[
+                                      styles.textSize,
+                                      {
+                                        backgroundColor: colors.grays,
+                                      },
+                                    ]}
+                                    autoCorrect={false}
+                                    value={email}
+                                    onChangeText={(value) => [
+                                      setEmail(value),
+                                      setEmailError(""),
+                                    ]}
+                                  />
+                                </View>
+                              </View>
+
+                              <View>
+                                <View
+                                  style={[
+                                    styles.txtView,
+                                    {
+                                      borderWidth: emailError !== "" ? 0.3 : 0,
+                                      borderColor:
+                                        emailError !== "" ? colors.MAIN : null,
+
+                                      flexDirection: "row",
+                                      justifyContent: "space-between",
+                                      width: height / 8.7,
+                                    },
+                                  ]}
+                                >
+                                  <TextInput
+                                    placeholder="Yes"
+                                    editable={false}
+                                    placeholderTextColor={
+                                      theme.colors.secondary
+                                    }
+                                    style={[
+                                      styles.textSize,
+                                      {
+                                        backgroundColor: colors.grays,
+                                      },
+                                    ]}
+                                    autoCorrect={false}
+                                    value={email}
+                                    onChangeText={(value) => [
+                                      setEmail(value),
+                                      setEmailError(""),
+                                    ]}
+                                  />
+                                  <MaterialIcons
+                                    size={height / 60}
+                                    name="keyboard-arrow-down"
+                                    color={"gray"}
+                                  />
+                                </View>
+                              </View>
+                            </View>
+
+                            <Text
+                              style={{
+                                fontFamily: "GlacialIndifference-Bold",
+                                fontSize: height / 50,
+                                marginTop: height / 70,
+                                marginBottom: 1,
+                              }}
+                            >
+                              Entry Requirements
+                            </Text>
+                            <View
+                              style={{
+                                flexDirection: "row",
+                                alignItems: "center",
+                                justifyContent: "space-between",
+                              }}
+                            >
+                              <View>
+                                <Text
+                                  style={{
+                                    fontFamily: "GlacialIndifference-Regular",
+                                    fontSize: height / 80,
+                                    marginTop: height / 100,
+                                    marginBottom: 6,
+                                  }}
+                                >
+                                  Security Code
+                                </Text>
+                                <View
+                                  style={[
+                                    styles.txtView,
+                                    {
+                                      borderWidth: emailError !== "" ? 0.3 : 0,
+                                      borderColor:
+                                        emailError !== "" ? colors.MAIN : null,
+
+                                      flexDirection: "row",
+                                      justifyContent: "space-between",
+                                      width: height / 8.7,
+                                    },
+                                  ]}
+                                >
+                                  <TextInput
+                                    placeholder="429"
+                                    editable={false}
+                                    placeholderTextColor={
+                                      theme.colors.secondary
+                                    }
+                                    style={[
+                                      styles.textSize,
+                                      {
+                                        backgroundColor: colors.grays,
+                                      },
+                                    ]}
+                                    autoCorrect={false}
+                                    value={email}
+                                    onChangeText={(value) => [
+                                      setEmail(value),
+                                      setEmailError(""),
+                                    ]}
+                                  />
+                                </View>
+                              </View>
+
+                              <View>
+                                <Text
+                                  style={{
+                                    fontFamily: "GlacialIndifference-Regular",
+                                    fontSize: height / 80,
+                                    marginTop: height / 100,
+                                    marginBottom: 6,
+                                  }}
+                                >
+                                  Call Box
+                                </Text>
+                                <View
+                                  style={[
+                                    styles.txtView,
+                                    {
+                                      borderWidth: emailError !== "" ? 0.3 : 0,
+                                      borderColor:
+                                        emailError !== "" ? colors.MAIN : null,
+
+                                      flexDirection: "row",
+                                      justifyContent: "space-between",
+                                      width: height / 8.7,
+                                    },
+                                  ]}
+                                >
+                                  <TextInput
+                                    placeholder="123"
+                                    editable={false}
+                                    placeholderTextColor={
+                                      theme.colors.secondary
+                                    }
+                                    style={[
+                                      styles.textSize,
+                                      {
+                                        backgroundColor: colors.grays,
+                                      },
+                                    ]}
+                                    autoCorrect={false}
+                                    value={email}
+                                    onChangeText={(value) => [
+                                      setEmail(value),
+                                      setEmailError(""),
+                                    ]}
+                                  />
+                                </View>
+                              </View>
+
+                              <View>
+                                <Text
+                                  style={{
+                                    fontFamily: "GlacialIndifference-Regular",
+                                    fontSize: height / 80,
+                                    marginTop: height / 100,
+                                    marginBottom: 6,
+                                  }}
+                                >
+                                  Key or Fob
+                                </Text>
+                                <View
+                                  style={[
+                                    styles.txtView,
+                                    {
+                                      borderWidth: emailError !== "" ? 0.3 : 0,
+                                      borderColor:
+                                        emailError !== "" ? colors.MAIN : null,
+
+                                      flexDirection: "row",
+                                      justifyContent: "space-between",
+                                      width: height / 8.7,
+                                    },
+                                  ]}
+                                >
+                                  <TextInput
+                                    placeholder="Yes"
+                                    editable={false}
+                                    placeholderTextColor={
+                                      theme.colors.secondary
+                                    }
+                                    style={[
+                                      styles.textSize,
+                                      {
+                                        backgroundColor: colors.grays,
+                                      },
+                                    ]}
+                                    autoCorrect={false}
+                                    value={email}
+                                    onChangeText={(value) => [
+                                      setEmail(value),
+                                      setEmailError(""),
+                                    ]}
+                                  />
+                                  <MaterialIcons
+                                    size={height / 60}
+                                    name="keyboard-arrow-down"
+                                    color={"gray"}
+                                  />
+                                </View>
+                              </View>
+                            </View>
+                          </View>
+                        ) : null}
+
+                        {others ? (
+                          <View>
+                            <Text
+                              style={{
+                                fontFamily: "GlacialIndifference-Bold",
+                                fontSize: height / 50,
+                                marginTop: height / 70,
+                                marginBottom: 6,
+                              }}
+                            >
+                              Where should we leave packages?
+                            </Text>
+                            <View
+                              style={[
+                                styles.txtView,
+                                {
+                                  borderWidth: emailError !== "" ? 0.3 : 0,
+                                  borderColor:
+                                    emailError !== "" ? colors.MAIN : null,
+
+                                  flexDirection: "row",
+                                  justifyContent: "space-between",
+                                },
+                              ]}
+                            >
+                              <TextInput
+                                placeholder="Front Door"
+                                editable={false}
+                                placeholderTextColor={theme.colors.secondary}
+                                style={[
+                                  styles.textSize,
+                                  {
+                                    backgroundColor: colors.grays,
+                                  },
+                                ]}
+                                autoCorrect={false}
+                                value={email}
+                                onChangeText={(value) => [
+                                  setEmail(value),
+                                  setEmailError(""),
+                                ]}
+                              />
+                              <MaterialIcons
+                                size={height / 60}
+                                name="keyboard-arrow-down"
+                                color={"gray"}
+                              />
+                            </View>
+                            <Text
+                              style={{
+                                fontFamily: "GlacialIndifference-Bold",
+                                fontSize: height / 50,
+                                marginTop: height / 70,
+                                marginBottom: 1,
+                              }}
+                            >
+                              Days Open for Delivery
+                            </Text>
+                            <View
+                              style={{
+                                flexDirection: "row",
+                                alignItems: "center",
+                                justifyContent: "space-between",
+                              }}
+                            >
+                              <View>
+                                <Text
+                                  style={{
+                                    fontFamily: "GlacialIndifference-Regular",
+                                    fontSize: height / 80,
+                                    marginTop: height / 100,
+                                    marginBottom: 6,
+                                  }}
+                                >
+                                  Day
+                                </Text>
+                                <View
+                                  style={[
+                                    styles.txtView,
+                                    {
+                                      borderWidth: emailError !== "" ? 0.3 : 0,
+                                      borderColor:
+                                        emailError !== "" ? colors.MAIN : null,
+
+                                      flexDirection: "row",
+                                      justifyContent: "space-between",
+                                      width: height / 6.7,
+                                    },
+                                  ]}
+                                >
+                                  <TextInput
+                                    placeholder="Monday"
+                                    editable={false}
+                                    placeholderTextColor={
+                                      theme.colors.secondary
+                                    }
+                                    style={[
+                                      styles.textSize,
+                                      {
+                                        backgroundColor: colors.grays,
+                                      },
+                                    ]}
+                                    autoCorrect={false}
+                                    value={email}
+                                    onChangeText={(value) => [
+                                      setEmail(value),
+                                      setEmailError(""),
+                                    ]}
+                                  />
+                                  <MaterialIcons
+                                    size={height / 60}
+                                    name="keyboard-arrow-down"
+                                    color={"gray"}
+                                  />
+                                </View>
+                              </View>
+                              <View>
+                                <Text
+                                  style={{
+                                    fontFamily: "GlacialIndifference-Regular",
+                                    fontSize: height / 80,
+                                    marginTop: height / 100,
+                                    marginBottom: 6,
+                                  }}
+                                >
+                                  Open Time
+                                </Text>
+                                <View
+                                  style={[
+                                    styles.txtView,
+                                    {
+                                      borderWidth: emailError !== "" ? 0.3 : 0,
+                                      borderColor:
+                                        emailError !== "" ? colors.MAIN : null,
+
+                                      flexDirection: "row",
+                                      justifyContent: "space-between",
+                                      width: height / 8.7,
+                                    },
+                                  ]}
+                                >
+                                  <TextInput
+                                    placeholder="00:00 PM"
+                                    editable={false}
+                                    placeholderTextColor={
+                                      theme.colors.secondary
+                                    }
+                                    style={[
+                                      styles.textSize,
+                                      {
+                                        backgroundColor: colors.grays,
+                                      },
+                                    ]}
+                                    autoCorrect={false}
+                                    value={email}
+                                    onChangeText={(value) => [
+                                      setEmail(value),
+                                      setEmailError(""),
+                                    ]}
+                                  />
+                                  <MaterialIcons
+                                    size={height / 60}
+                                    name="keyboard-arrow-down"
+                                    color={"gray"}
+                                  />
+                                </View>
+                              </View>
+                              <View>
+                                <Text
+                                  style={{
+                                    fontFamily: "GlacialIndifference-Regular",
+                                    fontSize: height / 80,
+                                    marginTop: height / 100,
+                                    marginBottom: 6,
+                                  }}
+                                >
+                                  Close Time
+                                </Text>
+                                <View
+                                  style={[
+                                    styles.txtView,
+                                    {
+                                      borderWidth: emailError !== "" ? 0.3 : 0,
+                                      borderColor:
+                                        emailError !== "" ? colors.MAIN : null,
+
+                                      flexDirection: "row",
+                                      justifyContent: "space-between",
+                                      width: height / 8.7,
+                                    },
+                                  ]}
+                                >
+                                  <TextInput
+                                    placeholder="00:00 PM"
+                                    editable={false}
+                                    placeholderTextColor={
+                                      theme.colors.secondary
+                                    }
+                                    style={[
+                                      styles.textSize,
+                                      {
+                                        backgroundColor: colors.grays,
+                                      },
+                                    ]}
+                                    autoCorrect={false}
+                                    value={email}
+                                    onChangeText={(value) => [
+                                      setEmail(value),
+                                      setEmailError(""),
+                                    ]}
+                                  />
+                                  <MaterialIcons
+                                    size={height / 60}
+                                    name="keyboard-arrow-down"
+                                    color={"gray"}
+                                  />
+                                </View>
+                              </View>
+                            </View>
+                            <Text
+                              style={{
+                                fontFamily: "GlacialIndifference-Regular",
+                                fontSize: height / 80,
+                                marginTop: height / 100,
+                                marginBottom: -10,
+                                textAlign: "right",
+                              }}
+                            >
+                              Add +
+                            </Text>
+
+                            <Text
+                              style={{
+                                fontFamily: "GlacialIndifference-Bold",
+                                fontSize: height / 50,
+                                marginTop: height / 70,
+                                marginBottom: 1,
+                              }}
+                            >
+                              Entry Requirements
+                            </Text>
+                            <View
+                              style={{
+                                flexDirection: "row",
+                                alignItems: "center",
+                                justifyContent: "space-between",
+                              }}
+                            >
+                              <View>
+                                <Text
+                                  style={{
+                                    fontFamily: "GlacialIndifference-Regular",
+                                    fontSize: height / 80,
+                                    marginTop: height / 100,
+                                    marginBottom: 6,
+                                  }}
+                                >
+                                  Security Code
+                                </Text>
+                                <View
+                                  style={[
+                                    styles.txtView,
+                                    {
+                                      borderWidth: emailError !== "" ? 0.3 : 0,
+                                      borderColor:
+                                        emailError !== "" ? colors.MAIN : null,
+
+                                      flexDirection: "row",
+                                      justifyContent: "space-between",
+                                      width: height / 8.7,
+                                    },
+                                  ]}
+                                >
+                                  <TextInput
+                                    placeholder="429"
+                                    editable={false}
+                                    placeholderTextColor={
+                                      theme.colors.secondary
+                                    }
+                                    style={[
+                                      styles.textSize,
+                                      {
+                                        backgroundColor: colors.grays,
+                                      },
+                                    ]}
+                                    autoCorrect={false}
+                                    value={email}
+                                    onChangeText={(value) => [
+                                      setEmail(value),
+                                      setEmailError(""),
+                                    ]}
+                                  />
+                                </View>
+                              </View>
+
+                              <View>
+                                <Text
+                                  style={{
+                                    fontFamily: "GlacialIndifference-Regular",
+                                    fontSize: height / 80,
+                                    marginTop: height / 100,
+                                    marginBottom: 6,
+                                  }}
+                                >
+                                  Call Box
+                                </Text>
+                                <View
+                                  style={[
+                                    styles.txtView,
+                                    {
+                                      borderWidth: emailError !== "" ? 0.3 : 0,
+                                      borderColor:
+                                        emailError !== "" ? colors.MAIN : null,
+
+                                      flexDirection: "row",
+                                      justifyContent: "space-between",
+                                      width: height / 8.7,
+                                    },
+                                  ]}
+                                >
+                                  <TextInput
+                                    placeholder="123"
+                                    editable={false}
+                                    placeholderTextColor={
+                                      theme.colors.secondary
+                                    }
+                                    style={[
+                                      styles.textSize,
+                                      {
+                                        backgroundColor: colors.grays,
+                                      },
+                                    ]}
+                                    autoCorrect={false}
+                                    value={email}
+                                    onChangeText={(value) => [
+                                      setEmail(value),
+                                      setEmailError(""),
+                                    ]}
+                                  />
+                                </View>
+                              </View>
+
+                              <View>
+                                <Text
+                                  style={{
+                                    fontFamily: "GlacialIndifference-Regular",
+                                    fontSize: height / 80,
+                                    marginTop: height / 100,
+                                    marginBottom: 6,
+                                  }}
+                                >
+                                  Key or Fob
+                                </Text>
+                                <View
+                                  style={[
+                                    styles.txtView,
+                                    {
+                                      borderWidth: emailError !== "" ? 0.3 : 0,
+                                      borderColor:
+                                        emailError !== "" ? colors.MAIN : null,
+
+                                      flexDirection: "row",
+                                      justifyContent: "space-between",
+                                      width: height / 8.7,
+                                    },
+                                  ]}
+                                >
+                                  <TextInput
+                                    placeholder="Yes"
+                                    editable={false}
+                                    placeholderTextColor={
+                                      theme.colors.secondary
+                                    }
+                                    style={[
+                                      styles.textSize,
+                                      {
+                                        backgroundColor: colors.grays,
+                                      },
+                                    ]}
+                                    autoCorrect={false}
+                                    value={email}
+                                    onChangeText={(value) => [
+                                      setEmail(value),
+                                      setEmailError(""),
+                                    ]}
+                                  />
+                                  <MaterialIcons
+                                    size={height / 60}
+                                    name="keyboard-arrow-down"
+                                    color={"gray"}
+                                  />
+                                </View>
+                              </View>
+                            </View>
+                          </View>
+                        ) : null}
+                        <Text
+                          style={{
+                            fontFamily: "GlacialIndifference-Bold",
+                            fontSize: height / 50,
+                            marginTop: height / 70,
+                            marginBottom: 6,
+                          }}
+                        >
+                          Additional Instructions
+                        </Text>
+                        <View
+                          style={[
+                            styles.txtView,
+                            {
+                              borderWidth: emailError !== "" ? 0.3 : 0,
+                              borderColor:
+                                emailError !== "" ? colors.MAIN : null,
+
+                              flexDirection: "row",
+                              justifyContent: "space-between",
+                            },
+                          ]}
+                        >
+                          <TextInput
+                            placeholder="Enter details"
+                            placeholderTextColor={theme.colors.secondary}
+                            style={[
+                              styles.textSize,
+                              {
+                                backgroundColor: colors.grays,
+                              },
+                            ]}
+                            autoCorrect={false}
+                            value={email}
+                            onChangeText={(value) => [
+                              setEmail(value),
+                              setEmailError(""),
+                            ]}
+                          />
+                        </View>
+                      </View>
+                    </View>
+                  ) : null}
 
                   <TouchableOpacity
                     onPress={() =>
@@ -631,7 +2711,7 @@ export default function GuestAddress(props) {
                           paddingVertical: height / 100,
                         }}
                       >
-                        Use this address
+                        Deliver to this address
                       </Text>
                     </ImageBackground>
                   </TouchableOpacity>
@@ -650,7 +2730,7 @@ export default function GuestAddress(props) {
                   >
                     <Text
                       style={{
-                        fontFamily: "GlacialIndifference-Bold",
+                        fontFamily: "GlacialIndifference-Regular",
                         fontSize: height / 50,
                         marginBottom: 6,
                         textAlign: "center",

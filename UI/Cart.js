@@ -108,6 +108,27 @@ export default function Cart(props) {
                 source={require("../assets/topbar.png")}
                 style={styles.topBar}
               >
+                <View
+                  style={{
+                    justifyContent: "space-between",
+                    marginTop: height / 10,
+                    paddingHorizontal: 20,
+                  }}
+                >
+                  <Text
+                    style={[
+                      styles.textSize,
+                      {
+                        color: "white",
+                        fontSize: height / 78,
+                        fontFamily: "Mediums-Font",
+                      },
+                    ]}
+                  >
+                    {loggedIn ? ` ` : ` Guest`}
+                  </Text>
+                </View>
+
                 <TouchableOpacity
                   onPress={() => refRBSheet.current.open()}
                   style={{
@@ -115,7 +136,7 @@ export default function Cart(props) {
                     alignItems: "center",
                     paddingHorizontal: 20,
                     justifyContent: "space-between",
-                    marginTop: height / 13,
+                    marginTop: -10,
                   }}
                 >
                   <View
@@ -194,9 +215,13 @@ export default function Cart(props) {
                     $ {(qty * 51.95).toFixed(2)}
                   </Text>
                 </View>
-
+                {/* refRBSheet.current.open() */}
                 <TouchableOpacity
-                  onPress={() => refRBSheet.current.open()}
+                  onPress={() =>
+                    loggedIn
+                      ? props.navigation.navigate("CheckoutCompleteInfo")
+                      : props.navigation.navigate("InAppLogin")
+                  }
                   style={{ marginTop: height / 60 }}
                 >
                   <ImageBackground
@@ -216,7 +241,6 @@ export default function Cart(props) {
                     </Text>
                   </ImageBackground>
                 </TouchableOpacity>
-
                 <View style={{ marginTop: height / 170 }}>
                   <View
                     style={{
@@ -343,10 +367,17 @@ export default function Cart(props) {
                           disabled={qty > 1 ? false : true}
                           onPress={() => setQty(qty - 1)}
                         >
-                          <MaterialCommunityIcons
-                            name="chevron-down"
-                            size={height / 50}
-                          />
+                          {qty > 1 ? (
+                            <MaterialCommunityIcons
+                              name="chevron-down"
+                              size={height / 50}
+                            />
+                          ) : (
+                            <MaterialCommunityIcons
+                              name="delete-outline"
+                              size={height / 50}
+                            />
+                          )}
                         </TouchableOpacity>
                         <Text
                           style={{

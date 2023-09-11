@@ -69,6 +69,8 @@ export default function InAppLogin(props) {
   const [phone, setPhone] = React.useState("");
   const [code, setCode] = React.useState("");
   const [toggleCheckBox, setToggleCheckBox] = useState(false);
+  const [checkBoxPhone, setCheckBoxPhone] = useState(false);
+  const [checkBoxEmail, setCheckBoxEmail] = useState(false);
 
   const [gLoading, setGLoading] = React.useState(false);
   const [gridView, setGridView] = React.useState(true);
@@ -103,10 +105,10 @@ export default function InAppLogin(props) {
   };
   const data = [
     {
-      label: "Create Account.",
+      label: "Create Account. New to Gearify?",
     },
     {
-      label: "Sign in",
+      label: "Sign in. Already a customer?",
     },
   ];
 
@@ -243,20 +245,40 @@ export default function InAppLogin(props) {
                     marginTop: 6,
                   }}
                 >
-                  <View style={{}}>
-                    <Text
-                      style={{
-                        fontFamily: "GlacialIndifference-Bold",
-                        fontSize: height / 50,
-                        marginTop: height / 70,
-                      }}
+                  <TouchableOpacity
+                    onPress={() => props.navigation.navigate("GuestAddress")}
+                  >
+                    <ImageBackground
+                      source={require("../assets/topbar.png")}
+                      style={[styles.checkOutBtn, { marginTop: height / 50 }]}
                     >
-                      Welcome
-                    </Text>
-                  </View>
+                      <Text
+                        style={{
+                          fontFamily: "Mediums-Font",
+                          fontSize: height / 45,
+                          textAlign: "center",
+                          color: "white",
+                          paddingVertical: height / 100,
+                        }}
+                      >
+                        Continue as Guest
+                      </Text>
+                    </ImageBackground>
+                  </TouchableOpacity>
+                  <Text
+                    style={{
+                      fontFamily: "GlacialIndifference-Bold",
+                      fontSize: height / 50,
+                      marginVertical: height / 50,
+                      marginBottom: 2,
+                      textAlign: "center",
+                    }}
+                  >
+                    OR
+                  </Text>
                   <View
                     style={{
-                      marginTop: height / 25,
+                      marginTop: height / 200,
                       marginBottom: 6,
                     }}
                   >
@@ -267,6 +289,7 @@ export default function InAppLogin(props) {
                         box={false}
                         initial={2}
                         activeIndex={1}
+                        style={{ marginStart: height / 80 }}
                         textStyle={{
                           fontFamily: "GlacialIndifference-Bold",
                           fontSize: height / 65,
@@ -275,12 +298,90 @@ export default function InAppLogin(props) {
                         activeColor={colors.MAIN}
                         selectedBtn={(e) =>
                           e.label.includes("Sign in")
-                            ? setShowCreate(false)
-                            : setShowCreate(true)
+                            ? (setShowCreate(false),
+                              setCheckBoxEmail(false),
+                              setCheckBoxPhone(false))
+                            : (setShowCreate(true),
+                              setCheckBoxEmail(false),
+                              setCheckBoxPhone(false))
                         }
                       />
                     </View>
                   </View>
+                  {showCreate ? null : (
+                    <View
+                      style={{
+                        flexDirection: "row",
+                        alignItems: "center",
+                        marginTop: -height / 60,
+                      }}
+                    >
+                      <TouchableOpacity
+                        onPress={() => [
+                          setCheckBoxPhone(true),
+                          setCheckBoxEmail(false),
+                        ]}
+                        style={{
+                          flexDirection: "row",
+                          alignItems: "center",
+                          marginTop: height / 25,
+                          marginBottom: 6,
+                        }}
+                      >
+                        {checkBoxPhone ? (
+                          <FontAwesome
+                            name="check-square-o"
+                            color={colors.MAIN}
+                            size={height / 50}
+                          />
+                        ) : (
+                          <FontAwesome name="square-o" size={height / 50} />
+                        )}
+
+                        <Text
+                          style={{
+                            fontFamily: "GlacialIndifference-Bold",
+                            fontSize: height / 70,
+                          }}
+                        >
+                          {`  `}Phone Number
+                        </Text>
+                      </TouchableOpacity>
+
+                      <TouchableOpacity
+                        onPress={() => [
+                          setCheckBoxPhone(false),
+                          setCheckBoxEmail(true),
+                        ]}
+                        style={{
+                          flexDirection: "row",
+                          alignItems: "center",
+                          marginTop: height / 25,
+                          marginBottom: 6,
+                          marginStart: height / 10,
+                        }}
+                      >
+                        {checkBoxEmail ? (
+                          <FontAwesome
+                            name="check-square-o"
+                            color={colors.MAIN}
+                            size={height / 50}
+                          />
+                        ) : (
+                          <FontAwesome name="square-o" size={height / 50} />
+                        )}
+                        <Text
+                          style={{
+                            fontFamily: "GlacialIndifference-Bold",
+                            fontSize: height / 70,
+                          }}
+                        >
+                          {`  `}Email
+                        </Text>
+                      </TouchableOpacity>
+                    </View>
+                  )}
+
                   {showCreate ? (
                     <View>
                       <Text
@@ -366,7 +467,7 @@ export default function InAppLogin(props) {
                           marginBottom: 9,
                         }}
                       >
-                        Creat a password
+                        Create a password
                       </Text>
                       <View
                         style={[
@@ -409,79 +510,257 @@ export default function InAppLogin(props) {
                           />
                         </TouchableOpacity>
                       </View>
+                      <TouchableOpacity
+                        onPress={() => props.navigation.navigate("InAppOTP")}
+                      >
+                        <ImageBackground
+                          source={require("../assets/topbar.png")}
+                          style={[
+                            styles.checkOutBtn,
+                            { marginTop: height / 17 },
+                          ]}
+                        >
+                          <Text
+                            style={{
+                              fontFamily: "Mediums-Font",
+                              fontSize: height / 45,
+                              textAlign: "center",
+                              color: "white",
+                              paddingVertical: height / 100,
+                            }}
+                          >
+                            Continue
+                          </Text>
+                        </ImageBackground>
+                      </TouchableOpacity>
                     </View>
                   ) : (
                     <View>
-                      <Text
-                        style={{
-                          fontFamily: "GlacialIndifference-Bold",
-                          fontSize: height / 70,
-                          marginVertical: height / 50,
-                        }}
-                      >
-                        Phone number or email
-                      </Text>
+                      {checkBoxEmail ? (
+                        <View>
+                          <Text
+                            style={{
+                              fontFamily: "GlacialIndifference-Bold",
+                              fontSize: height / 70,
+                              marginVertical: height / 50,
+                              marginBottom: height / 200,
+                            }}
+                          >
+                            Email
+                          </Text>
+                          <View
+                            style={[
+                              styles.txtView,
+                              {
+                                borderWidth: emailError !== "" ? 0.3 : 0,
+                                borderColor:
+                                  emailError !== "" ? colors.MAIN : null,
+                              },
+                            ]}
+                          >
+                            <TextInput
+                              placeholder="Enter email"
+                              placeholderTextColor={theme.colors.secondary}
+                              style={[
+                                styles.textSize,
+                                {
+                                  backgroundColor: colors.grays,
+                                },
+                              ]}
+                              autoCorrect={false}
+                              value={email}
+                              onChangeText={(value) => [
+                                setEmail(value),
+                                setEmailError(""),
+                              ]}
+                            />
+                          </View>
 
-                      <View
-                        style={[
-                          styles.txtView,
-                          {
-                            borderWidth: emailError !== "" ? 0.3 : 0,
-                            borderColor: emailError !== "" ? colors.MAIN : null,
-                          },
-                        ]}
-                      >
-                        <TextInput
-                          placeholder="Enter phone number or email"
-                          placeholderTextColor={theme.colors.secondary}
-                          style={[
-                            styles.textSize,
-                            {
-                              backgroundColor: colors.grays,
-                            },
-                          ]}
-                          autoCorrect={false}
-                          value={email}
-                          onChangeText={(value) => [
-                            setEmail(value),
-                            setEmailError(""),
-                          ]}
-                        />
-                      </View>
+                          <Text
+                            style={{
+                              fontFamily: "GlacialIndifference-Bold",
+                              fontSize: height / 70,
+                              marginVertical: height / 50,
+                              marginBottom: height / 200,
+                            }}
+                          >
+                            Password
+                          </Text>
+                          <View
+                            style={[
+                              styles.txtView,
+                              {
+                                borderWidth: emailError !== "" ? 0.3 : 0,
+                                borderColor:
+                                  emailError !== "" ? colors.MAIN : null,
+                              },
+                            ]}
+                          >
+                            <TextInput
+                              placeholder="Enter Password"
+                              placeholderTextColor={theme.colors.secondary}
+                              style={[
+                                styles.textSize,
+                                {
+                                  backgroundColor: colors.grays,
+                                },
+                              ]}
+                              autoCorrect={false}
+                              value={email}
+                              onChangeText={(value) => [
+                                setEmail(value),
+                                setEmailError(""),
+                              ]}
+                            />
+                          </View>
+                        </View>
+                      ) : checkBoxPhone ? (
+                        <View>
+                          <Text
+                            style={{
+                              fontFamily: "GlacialIndifference-Bold",
+                              fontSize: height / 70,
+                              marginVertical: height / 50,
+                              marginBottom: -3,
+                            }}
+                          >
+                            Phone number
+                          </Text>
+
+                          <View
+                            style={[
+                              styles.txtView,
+                              {
+                                marginTop: height / 100,
+                                padding: 0,
+                                borderWidth: 0,
+                                //borderColor: phoneError !== "" ? colors.MAIN : null,
+                              },
+                            ]}
+                          >
+                            <PhoneInput
+                              defaultCode="CA"
+                              layout="first"
+                              defaultValue={value}
+                              onChangeText={(text) => {
+                                setValue(text);
+                                setPhoneError("");
+                              }}
+                              onChangeFormattedText={(text) => {
+                                setPhone(text);
+                              }}
+                              onChangeCountry={(text) => {
+                                setCode(text.cca2);
+                              }}
+                              textInputStyle={{
+                                color: theme.colors.secondary,
+                                fontSize: height / 65,
+                                height: height / 90,
+                                padding: 0,
+                                fontFamily: "GlacialIndifference-Regular",
+                              }}
+                              containerStyle={{
+                                backgroundColor: theme.colors.backgroundColor,
+                                padding: 0,
+                                height: height / 19,
+                              }}
+                              textContainerStyle={{
+                                backgroundColor: theme.colors.backgroundColor,
+                              }}
+                              codeTextStyle={{
+                                color: theme.colors.secondary,
+                                fontSize: height / 65,
+                                height: height / 60,
+                                fontFamily: "GlacialIndifference-Regular",
+                              }}
+                              flagButtonStyle={{ height: height / 20 }}
+                            />
+                          </View>
+
+                          <Text
+                            style={{
+                              fontFamily: "GlacialIndifference-Bold",
+                              fontSize: height / 70,
+                              marginVertical: height / 50,
+                              marginBottom: height / 200,
+                            }}
+                          >
+                            Password
+                          </Text>
+                          <View
+                            style={[
+                              styles.txtView,
+                              {
+                                borderWidth: emailError !== "" ? 0.3 : 0,
+                                borderColor:
+                                  emailError !== "" ? colors.MAIN : null,
+                              },
+                            ]}
+                          >
+                            <TextInput
+                              placeholder="Enter Password"
+                              placeholderTextColor={theme.colors.secondary}
+                              style={[
+                                styles.textSize,
+                                {
+                                  backgroundColor: colors.grays,
+                                },
+                              ]}
+                              autoCorrect={false}
+                              value={email}
+                              onChangeText={(value) => [
+                                setEmail(value),
+                                setEmailError(""),
+                              ]}
+                            />
+                          </View>
+                        </View>
+                      ) : (
+                        <View>
+                          <View
+                            style={[
+                              styles.txtView,
+                              {
+                                borderWidth: emailError !== "" ? 0.3 : 0,
+                                borderColor:
+                                  emailError !== "" ? colors.MAIN : null,
+                                marginTop: height / 60,
+                              },
+                            ]}
+                          >
+                            <TextInput
+                              placeholder=""
+                              editable={false}
+                              placeholderTextColor={theme.colors.secondary}
+                              style={[
+                                styles.textSize,
+                                {
+                                  backgroundColor: colors.grays,
+                                },
+                              ]}
+                              autoCorrect={false}
+                              value={email}
+                              onChangeText={(value) => [
+                                setEmail(value),
+                                setEmailError(""),
+                              ]}
+                            />
+                          </View>
+                        </View>
+                      )}
                     </View>
                   )}
-
-                  <TouchableOpacity
-                    onPress={() =>
-                      showCreate
-                        ? props.navigation.navigate("InAppOTP")
-                        : props.navigation.navigate("InAppLoginPassword")
-                    }
-                  >
-                    <ImageBackground
-                      source={require("../assets/topbar.png")}
-                      style={[styles.checkOutBtn, { marginTop: height / 17 }]}
-                    >
-                      <Text
-                        style={{
-                          fontFamily: "Mediums-Font",
-                          fontSize: height / 45,
-                          textAlign: "center",
-                          color: "white",
-                          paddingVertical: height / 100,
-                        }}
-                      >
-                        Continue
-                      </Text>
-                    </ImageBackground>
-                  </TouchableOpacity>
-                  {showCreate ? null : (
+                  {checkBoxEmail || checkBoxPhone ? (
                     <TouchableOpacity
-                      onPress={() => props.navigation.navigate("GuestAddress")}
+                      onPress={() =>
+                        showCreate
+                          ? props.navigation.navigate("InAppOTP")
+                          : props.navigation.navigate("InAppLoginPassword")
+                      }
                     >
                       <ImageBackground
                         source={require("../assets/topbar.png")}
-                        style={[styles.checkOutBtn, { marginTop: height / 50 }]}
+                        style={[styles.checkOutBtn, { marginTop: height / 17 }]}
                       >
                         <Text
                           style={{
@@ -492,17 +771,17 @@ export default function InAppLogin(props) {
                             paddingVertical: height / 100,
                           }}
                         >
-                          Guest Checkout
+                          Continue
                         </Text>
                       </ImageBackground>
                     </TouchableOpacity>
-                  )}
+                  ) : null}
 
                   <View
                     style={{
                       flexDirection: "row",
                       alignItems: "center",
-                      marginTop: height / 40,
+                      marginTop: showCreate ? height / 12 : height / 7,
                       marginStart: height / 33,
                     }}
                   >
@@ -521,7 +800,7 @@ export default function InAppLogin(props) {
                         color: colors.MAIN,
                       }}
                     >
-                      Conditions of Use
+                      Terms & Conditions
                     </Text>
                     <Text
                       style={{
@@ -541,7 +820,7 @@ export default function InAppLogin(props) {
                       marginStart: height / 33,
                     }}
                   >
-                    Privacy Notice.
+                    Privacy Policy.
                   </Text>
 
                   <Text
@@ -555,48 +834,6 @@ export default function InAppLogin(props) {
                   >
                     Need help?
                   </Text>
-
-                  <View
-                    style={{
-                      flexDirection: "row",
-                      alignItems: "center",
-                      justifyContent: "center",
-
-                      marginTop: showCreate ? height / 12 : height / 7,
-                      marginStart: height / 33,
-                      marginEnd: height / 33,
-                    }}
-                  >
-                    <Text
-                      style={{
-                        fontFamily: "GlacialIndifference-Regular",
-                        fontSize: height / 65,
-                        color: colors.MAIN,
-                        marginEnd: height / 20,
-                      }}
-                    >
-                      Conditions of Use
-                    </Text>
-                    <Text
-                      style={{
-                        fontFamily: "GlacialIndifference-Regular",
-                        fontSize: height / 65,
-                        color: colors.MAIN,
-                        marginEnd: height / 20,
-                      }}
-                    >
-                      Privacy Notice
-                    </Text>
-                    <Text
-                      style={{
-                        fontFamily: "GlacialIndifference-Regular",
-                        fontSize: height / 65,
-                        color: colors.MAIN,
-                      }}
-                    >
-                      Help
-                    </Text>
-                  </View>
 
                   {/*  <View style={{ marginTop: height / 33 }}>
                     <View

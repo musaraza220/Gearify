@@ -24,7 +24,7 @@ import {
   MaterialCommunityIcons,
   MaterialIcons,
   EvilIcons,
-  SimpleLineIcons,
+  FontAwesome,
   Entypo,
   Ionicons,
 } from "@expo/vector-icons";
@@ -58,8 +58,11 @@ export default function CheckoutCompleteInfo(props) {
   const [error, setError] = React.useState("");
   const [authError, setAuthError] = React.useState("");
   const [loading, setLoading] = React.useState(true);
+  const [checkboxPromo, setCheckboxPromo] = React.useState(false);
+
   const [selectedValue, setSelectedValue] = useState("option1");
 
+  const [qty, setQty] = React.useState(1);
   const [gLoading, setGLoading] = React.useState(false);
   const [gridView, setGridView] = React.useState(true);
   const [listView, setListView] = React.useState(false);
@@ -242,7 +245,7 @@ export default function CheckoutCompleteInfo(props) {
                         textAlign: "center",
                       }}
                     >
-                      Place your order
+                      PLACE YOUR ORDER
                     </Text>
                   </View>
                   <Text
@@ -252,8 +255,8 @@ export default function CheckoutCompleteInfo(props) {
                       marginVertical: height / 22,
                     }}
                   >
-                    By placing your order, you agree to Gearify's privacy notice
-                    and conditions of use.
+                    By placing your order, you agree to Gearify's Privacy Policy
+                    and Terms & Conditions.
                   </Text>
                   <TouchableOpacity onPress={() => setOrderDone(true)}>
                     <ImageBackground
@@ -288,7 +291,7 @@ export default function CheckoutCompleteInfo(props) {
                           fontSize: height / 65,
                         }}
                       >
-                        Items (4):
+                        Items (2):
                       </Text>
                       <Text
                         style={{
@@ -442,66 +445,611 @@ export default function CheckoutCompleteInfo(props) {
                         fontSize: height / 65,
                       }}
                     >
-                      Paying with Mastercard 1770
+                      Paying with Mastercard ending in *1770
                     </Text>
 
                     <Text
                       style={{
                         fontFamily: "GlacialIndifference-Regular",
                         fontSize: height / 65,
-                        marginTop: 4,
+                        marginTop: 1,
                         color: colors.MAIN,
                       }}
                     >
-                      Change delivery address
+                      Change payment method
                     </Text>
-                    <Text
+                    <TouchableOpacity
+                      activeOpacity={1}
+                      onPress={() => [
+                        checkboxPromo == false
+                          ? setCheckboxPromo(true)
+                          : setCheckboxPromo(false),
+                      ]}
                       style={{
-                        fontFamily: "GlacialIndifference-Regular",
-                        fontSize: height / 65,
-                        marginTop: 4,
-                        color: colors.MAIN,
+                        flexDirection: "row",
+                        alignItems: "center",
+                        marginTop: height / 40,
+                        marginBottom: 6,
                       }}
                     >
-                      Use a gift card, voucher, or promo code
-                    </Text>
+                      {checkboxPromo ? (
+                        <FontAwesome
+                          name="check-square-o"
+                          color={colors.MAIN}
+                          size={height / 50}
+                        />
+                      ) : (
+                        <FontAwesome name="square-o" size={height / 50} />
+                      )}
+
+                      <Text
+                        style={{
+                          fontFamily: "GlacialIndifference-Bold",
+                          fontSize: height / 70,
+                        }}
+                      >
+                        {checkboxPromo
+                          ? " Use a gift card, vouchers, or promo code"
+                          : "  Use a gift card, vouchers, or promo code"}
+                      </Text>
+                      {checkboxPromo ? (
+                        <Text
+                          style={{
+                            fontFamily: "GlacialIndifference-Bold",
+                            fontSize: height / 70,
+                            textAlign: "right",
+                            paddingEnd: 4,
+                            flex: 1,
+                          }}
+                        >
+                          {`  `}$280.14
+                        </Text>
+                      ) : null}
+                    </TouchableOpacity>
+                  </View>
+                  {checkboxPromo ? (
+                    <View>
+                      <View
+                        style={{
+                          flexDirection: "row",
+                          justifyContent: "space-between",
+                          alignItems: "center",
+                        }}
+                      >
+                        <View>
+                          <Text
+                            style={{
+                              fontFamily: "GlacialIndifference-Bold",
+                              fontSize: height / 70,
+                              textAlign: "right",
+                              paddingEnd: 6,
+                              flex: 1,
+                            }}
+                          ></Text>
+                          <View
+                            style={[
+                              styles.txtView,
+                              {
+                                borderWidth: emailError !== "" ? 0.3 : 0,
+                                borderColor:
+                                  emailError !== "" ? colors.MAIN : null,
+                                width: width / 1.8,
+                                flexDirection: "row",
+                                justifyContent: "space-between",
+                                marginTop: 0,
+                              },
+                            ]}
+                          >
+                            <TextInput
+                              placeholder="1234"
+                              placeholderTextColor={theme.colors.secondary}
+                              style={[
+                                styles.textSize,
+                                {
+                                  backgroundColor: colors.grays,
+                                },
+                              ]}
+                              autoCorrect={false}
+                              value={email}
+                              onChangeText={(value) => [
+                                setEmail(value),
+                                setEmailError(""),
+                              ]}
+                            />
+                          </View>
+                        </View>
+
+                        <View>
+                          <Text
+                            style={{
+                              fontFamily: "Mediums-Font",
+                              fontSize: height / 70,
+                              textAlign: "right",
+                              paddingEnd: 4,
+                              flex: 1,
+                            }}
+                          >
+                            (Remaining Balance)
+                          </Text>
+                          <View
+                            style={[
+                              styles.txtView,
+                              {
+                                borderWidth: emailError !== "" ? 0.3 : 0,
+                                borderColor:
+                                  emailError !== "" ? colors.MAIN : null,
+                                width: width / 3.3,
+                                flexDirection: "row",
+                                justifyContent: "space-between",
+                                marginTop: 0,
+                              },
+                            ]}
+                          >
+                            <TextInput
+                              placeholder="$99.00"
+                              placeholderTextColor={theme.colors.secondary}
+                              style={[
+                                styles.textSize,
+                                {
+                                  backgroundColor: colors.grays,
+                                },
+                              ]}
+                              autoCorrect={false}
+                              value={email}
+                              onChangeText={(value) => [
+                                setEmail(value),
+                                setEmailError(""),
+                              ]}
+                            />
+                          </View>
+                        </View>
+                      </View>
+                    </View>
+                  ) : null}
+
+                  <Text
+                    style={{
+                      fontSize: height / 50,
+                      fontFamily: "GlacialIndifference-Bold",
+                      marginTop: height / 45,
+                    }}
+                  >
+                    ORDER DETAILS
+                  </Text>
+                  <View style={{ marginTop: 2 }}>
+                    <TouchableOpacity
+                      onPress={() =>
+                        props.navigation.navigate("CartProductDetails")
+                      }
+                    >
+                      <LinearGradient
+                        colors={["#ffffff", "lightgray"]}
+                        style={styles.bestSellerBack}
+                      >
+                        <View
+                          style={{
+                            flexDirection: "row",
+                            justifyContent: "space-between",
+                            alignItems: "center",
+                          }}
+                        >
+                          <Text
+                            style={{
+                              fontSize: height / 50,
+                              fontFamily: "GlacialIndifference-Bold",
+                            }}
+                          >
+                            OtterGrip Symmetry Case
+                          </Text>
+                          <Text
+                            style={{
+                              fontSize: height / 50,
+                              fontFamily: "GlacialIndifference-Regular",
+                            }}
+                          >
+                            Black
+                          </Text>
+                        </View>
+
+                        <Text
+                          style={{
+                            fontSize: height / 55,
+                            marginTop: 1,
+                            fontFamily: "GlacialIndifference-Regular",
+                          }}
+                        >
+                          Otterbox
+                        </Text>
+
+                        <View
+                          style={{ alignSelf: "center", paddingVertical: 2 }}
+                        >
+                          <Image
+                            source={require("../assets/mobilecase.png")}
+                            style={{
+                              width: height / 9,
+                              height: height / 9,
+                              resizeMode: "contain",
+                            }}
+                          />
+                        </View>
+                        <View
+                          style={{
+                            flexDirection: "row",
+                            justifyContent: "space-between",
+                            alignItems: "center",
+                          }}
+                        >
+                          <Text
+                            style={{
+                              fontSize: height / 52,
+                              fontFamily: "GlacialIndifference-Bold",
+                            }}
+                          >
+                            $51.95
+                          </Text>
+                          <Text
+                            style={{
+                              fontSize: height / 52,
+                              fontFamily: "GlacialIndifference-Regular",
+                            }}
+                          >
+                            iPhone 14
+                          </Text>
+                        </View>
+                      </LinearGradient>
+                    </TouchableOpacity>
+                    <View
+                      style={{
+                        flexDirection: "row",
+                        justifyContent: "space-between",
+                        alignItems: "center",
+                        marginTop: height / 90,
+                      }}
+                    >
+                      <TouchableOpacity>
+                        <Image
+                          source={require("../assets/deleteBtn.png")}
+                          style={styles.sellerButtons}
+                        />
+                      </TouchableOpacity>
+
+                      <View
+                        style={[
+                          styles.filterBtnPrice,
+                          {
+                            borderColor: "gray",
+                            flexDirection: "row",
+                            justifyContent: "space-between",
+                            alignItems: "center",
+                          },
+                        ]}
+                      >
+                        <TouchableOpacity
+                          activeOpacity={0.5}
+                          disabled={qty > 1 ? false : true}
+                          onPress={() => setQty(qty - 1)}
+                        >
+                          {qty > 1 ? (
+                            <MaterialCommunityIcons
+                              name="chevron-down"
+                              size={height / 50}
+                            />
+                          ) : (
+                            <MaterialCommunityIcons
+                              name="delete-outline"
+                              size={height / 50}
+                            />
+                          )}
+                        </TouchableOpacity>
+                        <Text
+                          style={{
+                            fontFamily: "GlacialIndifference-Regular",
+                            fontSize: height / 75,
+                            textAlign: "center",
+                          }}
+                        >
+                          {qty}
+                        </Text>
+                        <TouchableOpacity
+                          activeOpacity={0.5}
+                          onPress={() => setQty(qty + 1)}
+                        >
+                          <MaterialCommunityIcons
+                            name="chevron-up"
+                            size={height / 50}
+                          />
+                        </TouchableOpacity>
+                      </View>
+                    </View>
+
+                    <View
+                      style={{
+                        flexDirection: "row",
+                        alignItems: "center",
+                        justifyContent: "space-between",
+                        marginTop: 5,
+                        marginBottom: 5,
+                      }}
+                    >
+                      <View
+                        style={{ flexDirection: "row", alignItems: "center" }}
+                      >
+                        <MaterialCommunityIcons
+                          name="truck-delivery-outline"
+                          size={height / 50}
+                        />
+                        <Text
+                          style={{
+                            fontFamily: "GlacialIndifference-Regular",
+                            fontSize: height / 65,
+                          }}
+                        >
+                          {`  `}ABC, Anywhere, Anyplace
+                        </Text>
+                      </View>
+                      <Text
+                        style={{
+                          fontFamily: "GlacialIndifference-Regular",
+                          fontSize: height / 65,
+                          marginTop: 4,
+                          color: colors.MAIN,
+                        }}
+                      >
+                        Change delivery address
+                      </Text>
+                    </View>
+                    <View
+                      style={{
+                        height: 1,
+                        width: "100%",
+                        backgroundColor: "lightgray",
+                        marginVertical: height / 100,
+                      }}
+                    ></View>
                   </View>
 
-                  <View style={{ marginTop: height / 45 }}>
+                  <View style={{ marginTop: height / 80 }}>
+                    <TouchableOpacity
+                      onPress={() =>
+                        props.navigation.navigate("CartProductDetails")
+                      }
+                    >
+                      <LinearGradient
+                        colors={["#ffffff", "lightgray"]}
+                        style={styles.bestSellerBack}
+                      >
+                        <View
+                          style={{
+                            flexDirection: "row",
+                            justifyContent: "space-between",
+                            alignItems: "center",
+                          }}
+                        >
+                          <Text
+                            style={{
+                              fontSize: height / 50,
+                              fontFamily: "GlacialIndifference-Bold",
+                            }}
+                          >
+                            OtterGrip Symmetry Case
+                          </Text>
+                          <Text
+                            style={{
+                              fontSize: height / 50,
+                              fontFamily: "GlacialIndifference-Regular",
+                            }}
+                          >
+                            Black
+                          </Text>
+                        </View>
+
+                        <Text
+                          style={{
+                            fontSize: height / 55,
+                            marginTop: 1,
+                            fontFamily: "GlacialIndifference-Regular",
+                          }}
+                        >
+                          Otterbox
+                        </Text>
+
+                        <View
+                          style={{ alignSelf: "center", paddingVertical: 2 }}
+                        >
+                          <Image
+                            source={require("../assets/mobilecase.png")}
+                            style={{
+                              width: height / 9,
+                              height: height / 9,
+                              resizeMode: "contain",
+                            }}
+                          />
+                        </View>
+                        <View
+                          style={{
+                            flexDirection: "row",
+                            justifyContent: "space-between",
+                            alignItems: "center",
+                          }}
+                        >
+                          <Text
+                            style={{
+                              fontSize: height / 52,
+                              fontFamily: "GlacialIndifference-Bold",
+                            }}
+                          >
+                            $51.95
+                          </Text>
+                          <Text
+                            style={{
+                              fontSize: height / 52,
+                              fontFamily: "GlacialIndifference-Regular",
+                            }}
+                          >
+                            iPhone 14
+                          </Text>
+                        </View>
+                      </LinearGradient>
+                    </TouchableOpacity>
+                    <View
+                      style={{
+                        flexDirection: "row",
+                        justifyContent: "space-between",
+                        alignItems: "center",
+                        marginTop: height / 90,
+                      }}
+                    >
+                      <TouchableOpacity>
+                        <Image
+                          source={require("../assets/deleteBtn.png")}
+                          style={styles.sellerButtons}
+                        />
+                      </TouchableOpacity>
+
+                      <View
+                        style={[
+                          styles.filterBtnPrice,
+                          {
+                            borderColor: "gray",
+                            flexDirection: "row",
+                            justifyContent: "space-between",
+                            alignItems: "center",
+                          },
+                        ]}
+                      >
+                        <TouchableOpacity
+                          activeOpacity={0.5}
+                          disabled={qty > 1 ? false : true}
+                          onPress={() => setQty(qty - 1)}
+                        >
+                          {qty > 1 ? (
+                            <MaterialCommunityIcons
+                              name="chevron-down"
+                              size={height / 50}
+                            />
+                          ) : (
+                            <MaterialCommunityIcons
+                              name="delete-outline"
+                              size={height / 50}
+                            />
+                          )}
+                        </TouchableOpacity>
+                        <Text
+                          style={{
+                            fontFamily: "GlacialIndifference-Regular",
+                            fontSize: height / 75,
+                            textAlign: "center",
+                          }}
+                        >
+                          {qty}
+                        </Text>
+                        <TouchableOpacity
+                          activeOpacity={0.5}
+                          onPress={() => setQty(qty + 1)}
+                        >
+                          <MaterialCommunityIcons
+                            name="chevron-up"
+                            size={height / 50}
+                          />
+                        </TouchableOpacity>
+                      </View>
+                    </View>
+
+                    <View
+                      style={{
+                        flexDirection: "row",
+                        alignItems: "center",
+                        justifyContent: "space-between",
+                        marginTop: 5,
+                        marginBottom: 5,
+                      }}
+                    >
+                      <View
+                        style={{ flexDirection: "row", alignItems: "center" }}
+                      >
+                        <MaterialCommunityIcons
+                          name="truck-delivery-outline"
+                          size={height / 50}
+                        />
+                        <Text
+                          style={{
+                            fontFamily: "GlacialIndifference-Regular",
+                            fontSize: height / 65,
+                          }}
+                        >
+                          {`  `}ABC, Anywhere, Anyplace
+                        </Text>
+                      </View>
+                      <Text
+                        style={{
+                          fontFamily: "GlacialIndifference-Regular",
+                          fontSize: height / 65,
+                          marginTop: 4,
+                          color: colors.MAIN,
+                        }}
+                      >
+                        Change delivery address
+                      </Text>
+                    </View>
+                    <View
+                      style={{
+                        height: 1,
+                        width: "100%",
+                        backgroundColor: "lightgray",
+                        marginVertical: height / 100,
+                      }}
+                    ></View>
+                  </View>
+
+                  <View
+                    style={{
+                      flexDirection: "row",
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                      marginTop: height / 60,
+                      marginHorizontal: height / 36,
+                    }}
+                  >
                     <Text
                       style={{
                         fontFamily: "GlacialIndifference-Bold",
                         fontSize: height / 65,
                       }}
                     >
-                      Arriving Friday, Sept. 1 and Sunday, Sept. 3
+                      Order total:
                     </Text>
-
                     <Text
                       style={{
-                        fontFamily: "GlacialIndifference-Regular",
+                        fontFamily: "GlacialIndifference-Bold",
                         fontSize: height / 65,
-                        marginTop: 4,
+                        width: height / 16,
                       }}
                     >
-                      If you order in the next 7 hours and 23 minutes
+                      $280.14
                     </Text>
-                    <View>
-                      <RadioButtonRN
-                        circleSize={height / 150}
-                        data={data}
-                        box={false}
-                        initial={1}
-                        textStyle={{
-                          fontFamily: "GlacialIndifference-Bold",
-                          fontSize: height / 65,
-                          marginStart: -10,
-                        }}
-                        activeColor={colors.MAIN}
-                        selectedBtn={(e) => console.log(e)}
-                      />
-                    </View>
                   </View>
+                  <TouchableOpacity
+                    onPress={() => setOrderDone(true)}
+                    style={{ marginTop: height / 40 }}
+                  >
+                    <ImageBackground
+                      source={require("../assets/topbar.png")}
+                      style={styles.checkOutBtn}
+                    >
+                      <Text
+                        style={{
+                          fontFamily: "Mediums-Font",
+                          fontSize: height / 45,
+                          textAlign: "center",
+                          color: "white",
+                          paddingVertical: height / 100,
+                        }}
+                      >
+                        Place your order
+                      </Text>
+                    </ImageBackground>
+                  </TouchableOpacity>
                 </View>
               )}
             </ScrollView>
@@ -649,9 +1197,10 @@ const useStyle = () => {
       marginTop: 2,
     },
     txtView: {
-      padding: 7,
-      marginTop: height / 30,
-      borderWidth: 0.4,
+      padding: 13,
+      backgroundColor: colors.grays,
+      marginTop: 2,
+      borderRadius: 3,
     },
     txtView1: {
       padding: 8,

@@ -133,29 +133,45 @@ export default function SubCat(props) {
                 marginTop: 4,
                 flexDirection: "row",
                 alignItems: "center",
+                justifyContent: "space-between",
               }}
             >
-              <TouchableOpacity onPress={() => props.navigation.goBack()}>
-                <Image
-                  source={require("../assets/back.png")}
+              <View style={{ flexDirection: "row", alignItems: "center" }}>
+                <TouchableOpacity onPress={() => props.navigation.goBack()}>
+                  <Image
+                    source={require("../assets/back.png")}
+                    style={{
+                      resizeMode: "contain",
+                      height: height / 50,
+                      width: width / 22,
+                      marginTop: 7,
+                    }}
+                  />
+                </TouchableOpacity>
+
+                <Text
                   style={{
-                    resizeMode: "contain",
-                    height: height / 50,
-                    width: width / 22,
-                    marginTop: 7,
+                    fontFamily: "GlacialIndifference-Bold",
+                    fontSize: height / 47,
+                    padding: 10,
+                    paddingStart: 7,
                   }}
-                />
-              </TouchableOpacity>
+                >
+                  Subcategory
+                </Text>
+              </View>
 
               <Text
                 style={{
-                  fontFamily: "GlacialIndifference-Bold",
-                  fontSize: height / 47,
+                  fontFamily: "GlacialIndifference-Gegular",
+                  fontSize: height / 70,
                   padding: 10,
                   paddingStart: 7,
+                  paddingEnd: 1,
+                  textAlign: "right",
                 }}
               >
-                Subcategory
+                View all products in this category
               </Text>
             </View>
 
@@ -336,17 +352,6 @@ export default function SubCat(props) {
                     </View>
                   </View>
                 </LinearGradient>
-                <Text
-                  style={{
-                    fontFamily: "GlacialIndifference-Gegular",
-                    fontSize: height / 70,
-                    padding: 10,
-                    paddingStart: 7,
-                    alignSelf: "flex-end",
-                  }}
-                >
-                  View all products in this category
-                </Text>
               </View>
             </ScrollView>
           </View>
