@@ -111,7 +111,7 @@ export default function Cart(props) {
                 <View
                   style={{
                     justifyContent: "space-between",
-                    marginTop: height / 10,
+                    marginTop: height / 13.3,
                     paddingHorizontal: 20,
                   }}
                 >

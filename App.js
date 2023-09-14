@@ -57,6 +57,12 @@ import CartProductDetails from "./UI/CartProductDetails";
 import NewAccountAddAddress from "./UI/NewAccountAddAddress";
 import ExploreProductScreen from "./UI/ExploreProductScreen";
 import ExploreProductDetails from "./UI/ExploreProductDetails";
+import EditAddress from "./UI/EditAddress";
+import Wishlist from "./UI/Wishlist";
+import ProductDetailsWishlist from "./UI/ProductDetailsWishlist";
+import ViewLists from "./UI/ViewLists";
+import SpecificList from "./UI/SpecificList";
+import Registry from "./UI/Registry";
 
 // const Tab = createMaterialBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -208,6 +214,36 @@ export default function App() {
           <Stack.Screen
             name="Home"
             component={Home}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="ProductDetailsWishlist"
+            component={ProductDetailsWishlist}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="Registry"
+            component={Registry}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="SpecificList"
+            component={SpecificList}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="ViewLists"
+            component={ViewLists}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="EditAddress"
+            component={EditAddress}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="Wishlist"
+            component={Wishlist}
             options={{ headerShown: false }}
           />
           <Stack.Screen
