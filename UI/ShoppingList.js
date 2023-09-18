@@ -13,6 +13,8 @@ import {
   ImageBackground,
   TextInput,
 } from "react-native";
+import { Overlay } from "react-native-elements";
+
 import { Text, useTheme, ActivityIndicator } from "react-native-paper";
 import { colors } from "../assets/colors";
 import {
@@ -22,7 +24,6 @@ import {
   FontAwesome,
 } from "@expo/vector-icons";
 import { appleAuth } from "@invertase/react-native-apple-authentication";
-import { Overlay } from "react-native-elements";
 
 // import AsyncStorage from "@react-native-async-storage/async-storage";
 import {
@@ -40,7 +41,7 @@ import * as Font from "expo-font";
 import { loginAPI, PersonalAccountAPI } from "./APIs";
 WebBrowser.maybeCompleteAuthSession();
 
-export default function ViewLists(props) {
+export default function ShoppingList(props) {
   const refRBSheetViewInst = useRef();
 
   const [email, setEmail] = React.useState("");
@@ -53,6 +54,7 @@ export default function ViewLists(props) {
   const [error, setError] = React.useState("");
   const [authError, setAuthError] = React.useState("");
   const [loading, setLoading] = React.useState(true);
+  const [sublist, setSubList] = React.useState(true);
   const [qty, setQty] = React.useState(1);
   const [gLoading, setGLoading] = React.useState(false);
   const [listView, setListView] = React.useState(false);
@@ -114,17 +116,23 @@ export default function ViewLists(props) {
                   }}
                 >
                   <View style={{ flexDirection: "row", alignItems: "center" }}>
-                    <TouchableOpacity onPress={() => props.navigation.goBack()}>
-                      <Image
-                        source={require("../assets/backwhite.png")}
-                        style={{
-                          resizeMode: "contain",
-                          height: height / 42,
-                          width: width / 19,
-                          marginStart: 2,
-                        }}
-                      />
-                    </TouchableOpacity>
+                    {/* <MaterialIcons
+                      name="location-pin"
+                      color={"white"}
+                      size={height / 55}
+                    />
+                    <Text
+                      style={[
+                        styles.textSize,
+                        {
+                          color: "white",
+                          fontSize: height / 55,
+                          fontFamily: "Futura-CondensedMedium",
+                        },
+                      ]}
+                    >
+                      {` `}SASKATOON
+                    </Text> */}
                   </View>
                   <View>
                     <MaterialCommunityIcons
@@ -160,28 +168,262 @@ export default function ViewLists(props) {
                         fontSize: height / 47,
                       }}
                     >
-                      Lists & Registry
+                      Shopping List
                     </Text>
-                  </View>
-
-                  <TouchableOpacity
-                    onPress={() => refRBSheetViewInst.current.open()}
-                    style={{ flexDirection: "row" }}
-                  >
-                    <MaterialCommunityIcons
-                      name="plus"
-                      color={"black"}
-                      size={height / 50}
-                    />
                     <Text
                       style={{
                         fontFamily: "GlacialIndifference-Regular",
                         fontSize: height / 70,
                       }}
                     >
-                      Create a List
+                      Private
                     </Text>
-                  </TouchableOpacity>
+                  </View>
+                  <View style={{ flexDirection: "row", alignItems: "center" }}>
+                    <TouchableOpacity
+                      onPress={() => props.navigation.goBack()}
+                      style={{ flexDirection: "row" }}
+                    >
+                      <Text
+                        style={{
+                          fontFamily: "GlacialIndifference-Regular",
+                          fontSize: height / 70,
+                          marginEnd: 10,
+                        }}
+                      >
+                        View Lists
+                      </Text>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity onPress={() => setTypeSwitch(true)}>
+                      <MaterialCommunityIcons
+                        name="chevron-down"
+                        color={"black"}
+                        size={height / 50}
+                      />
+
+                      <Overlay
+                        visible={typeSwitch}
+                        overlayStyle={{
+                          borderRadius: 5,
+
+                          backgroundColor: theme.colors.background,
+                          marginTop: height / -2.3,
+                          marginStart: height / 4,
+                        }}
+                      >
+                        <View style={{ marginBottom: 6 }}>
+                          <TouchableOpacity
+                            style={{ alignSelf: "flex-end" }}
+                            onPress={() => setTypeSwitch(false)}
+                          >
+                            <MaterialCommunityIcons name="close" />
+                          </TouchableOpacity>
+                        </View>
+                        <View
+                          style={{
+                            marginStart: height / 60,
+
+                            flexDirection: "row",
+                            justifyContent: "space-between",
+                          }}
+                        >
+                          <TouchableOpacity>
+                            <Text
+                              style={{
+                                fontFamily: "Mediums-Font",
+                                fontSize: height / 75,
+                                width: height / 20,
+                              }}
+                            >
+                              Edit {`    `}
+                            </Text>
+                          </TouchableOpacity>
+                        </View>
+                        <View
+                          style={{
+                            marginStart: height / 60,
+                            marginEnd: height / 15,
+                            marginTop: 10,
+                          }}
+                        >
+                          <TouchableOpacity>
+                            <Text
+                              style={{
+                                fontFamily: "Mediums-Font",
+                                fontSize: height / 75,
+                              }}
+                            >
+                              Delete {`    `}
+                            </Text>
+                          </TouchableOpacity>
+                        </View>
+                        <View
+                          style={{
+                            marginStart: height / 60,
+                            marginEnd: height / 15,
+                            marginTop: 10,
+                          }}
+                        >
+                          <TouchableOpacity>
+                            <Text
+                              style={{
+                                fontFamily: "Mediums-Font",
+                                fontSize: height / 75,
+                              }}
+                            >
+                              Move {`    `}
+                            </Text>
+                          </TouchableOpacity>
+                        </View>
+                        <View
+                          style={{
+                            marginStart: height / 60,
+                            marginEnd: height / 15,
+                            marginTop: 10,
+                          }}
+                        >
+                          <TouchableOpacity>
+                            <Text
+                              style={{
+                                fontFamily: "Mediums-Font",
+                                fontSize: height / 75,
+                              }}
+                            >
+                              Combine {`    `}
+                            </Text>
+                          </TouchableOpacity>
+                        </View>
+                        <View
+                          style={{
+                            marginStart: height / 60,
+                            marginTop: 10,
+                            flexDirection: "row",
+                            justifyContent: "space-between",
+                          }}
+                        >
+                          <TouchableOpacity
+                            onPress={() => [
+                              setTypeSwitch(false),
+                              setSubList(true),
+                            ]}
+                          >
+                            <Text
+                              style={{
+                                fontFamily: "Mediums-Font",
+                                fontSize: height / 75,
+                              }}
+                            >
+                              Frequency {`    `}
+                            </Text>
+                          </TouchableOpacity>
+                          <MaterialCommunityIcons
+                            name="chevron-right"
+                            color={"gray"}
+                            size={height / 50}
+                          />
+                        </View>
+                      </Overlay>
+
+                      <Overlay
+                        visible={sublist}
+                        overlayStyle={{
+                          borderRadius: 5,
+
+                          backgroundColor: theme.colors.background,
+                          marginTop: height / -2.3,
+                          marginStart: height / 4,
+                        }}
+                      >
+                        <View style={{ marginBottom: 6 }}>
+                          <TouchableOpacity
+                            style={{ alignSelf: "flex-end" }}
+                            onPress={() => setSubList(false)}
+                          >
+                            <MaterialCommunityIcons name="close" />
+                          </TouchableOpacity>
+                        </View>
+                        <View
+                          style={{
+                            marginStart: height / 60,
+
+                            flexDirection: "row",
+                            justifyContent: "space-between",
+                          }}
+                        >
+                          <TouchableOpacity>
+                            <Text
+                              style={{
+                                fontFamily: "Mediums-Font",
+                                fontSize: height / 75,
+                              }}
+                            >
+                              Custom {`    `}
+                            </Text>
+                          </TouchableOpacity>
+                          <MaterialCommunityIcons
+                            name="chevron-right"
+                            color={"gray"}
+                            size={height / 50}
+                          />
+                        </View>
+                        <View
+                          style={{
+                            marginStart: height / 60,
+                            marginEnd: height / 15,
+                            marginTop: 10,
+                          }}
+                        >
+                          <TouchableOpacity>
+                            <Text
+                              style={{
+                                fontFamily: "Mediums-Font",
+                                fontSize: height / 75,
+                              }}
+                            >
+                              Daily {`    `}
+                            </Text>
+                          </TouchableOpacity>
+                        </View>
+                        <View
+                          style={{
+                            marginStart: height / 60,
+                            marginEnd: height / 15,
+                            marginTop: 10,
+                          }}
+                        >
+                          <TouchableOpacity>
+                            <Text
+                              style={{
+                                fontFamily: "Mediums-Font",
+                                fontSize: height / 75,
+                              }}
+                            >
+                              Weekly {`    `}
+                            </Text>
+                          </TouchableOpacity>
+                        </View>
+                        <View
+                          style={{
+                            marginStart: height / 60,
+                            marginEnd: height / 15,
+                            marginTop: 10,
+                          }}
+                        >
+                          <TouchableOpacity>
+                            <Text
+                              style={{
+                                fontFamily: "Mediums-Font",
+                                fontSize: height / 75,
+                              }}
+                            >
+                              Monthly {`    `}
+                            </Text>
+                          </TouchableOpacity>
+                        </View>
+                      </Overlay>
+                    </TouchableOpacity>
+                  </View>
                 </View>
               </View>
 
@@ -190,16 +432,16 @@ export default function ViewLists(props) {
                   marginHorizontal: height / 37,
                   flexDirection: "row",
                   alignItems: "center",
-                  marginTop: 11,
+                  marginTop: 7,
                 }}
               >
                 <TouchableOpacity
-                  style={{ marginTop: height / 60, marginEnd: height / 60 }}
+                  style={{ marginTop: height / 60, marginEnd: height / 110 }}
                 >
                   <ImageBackground
                     source={require("../assets/button.png")}
                     style={{
-                      width: height / 8,
+                      width: height / 11,
                       height: height / 23,
                       overflow: "hidden",
                       borderRadius: 3,
@@ -210,21 +452,23 @@ export default function ViewLists(props) {
                     <Text
                       style={{
                         fontFamily: "Mediums-Font",
-                        fontSize: height / 50,
+                        fontSize: height / 55,
                         textAlign: "center",
                         color: "white",
                         marginVertical: 2,
                       }}
                     >
-                      Your Lists
+                      Share
                     </Text>
                   </ImageBackground>
                 </TouchableOpacity>
 
-                <TouchableOpacity style={{ marginTop: height / 60 }}>
+                <TouchableOpacity
+                  style={{ marginTop: height / 60, marginEnd: height / 110 }}
+                >
                   <View
                     style={{
-                      width: height / 7.7,
+                      width: height / 10,
                       height: height / 23,
                       overflow: "hidden",
                       borderRadius: 3,
@@ -238,12 +482,69 @@ export default function ViewLists(props) {
                     <Text
                       style={{
                         fontFamily: "GlacialIndifference-Regular",
-                        fontSize: height / 55,
+                        fontSize: height / 58,
                         textAlign: "center",
                         marginVertical: 2,
                       }}
                     >
-                      Shared with you
+                      Collaborate
+                    </Text>
+                  </View>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={{ marginTop: height / 60, marginEnd: height / 110 }}
+                >
+                  <View
+                    style={{
+                      width: height / 10.5,
+                      height: height / 23,
+                      overflow: "hidden",
+                      borderRadius: 3,
+                      alignItems: "center",
+                      backgroundColor: "white",
+                      justifyContent: "center",
+                      borderWidth: 1,
+                      borderColor: colors.MAIN,
+                    }}
+                  >
+                    <Text
+                      style={{
+                        fontFamily: "GlacialIndifference-Regular",
+                        fontSize: height / 58,
+                        textAlign: "center",
+                        marginVertical: 2,
+                      }}
+                    >
+                      Buy Now
+                    </Text>
+                  </View>
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                  style={{ marginTop: height / 60, marginEnd: height / 110 }}
+                >
+                  <View
+                    style={{
+                      width: height / 11,
+                      height: height / 23,
+                      overflow: "hidden",
+                      borderRadius: 3,
+                      alignItems: "center",
+                      backgroundColor: "white",
+                      justifyContent: "center",
+                      borderWidth: 1,
+                      borderColor: colors.MAIN,
+                    }}
+                  >
+                    <Text
+                      style={{
+                        fontFamily: "GlacialIndifference-Regular",
+                        fontSize: height / 58,
+                        textAlign: "center",
+                        marginVertical: 2,
+                      }}
+                    >
+                      Stop
                     </Text>
                   </View>
                 </TouchableOpacity>
@@ -252,174 +553,19 @@ export default function ViewLists(props) {
               <View
                 style={{
                   marginHorizontal: height / 37,
-                  marginTop: height / 24,
+                  marginTop: height / 28,
                   paddingBottom: 1,
                 }}
               >
-                <TouchableOpacity
-                  onPress={() => props.navigation.navigate("SpecificList")}
+                <Text
                   style={{
-                    marginTop: 3,
-                    flexDirection: "row",
+                    fontFamily: "GlacialIndifference-Regular",
+                    fontSize: height / 60,
+                    textAlign: "center",
                   }}
                 >
-                  <LinearGradient
-                    colors={["#ffffff", "lightgray"]}
-                    style={styles.bestSellerBacks}
-                  ></LinearGradient>
-                  <View
-                    style={{
-                      marginStart: height / 50,
-                      justifyContent: "center",
-                    }}
-                  >
-                    <Text style={[styles.textSize, { fontSize: height / 50 }]}>
-                      My favourites
-                    </Text>
-                    <View
-                      style={{ marginTop: height / 80, flexDirection: "row" }}
-                    >
-                      <Text
-                        style={[styles.textSize, { fontSize: height / 70 }]}
-                      >
-                        Default
-                      </Text>
-                      <Text
-                        style={[
-                          styles.textSize,
-                          { fontSize: height / 70, marginStart: height / 50 },
-                        ]}
-                      >
-                        Private
-                      </Text>
-                    </View>
-                  </View>
-                </TouchableOpacity>
-
-                <TouchableOpacity
-                  onPress={() => props.navigation.navigate("Registry")}
-                  style={{
-                    marginTop: height / 33,
-                    flexDirection: "row",
-                  }}
-                >
-                  <LinearGradient
-                    colors={["#ffffff", "lightgray"]}
-                    style={styles.bestSellerBacks}
-                  ></LinearGradient>
-                  <View
-                    style={{
-                      marginStart: height / 50,
-                      justifyContent: "center",
-                    }}
-                  >
-                    <Text style={[styles.textSize, { fontSize: height / 50 }]}>
-                      Registry
-                    </Text>
-                    <View
-                      style={{ marginTop: height / 80, flexDirection: "row" }}
-                    >
-                      <Text
-                        style={[styles.textSize, { fontSize: height / 70 }]}
-                      >
-                        Private
-                      </Text>
-                    </View>
-                  </View>
-                </TouchableOpacity>
-
-                <TouchableOpacity
-                  onPress={() => props.navigation.navigate("ShoppingList")}
-                  style={{
-                    marginTop: height / 33,
-                    flexDirection: "row",
-                  }}
-                >
-                  <LinearGradient
-                    colors={["#ffffff", "lightgray"]}
-                    style={styles.bestSellerBacks}
-                  ></LinearGradient>
-                  <View
-                    style={{
-                      marginStart: height / 50,
-                      justifyContent: "center",
-                    }}
-                  >
-                    <Text style={[styles.textSize, { fontSize: height / 50 }]}>
-                      Shopping List
-                    </Text>
-                    <View
-                      style={{ marginTop: height / 80, flexDirection: "row" }}
-                    >
-                      <Text
-                        style={[styles.textSize, { fontSize: height / 70 }]}
-                      >
-                        Private
-                      </Text>
-                    </View>
-                  </View>
-                </TouchableOpacity>
-
-                <TouchableOpacity
-                  onPress={() => props.navigation.navigate("Reserved")}
-                  style={{
-                    marginTop: height / 33,
-                    flexDirection: "row",
-                  }}
-                >
-                  <LinearGradient
-                    colors={["#ffffff", "lightgray"]}
-                    style={styles.bestSellerBacks}
-                  ></LinearGradient>
-                  <View
-                    style={{
-                      marginStart: height / 50,
-                      justifyContent: "center",
-                    }}
-                  >
-                    <Text style={[styles.textSize, { fontSize: height / 50 }]}>
-                      Reserved
-                    </Text>
-                    <View
-                      style={{ marginTop: height / 80, flexDirection: "row" }}
-                    >
-                      <Text
-                        style={[styles.textSize, { fontSize: height / 70 }]}
-                      >
-                        Private
-                      </Text>
-                    </View>
-                  </View>
-                </TouchableOpacity>
-
-                <View
-                  style={{
-                    marginTop: height / 33,
-                    flexDirection: "row",
-                  }}
-                >
-                  <LinearGradient
-                    colors={["#ffffff", "lightgray"]}
-                    style={styles.bestSellerBacks}
-                  ></LinearGradient>
-                  <View
-                    style={{
-                      marginStart: height / 50,
-                      justifyContent: "center",
-                    }}
-                  >
-                    <Text style={[styles.textSize, { fontSize: height / 50 }]}>
-                      List 2
-                    </Text>
-                    <View style={{ marginTop: height / 80 }}>
-                      <Text
-                        style={[styles.textSize, { fontSize: height / 70 }]}
-                      >
-                        Private
-                      </Text>
-                    </View>
-                  </View>
-                </View>
+                  There are no items in this List.
+                </Text>
               </View>
             </ScrollView>
 
@@ -427,7 +573,7 @@ export default function ViewLists(props) {
               ref={refRBSheetViewInst}
               closeOnDragDown={true}
               closeOnPressMask={true}
-              height={height / 1.5}
+              height={height / 1.8}
               customStyles={{
                 wrapper: {
                   backgroundColor: "rgba(0, 0, 0, 0.5)",
@@ -437,104 +583,6 @@ export default function ViewLists(props) {
                 },
               }}
             >
-              <Overlay
-                visible={typeSwitch}
-                overlayStyle={{
-                  borderRadius: 5,
-
-                  backgroundColor: theme.colors.background,
-                  marginTop: height / 2.6,
-                }}
-              >
-                <View style={{ marginBottom: 6 }}>
-                  <TouchableOpacity
-                    style={{ alignSelf: "flex-end" }}
-                    onPress={() => setTypeSwitch(false)}
-                  >
-                    <MaterialCommunityIcons name="close" />
-                  </TouchableOpacity>
-                </View>
-                <View
-                  style={{
-                    marginStart: height / 60,
-
-                    flexDirection: "row",
-                    justifyContent: "space-between",
-                  }}
-                >
-                  <TouchableOpacity>
-                    <Text
-                      style={{
-                        fontFamily: "Mediums-Font",
-                        fontSize: height / 75,
-                        width: height / 5,
-                      }}
-                    >
-                      My Favourites {`    `}
-                    </Text>
-                  </TouchableOpacity>
-                </View>
-                <View
-                  style={{
-                    marginStart: height / 60,
-                    marginTop: height / 120,
-                    flexDirection: "row",
-                    justifyContent: "space-between",
-                  }}
-                >
-                  <TouchableOpacity>
-                    <Text
-                      style={{
-                        fontFamily: "Mediums-Font",
-                        fontSize: height / 75,
-                        width: height / 5,
-                      }}
-                    >
-                      Shopping List {`    `}
-                    </Text>
-                  </TouchableOpacity>
-                </View>
-                <View
-                  style={{
-                    marginStart: height / 60,
-                    marginTop: height / 120,
-                    flexDirection: "row",
-                    justifyContent: "space-between",
-                  }}
-                >
-                  <TouchableOpacity>
-                    <Text
-                      style={{
-                        fontFamily: "Mediums-Font",
-                        fontSize: height / 75,
-                        width: height / 5,
-                      }}
-                    >
-                      Registry {`    `}
-                    </Text>
-                  </TouchableOpacity>
-                </View>
-                <View
-                  style={{
-                    marginStart: height / 60,
-                    marginTop: height / 120,
-                    flexDirection: "row",
-                    justifyContent: "space-between",
-                  }}
-                >
-                  <TouchableOpacity>
-                    <Text
-                      style={{
-                        fontFamily: "Mediums-Font",
-                        fontSize: height / 75,
-                        width: height / 5,
-                      }}
-                    >
-                      Reserved {`    `}
-                    </Text>
-                  </TouchableOpacity>
-                </View>
-              </Overlay>
               <View style={{ paddingHorizontal: height / 40 }}>
                 <Text
                   style={{
@@ -554,7 +602,7 @@ export default function ViewLists(props) {
                   List Type
                 </Text>
                 <TouchableOpacity
-                  onPress={() => setTypeSwitch(true)}
+                  //onPress={() => setTypeSwitch(true)}
                   style={[
                     styles.txtView,
                     {
@@ -590,46 +638,6 @@ export default function ViewLists(props) {
                   }}
                 >
                   List Name
-                </Text>
-                <View
-                  style={[
-                    styles.txtView,
-                    {
-                      borderWidth: emailError !== "" ? 0.3 : 0,
-                      borderColor: emailError !== "" ? colors.MAIN : null,
-
-                      flexDirection: "row",
-                      justifyContent: "space-between",
-                      marginTop: height / 90,
-                    },
-                  ]}
-                >
-                  <TextInput
-                    placeholder=""
-                    placeholderTextColor={theme.colors.secondary}
-                    style={[
-                      styles.textSize,
-                      {
-                        backgroundColor: colors.grays,
-                      },
-                    ]}
-                    autoCorrect={false}
-                    value={email}
-                    onChangeText={(value) => [
-                      setEmail(value),
-                      setEmailError(""),
-                    ]}
-                  />
-                </View>
-
-                <Text
-                  style={{
-                    fontFamily: "GlacialIndifference-Bold",
-                    fontSize: height / 60,
-                    marginTop: height / 40,
-                  }}
-                >
-                  Budget
                 </Text>
                 <View
                   style={[

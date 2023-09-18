@@ -43,10 +43,16 @@ WebBrowser.maybeCompleteAuthSession();
 
 export default function SpecificList(props) {
   const refRBSheetViewInst = useRef();
+  const refRBSheetViewName = useRef();
+  const refRBSheetBackgrounds = useRef();
+  const refRBSheetVisibility = useRef();
 
   const [email, setEmail] = React.useState("");
   const [rating, setRating] = useState(3.5);
   const [typeSwitch, setTypeSwitch] = React.useState(false);
+  const [editShow, setEditShow] = React.useState(false);
+  const [nameConfirm, setNameConfirm] = React.useState(false);
+  const [deleteConfirm, setDeleteConfirm] = React.useState(false);
 
   const [emailError, setEmailError] = React.useState("");
   const [password, setPassword] = React.useState("");
@@ -55,6 +61,8 @@ export default function SpecificList(props) {
   const [authError, setAuthError] = React.useState("");
   const [loading, setLoading] = React.useState(true);
   const [qty, setQty] = React.useState(1);
+  const [sharedView, setSharedView] = React.useState(false);
+  const [listName, setListName] = React.useState("");
   const [gLoading, setGLoading] = React.useState(false);
   const [listView, setListView] = React.useState(false);
   const [gridView, setGridView] = React.useState(false);
@@ -115,23 +123,17 @@ export default function SpecificList(props) {
                   }}
                 >
                   <View style={{ flexDirection: "row", alignItems: "center" }}>
-                    {/* <MaterialIcons
-                      name="location-pin"
-                      color={"white"}
-                      size={height / 55}
-                    />
-                    <Text
-                      style={[
-                        styles.textSize,
-                        {
-                          color: "white",
-                          fontSize: height / 55,
-                          fontFamily: "Futura-CondensedMedium",
-                        },
-                      ]}
-                    >
-                      {` `}SASKATOON
-                    </Text> */}
+                    <TouchableOpacity onPress={() => props.navigation.goBack()}>
+                      <Image
+                        source={require("../assets/backwhite.png")}
+                        style={{
+                          resizeMode: "contain",
+                          height: height / 42,
+                          width: width / 19,
+                          marginStart: 2,
+                        }}
+                      />
+                    </TouchableOpacity>
                   </View>
                   <View>
                     <MaterialCommunityIcons
@@ -163,34 +165,83 @@ export default function SpecificList(props) {
                   <View>
                     <Text
                       style={{
-                        fontFamily: "GlacialIndifference-Bold",
-                        fontSize: height / 47,
+                        fontFamily: "GlacialIndifference-Regular",
+                        fontSize: height / 70,
+                        marginBottom: 3,
                       }}
                     >
-                      My Favourites
+                      September 15, 2023
                     </Text>
+                    {listName === "" ? (
+                      <View>
+                        <Text
+                          style={{
+                            fontFamily: "GlacialIndifference-Bold",
+                            fontSize: height / 47,
+                            marginBottom: 3,
+                          }}
+                        >
+                          My Favourites
+                        </Text>
+                      </View>
+                    ) : (
+                      <View>
+                        <Text
+                          style={{
+                            fontFamily: "GlacialIndifference-Regular",
+                            fontSize: height / 47,
+                            marginBottom: 3,
+                          }}
+                        >
+                          My Favourites
+                        </Text>
+                        <Text
+                          style={{
+                            fontFamily: "GlacialIndifference-Bold",
+                            fontSize: height / 47,
+                            marginBottom: 3,
+                          }}
+                        >
+                          {listName}
+                        </Text>
+                      </View>
+                    )}
+
                     <Text
                       style={{
                         fontFamily: "GlacialIndifference-Regular",
                         fontSize: height / 70,
                       }}
                     >
-                      Private
+                      {sharedView ? "Shared (View Only)" : "Private"}
                     </Text>
                   </View>
                   <View style={{ flexDirection: "row", alignItems: "center" }}>
+                    <View style={{ marginEnd: height / 50 }}>
+                      <MaterialCommunityIcons
+                        name="plus"
+                        color={"black"}
+                        size={height / 50}
+                      />
+                    </View>
+                    <View style={{ marginEnd: height / 50 }}>
+                      <MaterialIcons
+                        name="ios-share"
+                        color={"black"}
+                        size={height / 50}
+                      />
+                    </View>
                     <TouchableOpacity
-                      onPress={() => props.navigation.goBack()}
+                      onPress={() => setTypeSwitch(true)}
                       style={{ flexDirection: "row" }}
                     >
                       <Text
                         style={{
                           fontFamily: "GlacialIndifference-Regular",
                           fontSize: height / 70,
-                          marginEnd: 10,
                         }}
                       >
-                        View Lists
+                        Options
                       </Text>
                     </TouchableOpacity>
 
@@ -207,7 +258,7 @@ export default function SpecificList(props) {
                           borderRadius: 5,
 
                           backgroundColor: theme.colors.background,
-                          marginTop: height / -2.1,
+                          marginTop: height / -2.6,
                           marginStart: height / 4,
                         }}
                       >
@@ -227,7 +278,12 @@ export default function SpecificList(props) {
                             justifyContent: "space-between",
                           }}
                         >
-                          <TouchableOpacity>
+                          <TouchableOpacity
+                            onPress={() => [
+                              setTypeSwitch(false),
+                              setEditShow(true),
+                            ]}
+                          >
                             <Text
                               style={{
                                 fontFamily: "Mediums-Font",
@@ -238,11 +294,35 @@ export default function SpecificList(props) {
                               Edit {`    `}
                             </Text>
                           </TouchableOpacity>
-                          <MaterialCommunityIcons
+                          {/* <MaterialCommunityIcons
                             name="chevron-right"
                             color={"gray"}
                             size={height / 50}
-                          />
+                          /> */}
+                        </View>
+
+                        <View
+                          style={{
+                            marginStart: height / 60,
+                            marginEnd: height / 15,
+                            marginTop: 10,
+                          }}
+                        >
+                          <TouchableOpacity
+                            onPress={() => [
+                              setTypeSwitch(false),
+                              refRBSheetVisibility.current.open(),
+                            ]}
+                          >
+                            <Text
+                              style={{
+                                fontFamily: "Mediums-Font",
+                                fontSize: height / 75,
+                              }}
+                            >
+                              Visibility {`    `}
+                            </Text>
+                          </TouchableOpacity>
                         </View>
                         <View
                           style={{
@@ -251,7 +331,12 @@ export default function SpecificList(props) {
                             marginTop: 10,
                           }}
                         >
-                          <TouchableOpacity>
+                          <TouchableOpacity
+                            onPress={() => [
+                              setTypeSwitch(false),
+                              setDeleteConfirm(true),
+                            ]}
+                          >
                             <Text
                               style={{
                                 fontFamily: "Mediums-Font",
@@ -307,70 +392,6 @@ export default function SpecificList(props) {
               <View
                 style={{
                   marginHorizontal: height / 37,
-                  flexDirection: "row",
-                  alignItems: "center",
-                  marginTop: 7,
-                }}
-              >
-                <TouchableOpacity
-                  style={{ marginTop: height / 60, marginEnd: height / 60 }}
-                >
-                  <ImageBackground
-                    source={require("../assets/button.png")}
-                    style={{
-                      width: height / 8,
-                      height: height / 23,
-                      overflow: "hidden",
-                      borderRadius: 3,
-                      alignItems: "center",
-                      justifyContent: "center",
-                    }}
-                  >
-                    <Text
-                      style={{
-                        fontFamily: "Mediums-Font",
-                        fontSize: height / 55,
-                        textAlign: "center",
-                        color: "white",
-                        marginVertical: 2,
-                      }}
-                    >
-                      Share
-                    </Text>
-                  </ImageBackground>
-                </TouchableOpacity>
-
-                <TouchableOpacity style={{ marginTop: height / 60 }}>
-                  <View
-                    style={{
-                      width: height / 7.7,
-                      height: height / 23,
-                      overflow: "hidden",
-                      borderRadius: 3,
-                      alignItems: "center",
-                      backgroundColor: "white",
-                      justifyContent: "center",
-                      borderWidth: 1,
-                      borderColor: colors.MAIN,
-                    }}
-                  >
-                    <Text
-                      style={{
-                        fontFamily: "GlacialIndifference-Regular",
-                        fontSize: height / 58,
-                        textAlign: "center",
-                        marginVertical: 2,
-                      }}
-                    >
-                      Collaborate
-                    </Text>
-                  </View>
-                </TouchableOpacity>
-              </View>
-
-              <View
-                style={{
-                  marginHorizontal: height / 37,
                   marginTop: height / 28,
                   paddingBottom: 1,
                 }}
@@ -385,8 +406,378 @@ export default function SpecificList(props) {
                   There are no items in this List.
                 </Text>
               </View>
+              <Overlay
+                visible={deleteConfirm}
+                overlayStyle={{
+                  borderRadius: 5,
+                  padding: height / 20,
+                  backgroundColor: theme.colors.background,
+                }}
+              >
+                <View>
+                  <Text
+                    style={{
+                      fontFamily: "GlacialIndifference-Bold",
+                      fontSize: height / 45,
+                      textAlign: "center",
+                    }}
+                  >
+                    Are you sure{`\n`}you want to delete?
+                  </Text>
+                </View>
+                <View
+                  style={{
+                    flexDirection: "row",
+                    alignItems: "center",
+                    marginTop: height / 22,
+                  }}
+                >
+                  <TouchableOpacity
+                    onPress={() => [
+                      setDeleteConfirm(false),
+                      // setListName(email),
+                      //refRBSheetViewName.current.close(),
+                    ]}
+                  >
+                    <ImageBackground
+                      source={require("../assets/topbar.png")}
+                      style={[
+                        styles.checkOutBtn,
+                        { width: height / 8, marginEnd: 13 },
+                      ]}
+                    >
+                      <Text
+                        style={{
+                          fontFamily: "Mediums-Font",
+                          fontSize: height / 60,
+                          textAlign: "center",
+                          color: "white",
+                          paddingVertical: height / 300,
+                        }}
+                      >
+                        Yes
+                      </Text>
+                    </ImageBackground>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    onPress={() => [
+                      setDeleteConfirm(false),
+                      //refRBSheetViewName.current.close(),
+                    ]}
+                    style={{
+                      paddingHorizontal: height / 53,
+                      paddingVertical: height / 300,
+                      backgroundColor: "white",
+                      borderWidth: 1,
+                      borderColor: colors.MAIN,
+                      borderRadius: 4,
+                      marginEnd: 4,
+                      width: height / 8,
+                    }}
+                  >
+                    <Text
+                      style={{
+                        fontFamily: "Mediums-Font",
+                        fontSize: height / 60,
+                        textAlign: "center",
+                      }}
+                    >
+                      No
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+              </Overlay>
             </ScrollView>
+            <Overlay
+              visible={editShow}
+              overlayStyle={{
+                borderRadius: 5,
 
+                backgroundColor: theme.colors.background,
+                marginTop: height / -2.4,
+                marginStart: height / 5,
+              }}
+            >
+              <View style={{ marginBottom: 10 }}>
+                <TouchableOpacity
+                  style={{
+                    flexDirection: "row",
+                    justifyContent: "space-between",
+                  }}
+                  onPress={() => setEditShow(false)}
+                >
+                  <Text
+                    style={{
+                      fontFamily: "GlacialIndifference-Bold",
+                      fontSize: height / 75,
+                      width: height / 20,
+                    }}
+                  >
+                    {`      `}EDIT {`    `}
+                  </Text>
+                  <MaterialCommunityIcons name="close" />
+                </TouchableOpacity>
+              </View>
+              <View
+                style={{
+                  marginStart: height / 60,
+
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                }}
+              >
+                <TouchableOpacity
+                  onPress={() => [
+                    setEditShow(false),
+                    refRBSheetViewName.current.open(),
+                  ]}
+                >
+                  <Text
+                    style={{
+                      fontFamily: "Mediums-Font",
+                      fontSize: height / 75,
+                    }}
+                  >
+                    Change Name {`    `}
+                  </Text>
+                </TouchableOpacity>
+                {/* <MaterialCommunityIcons
+                            name="chevron-right"
+                            color={"gray"}
+                            size={height / 50}
+                          /> */}
+              </View>
+
+              <View
+                style={{
+                  marginStart: height / 60,
+                  marginEnd: height / 15,
+                  marginTop: 10,
+                }}
+              >
+                <TouchableOpacity
+                  onPress={() => [
+                    setEditShow(false),
+                    refRBSheetBackgrounds.current.open(),
+                  ]}
+                >
+                  <Text
+                    style={{
+                      fontFamily: "Mediums-Font",
+                      fontSize: height / 75,
+                    }}
+                  >
+                    Change Background {`    `}
+                  </Text>
+                </TouchableOpacity>
+              </View>
+              <View
+                style={{
+                  marginTop: 10,
+                  alignSelf: "flex-end",
+                  marginEnd: 2,
+                }}
+              >
+                <TouchableOpacity
+                  onPress={() => [setTypeSwitch(true), setEditShow(false)]}
+                >
+                  <Image
+                    source={require("../assets/back.png")}
+                    style={{
+                      resizeMode: "contain",
+                      height: height / 42,
+                      width: width / 30,
+                      marginStart: 2,
+                    }}
+                  />
+                </TouchableOpacity>
+              </View>
+            </Overlay>
+
+            <RBSheet
+              ref={refRBSheetViewName}
+              closeOnDragDown={true}
+              closeOnPressMask={true}
+              height={height / 3.9}
+              customStyles={{
+                wrapper: {
+                  backgroundColor: "rgba(0, 0, 0, 0.5)",
+                },
+                draggableIcon: {
+                  backgroundColor: "#000",
+                },
+              }}
+            >
+              <Overlay
+                visible={nameConfirm}
+                overlayStyle={{
+                  borderRadius: 5,
+                  padding: height / 20,
+                  backgroundColor: theme.colors.background,
+                }}
+              >
+                <View>
+                  <Text
+                    style={{
+                      fontFamily: "GlacialIndifference-Bold",
+                      fontSize: height / 45,
+                      textAlign: "center",
+                    }}
+                  >
+                    Are you sure you want{`\n`}to change the name?
+                  </Text>
+                </View>
+                <View
+                  style={{
+                    flexDirection: "row",
+                    alignItems: "center",
+                    marginTop: height / 22,
+                  }}
+                >
+                  <TouchableOpacity
+                    onPress={() => [
+                      setNameConfirm(false),
+                      setListName(email),
+                      refRBSheetViewName.current.close(),
+                    ]}
+                  >
+                    <ImageBackground
+                      source={require("../assets/topbar.png")}
+                      style={[
+                        styles.checkOutBtn,
+                        { width: height / 8, marginEnd: 13 },
+                      ]}
+                    >
+                      <Text
+                        style={{
+                          fontFamily: "Mediums-Font",
+                          fontSize: height / 60,
+                          textAlign: "center",
+                          color: "white",
+                          paddingVertical: height / 300,
+                        }}
+                      >
+                        Yes
+                      </Text>
+                    </ImageBackground>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    onPress={() => [
+                      setNameConfirm(false),
+                      refRBSheetViewName.current.close(),
+                    ]}
+                    style={{
+                      paddingHorizontal: height / 53,
+                      paddingVertical: height / 300,
+                      backgroundColor: "white",
+                      borderWidth: 1,
+                      borderColor: colors.MAIN,
+                      borderRadius: 4,
+                      marginEnd: 4,
+                      width: height / 8,
+                    }}
+                  >
+                    <Text
+                      style={{
+                        fontFamily: "Mediums-Font",
+                        fontSize: height / 60,
+                        textAlign: "center",
+                      }}
+                    >
+                      No
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+              </Overlay>
+              <View style={{ paddingHorizontal: height / 40 }}>
+                <Text
+                  style={{
+                    fontFamily: "GlacialIndifference-Bold",
+                    fontSize: height / 60,
+                    marginTop: height / 40,
+                  }}
+                >
+                  Enter New Name
+                </Text>
+                <View
+                  style={[
+                    styles.txtView,
+                    {
+                      borderWidth: emailError !== "" ? 0.3 : 0,
+                      borderColor: emailError !== "" ? colors.MAIN : null,
+
+                      flexDirection: "row",
+                      justifyContent: "space-between",
+                      marginTop: height / 90,
+                    },
+                  ]}
+                >
+                  <TextInput
+                    placeholder=""
+                    placeholderTextColor={theme.colors.secondary}
+                    style={[
+                      styles.textSize,
+                      {
+                        backgroundColor: colors.grays,
+                      },
+                    ]}
+                    autoCorrect={false}
+                    value={email}
+                    onChangeText={(value) => [
+                      setEmail(value),
+                      setEmailError(""),
+                    ]}
+                  />
+                </View>
+
+                <TouchableOpacity
+                  style={{
+                    position: "absolute",
+                    bottom: -height / 20,
+                    right: height / 8,
+                  }}
+                  onPress={() => [
+                    setNameConfirm(true),
+                    //refRBSheetViewName.current.close(),
+                    //props.navigation.navigate("AddNewAddress"),
+                  ]}
+                >
+                  <Text
+                    style={{
+                      fontFamily: "Mediums-Font",
+                      fontSize: height / 65,
+                      color: colors.MAIN,
+                      textAlign: "center",
+                    }}
+                  >
+                    Update
+                  </Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                  style={{
+                    position: "absolute",
+                    bottom: -height / 20,
+                    right: height / 22,
+                  }}
+                  onPress={() => [
+                    refRBSheetViewName.current.close(),
+                    //props.navigation.navigate("AddressBook"),
+                  ]}
+                >
+                  <Text
+                    style={{
+                      fontFamily: "Mediums-Font",
+                      fontSize: height / 65,
+                      color: colors.MAIN,
+                      textAlign: "center",
+                    }}
+                  >
+                    Cancel
+                  </Text>
+                </TouchableOpacity>
+              </View>
+            </RBSheet>
             <RBSheet
               ref={refRBSheetViewInst}
               closeOnDragDown={true}
@@ -616,6 +1007,374 @@ export default function SpecificList(props) {
                 </TouchableOpacity>
               </View>
             </RBSheet>
+
+            <RBSheet
+              ref={refRBSheetVisibility}
+              closeOnDragDown={true}
+              closeOnPressMask={true}
+              height={height / 3.2}
+              customStyles={{
+                wrapper: {
+                  backgroundColor: "rgba(0, 0, 0, 0.5)",
+                },
+                draggableIcon: {
+                  backgroundColor: "#000",
+                },
+              }}
+            >
+              <View style={{ paddingHorizontal: height / 25 }}>
+                <TouchableOpacity
+                  activeOpacity={1}
+                  onPress={() => [
+                    checkboxPromo == false
+                      ? setCheckboxPromo(true)
+                      : setCheckboxPromo(false),
+                  ]}
+                  style={{
+                    flexDirection: "row",
+                    alignItems: "center",
+                    marginTop: height / 38,
+                    marginBottom: 6,
+                  }}
+                >
+                  {checkboxPromo ? (
+                    <MaterialCommunityIcons
+                      name="square-circle"
+                      color={colors.MAIN}
+                      size={height / 40}
+                    />
+                  ) : (
+                    <FontAwesome name="square-o" size={height / 40} />
+                  )}
+
+                  <Text
+                    style={{
+                      fontFamily: "GlacialIndifference-Bold",
+                      fontSize: height / 46,
+                      marginStart: height / 60,
+                    }}
+                  >
+                    Make Private
+                  </Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                  activeOpacity={1}
+                  onPress={() => [
+                    checkboxPromo == false
+                      ? setCheckboxPromo(true)
+                      : setCheckboxPromo(false),
+                  ]}
+                  style={{
+                    flexDirection: "row",
+                    alignItems: "center",
+                    marginTop: height / 80,
+                    marginBottom: 6,
+                  }}
+                >
+                  {checkboxPromo ? (
+                    <MaterialCommunityIcons
+                      name="square-circle"
+                      color={colors.MAIN}
+                      size={height / 40}
+                    />
+                  ) : (
+                    <FontAwesome name="square-o" size={height / 40} />
+                  )}
+
+                  <Text
+                    style={{
+                      fontFamily: "GlacialIndifference-Bold",
+                      fontSize: height / 46,
+                      marginStart: height / 60,
+                    }}
+                  >
+                    Shared
+                  </Text>
+                </TouchableOpacity>
+              </View>
+
+              <View
+                style={{
+                  paddingHorizontal: height / 12,
+                  flexDirection: "row",
+                  alignItems: "center",
+                  marginTop: height / 70,
+                }}
+              >
+                <TouchableOpacity
+                  activeOpacity={1}
+                  onPress={() => [
+                    checkboxPromo == false
+                      ? setCheckboxPromo(true)
+                      : setCheckboxPromo(false),
+                  ]}
+                  style={{
+                    flexDirection: "row",
+                    alignItems: "center",
+                  }}
+                >
+                  {checkboxPromo ? (
+                    <MaterialCommunityIcons
+                      name="square-circle"
+                      color={colors.MAIN}
+                      size={height / 45}
+                    />
+                  ) : (
+                    <FontAwesome name="square-o" size={height / 45} />
+                  )}
+
+                  <Text
+                    style={{
+                      fontFamily: "GlacialIndifference-Regular",
+                      fontSize: height / 58,
+                      marginStart: height / 70,
+                    }}
+                  >
+                    View Only
+                  </Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                  activeOpacity={1}
+                  onPress={() => [
+                    checkboxPromo == false
+                      ? setCheckboxPromo(true)
+                      : setCheckboxPromo(false),
+                  ]}
+                  style={{
+                    flexDirection: "row",
+                    alignItems: "center",
+                    marginStart: height / 25,
+                  }}
+                >
+                  {checkboxPromo ? (
+                    <MaterialCommunityIcons
+                      name="square-circle"
+                      color={colors.MAIN}
+                      size={height / 45}
+                    />
+                  ) : (
+                    <FontAwesome name="square-o" size={height / 45} />
+                  )}
+
+                  <Text
+                    style={{
+                      fontFamily: "GlacialIndifference-Regular",
+                      fontSize: height / 58,
+                      marginStart: height / 60,
+                    }}
+                  >
+                    With Edit
+                  </Text>
+                </TouchableOpacity>
+              </View>
+
+              <View
+                style={{
+                  paddingHorizontal: height / 25,
+                  flexDirection: "row",
+                  alignItems: "center",
+                  marginTop: height / 33,
+                }}
+              >
+                <Text
+                  style={{
+                    fontFamily: "GlacialIndifference-Regular",
+                    fontSize: height / 58,
+                  }}
+                >
+                  View List
+                </Text>
+                <MaterialCommunityIcons
+                  name="chevron-down"
+                  color={"black"}
+                  size={height / 50}
+                />
+              </View>
+            </RBSheet>
+
+            <RBSheet
+              ref={refRBSheetBackgrounds}
+              closeOnDragDown={true}
+              closeOnPressMask={true}
+              height={height / 2}
+              customStyles={{
+                wrapper: {
+                  backgroundColor: "rgba(0, 0, 0, 0.5)",
+                },
+                draggableIcon: {
+                  backgroundColor: "#000",
+                },
+              }}
+            >
+              <View style={{ paddingHorizontal: height / 40 }}>
+                <Text
+                  style={{
+                    fontFamily: "GlacialIndifference-Bold",
+                    fontSize: height / 45,
+                    marginTop: 3,
+                  }}
+                >
+                  Beautiful Day Today!
+                </Text>
+                <View
+                  style={{
+                    flexDirection: "row",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    marginTop: height / 80,
+                  }}
+                >
+                  <View
+                    style={{
+                      borderWidth: 1,
+                      borderColor: "gray",
+                      padding: 38,
+                      marginEnd: 10,
+                    }}
+                  ></View>
+                  <View
+                    style={{
+                      borderWidth: 1,
+                      borderColor: "gray",
+                      padding: 38,
+                      marginEnd: 10,
+                    }}
+                  ></View>
+                  <View
+                    style={{
+                      borderWidth: 1,
+                      borderColor: "gray",
+                      padding: 38,
+                      marginEnd: 10,
+                    }}
+                  ></View>
+                  <View
+                    style={{
+                      borderWidth: 1,
+                      borderColor: "gray",
+                      padding: 38,
+                    }}
+                  ></View>
+                </View>
+                <View
+                  style={{
+                    flexDirection: "row",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    marginTop: height / 80,
+                  }}
+                >
+                  <View
+                    style={{
+                      borderWidth: 1,
+                      borderColor: "gray",
+                      padding: 38,
+                      marginEnd: 10,
+                    }}
+                  ></View>
+                  <View
+                    style={{
+                      borderWidth: 1,
+                      borderColor: "gray",
+                      padding: 38,
+                      marginEnd: 10,
+                    }}
+                  ></View>
+                  <View
+                    style={{
+                      borderWidth: 1,
+                      borderColor: "gray",
+                      padding: 38,
+                      marginEnd: 10,
+                    }}
+                  ></View>
+                  <View
+                    style={{
+                      borderWidth: 1,
+                      borderColor: "gray",
+                      padding: 38,
+                    }}
+                  ></View>
+                </View>
+              </View>
+
+              <View
+                style={{
+                  paddingHorizontal: height / 40,
+                  marginTop: height / 26,
+                }}
+              >
+                <View
+                  style={{
+                    flexDirection: "row",
+                    justifyContent: "space-between",
+                  }}
+                >
+                  <Text
+                    style={{
+                      fontFamily: "GlacialIndifference-Bold",
+                      fontSize: height / 53,
+                      marginTop: 3,
+                    }}
+                  >
+                    Your Pictures
+                  </Text>
+                  <Text
+                    style={{
+                      fontFamily: "GlacialIndifference-Regular",
+                      fontSize: height / 53,
+                      marginTop: 3,
+                      marginEnd: 4,
+                    }}
+                  >
+                    Upload
+                  </Text>
+                </View>
+
+                <View
+                  style={{
+                    flexDirection: "row",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    marginTop: height / 80,
+                  }}
+                >
+                  <View
+                    style={{
+                      borderWidth: 1,
+                      borderColor: "gray",
+                      padding: 38,
+                      marginEnd: 10,
+                    }}
+                  ></View>
+                  <View
+                    style={{
+                      borderWidth: 1,
+                      borderColor: "gray",
+                      padding: 38,
+                      marginEnd: 10,
+                    }}
+                  ></View>
+                  <View
+                    style={{
+                      borderWidth: 1,
+                      borderColor: "gray",
+                      padding: 38,
+                      marginEnd: 10,
+                    }}
+                  ></View>
+                  <View
+                    style={{
+                      borderWidth: 1,
+                      borderColor: "gray",
+                      padding: 38,
+                    }}
+                  ></View>
+                </View>
+              </View>
+            </RBSheet>
           </View>
 
           <ImageBackground
@@ -764,6 +1523,15 @@ const useStyle = () => {
       backgroundColor: colors.grays,
       marginTop: height / 30,
       borderRadius: 3,
+    },
+    checkOutBtn: {
+      paddingVertical: 1,
+      overflow: "hidden",
+      resizeMode: "contain",
+      borderRadius: 4,
+      justifyContent: "center",
+      width: width / 1.3,
+      alignSelf: "center",
     },
     btnStyles: {
       padding: 8,
