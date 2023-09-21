@@ -65,6 +65,9 @@ import SpecificList from "./UI/SpecificList";
 import Registry from "./UI/Registry";
 import ShoppingList from "./UI/ShoppingList";
 import Reserved from "./UI/Reserved";
+import ViewListsCombine from "./UI/ViewListsCombine";
+import AddInListSearch from "./UI/AddInListSearch";
+import WishlistAddProducts from "./UI/WishlistAddProducts";
 
 // const Tab = createMaterialBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -218,9 +221,25 @@ export default function App() {
             component={Home}
             options={{ headerShown: false }}
           />
+
           <Stack.Screen
             name="ProductDetailsWishlist"
             component={ProductDetailsWishlist}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="WishlistAddProducts"
+            component={WishlistAddProducts}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="AddInListSearch"
+            component={AddInListSearch}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="ViewListsCombine"
+            component={ViewListsCombine}
             options={{ headerShown: false }}
           />
           <Stack.Screen

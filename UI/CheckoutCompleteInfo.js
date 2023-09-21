@@ -1314,11 +1314,43 @@ export default function CheckoutCompleteInfo(props) {
                               marginTop: height / 90,
                             }}
                           >
-                            <TouchableOpacity>
-                              <Image
-                                source={require("../assets/deleteBtn.png")}
-                                style={styles.sellerButtons}
-                              />
+                            <TouchableOpacity
+                              style={{
+                                borderWidth: 1,
+                                borderColor: colors.MAIN,
+                                borderRadius: 3,
+                                paddingHorizontal: height / 25,
+                                paddingVertical: height / 250,
+                              }}
+                            >
+                              <Text
+                                style={{
+                                  fontFamily: "Mediums-Font",
+                                  fontSize: height / 75,
+                                  textAlign: "center",
+                                }}
+                              >
+                                DELETE
+                              </Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity
+                              style={{
+                                borderWidth: 1,
+                                borderColor: colors.MAIN,
+                                borderRadius: 3,
+                                paddingHorizontal: height / 30,
+                                paddingVertical: height / 250,
+                              }}
+                            >
+                              <Text
+                                style={{
+                                  fontFamily: "Mediums-Font",
+                                  fontSize: height / 75,
+                                  textAlign: "center",
+                                }}
+                              >
+                                GIFT OPTION
+                              </Text>
                             </TouchableOpacity>
 
                             <View
@@ -1424,203 +1456,254 @@ export default function CheckoutCompleteInfo(props) {
                               marginVertical: height / 100,
                             }}
                           ></View>
-                        </View>
 
-                        <View style={{ marginTop: height / 80 }}>
-                          <TouchableOpacity
-                            onPress={() =>
-                              props.navigation.navigate("CartProductDetails")
-                            }
-                          >
-                            <LinearGradient
-                              colors={["#ffffff", "lightgray"]}
-                              style={[
-                                styles.bestSellerBack,
-                                {
-                                  borderColor: changeSpecific
-                                    ? colors.MAIN
-                                    : null,
-                                },
-                              ]}
+                          <View style={{ marginTop: height / 80 }}>
+                            <TouchableOpacity
+                              onPress={() =>
+                                props.navigation.navigate("CartProductDetails")
+                              }
                             >
-                              <View
-                                style={{
-                                  flexDirection: "row",
-                                  justifyContent: "space-between",
-                                  alignItems: "center",
-                                }}
+                              <LinearGradient
+                                colors={["#ffffff", "lightgray"]}
+                                style={[
+                                  styles.bestSellerBack,
+                                  {
+                                    borderColor: changeSpecific
+                                      ? colors.MAIN
+                                      : highlight
+                                      ? "#0372BA"
+                                      : null,
+                                    borderWidth:
+                                      changeSpecific || highlight ? 0.8 : 0.2,
+                                  },
+                                ]}
                               >
-                                <Text
+                                <View
                                   style={{
-                                    fontSize: height / 50,
-                                    fontFamily: "GlacialIndifference-Bold",
+                                    flexDirection: "row",
+                                    justifyContent: "space-between",
+                                    alignItems: "center",
                                   }}
                                 >
-                                  OtterGrip Symmetry Case
-                                </Text>
+                                  <Text
+                                    style={{
+                                      fontSize: height / 50,
+                                      fontFamily: "GlacialIndifference-Bold",
+                                    }}
+                                  >
+                                    OtterGrip Symmetry Case
+                                  </Text>
+                                  <Text
+                                    style={{
+                                      fontSize: height / 50,
+                                      fontFamily: "GlacialIndifference-Regular",
+                                    }}
+                                  >
+                                    Black
+                                  </Text>
+                                </View>
+
                                 <Text
                                   style={{
-                                    fontSize: height / 50,
+                                    fontSize: height / 55,
+                                    marginTop: 1,
                                     fontFamily: "GlacialIndifference-Regular",
                                   }}
                                 >
-                                  Black
+                                  Otterbox
                                 </Text>
-                              </View>
 
-                              <Text
-                                style={{
-                                  fontSize: height / 55,
-                                  marginTop: 1,
-                                  fontFamily: "GlacialIndifference-Regular",
-                                }}
-                              >
-                                Otterbox
-                              </Text>
-
-                              <View
-                                style={{
-                                  alignSelf: "center",
-                                  paddingVertical: 2,
-                                }}
-                              >
-                                <Image
-                                  source={require("../assets/mobilecase.png")}
+                                <View
                                   style={{
-                                    width: height / 9,
-                                    height: height / 9,
-                                    resizeMode: "contain",
-                                  }}
-                                />
-                              </View>
-                              <View
-                                style={{
-                                  flexDirection: "row",
-                                  justifyContent: "space-between",
-                                  alignItems: "center",
-                                }}
-                              >
-                                <Text
-                                  style={{
-                                    fontSize: height / 52,
-                                    fontFamily: "GlacialIndifference-Bold",
+                                    alignSelf: "center",
+                                    paddingVertical: 2,
                                   }}
                                 >
-                                  $51.95
-                                </Text>
-                                <Text
+                                  <Image
+                                    source={require("../assets/mobilecase.png")}
+                                    style={{
+                                      width: height / 9,
+                                      height: height / 9,
+                                      resizeMode: "contain",
+                                    }}
+                                  />
+                                </View>
+                                <View
                                   style={{
-                                    fontSize: height / 52,
-                                    fontFamily: "GlacialIndifference-Regular",
+                                    flexDirection: "row",
+                                    justifyContent: "space-between",
+                                    alignItems: "center",
                                   }}
                                 >
-                                  iPhone 14
-                                </Text>
-                              </View>
-                            </LinearGradient>
-                          </TouchableOpacity>
-                          <View
-                            style={{
-                              flexDirection: "row",
-                              justifyContent: "space-between",
-                              alignItems: "center",
-                              marginTop: height / 90,
-                            }}
-                          >
-                            <TouchableOpacity>
-                              <Image
-                                source={require("../assets/deleteBtn.png")}
-                                style={styles.sellerButtons}
-                              />
+                                  <Text
+                                    style={{
+                                      fontSize: height / 52,
+                                      fontFamily: "GlacialIndifference-Bold",
+                                    }}
+                                  >
+                                    $51.95
+                                  </Text>
+                                  <Text
+                                    style={{
+                                      fontSize: height / 52,
+                                      fontFamily: "GlacialIndifference-Regular",
+                                    }}
+                                  >
+                                    iPhone 14
+                                  </Text>
+                                </View>
+                              </LinearGradient>
                             </TouchableOpacity>
-
                             <View
-                              style={[
-                                styles.filterBtnPrice,
-                                {
-                                  borderColor: "gray",
-                                  flexDirection: "row",
-                                  justifyContent: "space-between",
-                                  alignItems: "center",
-                                },
-                              ]}
+                              style={{
+                                flexDirection: "row",
+                                justifyContent: "space-between",
+                                alignItems: "center",
+                                marginTop: height / 90,
+                              }}
                             >
                               <TouchableOpacity
-                                activeOpacity={0.5}
-                                disabled={qty > 1 ? false : true}
-                                onPress={() => setQty(qty - 1)}
-                              >
-                                {qty > 1 ? (
-                                  <MaterialCommunityIcons
-                                    name="chevron-down"
-                                    size={height / 50}
-                                  />
-                                ) : (
-                                  <MaterialCommunityIcons
-                                    name="delete-outline"
-                                    size={height / 50}
-                                  />
-                                )}
-                              </TouchableOpacity>
-                              <Text
                                 style={{
-                                  fontFamily: "GlacialIndifference-Regular",
-                                  fontSize: height / 75,
-                                  textAlign: "center",
+                                  borderWidth: 1,
+                                  borderColor: colors.MAIN,
+                                  borderRadius: 3,
+                                  paddingHorizontal: height / 25,
+                                  paddingVertical: height / 250,
                                 }}
                               >
-                                {qty}
-                              </Text>
-                              <TouchableOpacity
-                                activeOpacity={0.5}
-                                onPress={() => setQty(qty + 1)}
-                              >
-                                <MaterialCommunityIcons
-                                  name="chevron-up"
-                                  size={height / 50}
-                                />
+                                <Text
+                                  style={{
+                                    fontFamily: "Mediums-Font",
+                                    fontSize: height / 75,
+                                    textAlign: "center",
+                                  }}
+                                >
+                                  DELETE
+                                </Text>
                               </TouchableOpacity>
-                            </View>
-                          </View>
+                              <TouchableOpacity
+                                style={{
+                                  borderWidth: 1,
+                                  borderColor: colors.MAIN,
+                                  borderRadius: 3,
+                                  paddingHorizontal: height / 30,
+                                  paddingVertical: height / 250,
+                                }}
+                              >
+                                <Text
+                                  style={{
+                                    fontFamily: "Mediums-Font",
+                                    fontSize: height / 75,
+                                    textAlign: "center",
+                                  }}
+                                >
+                                  GIFT OPTION
+                                </Text>
+                              </TouchableOpacity>
 
-                          <View
-                            style={{
-                              flexDirection: "row",
-                              alignItems: "center",
-                              justifyContent: "space-between",
-                              marginTop: 5,
-                              marginBottom: 5,
-                            }}
-                          >
+                              <View
+                                style={[
+                                  styles.filterBtnPrice,
+                                  {
+                                    borderColor: "gray",
+                                    flexDirection: "row",
+                                    justifyContent: "space-between",
+                                    alignItems: "center",
+                                  },
+                                ]}
+                              >
+                                <TouchableOpacity
+                                  activeOpacity={0.5}
+                                  disabled={qty > 1 ? false : true}
+                                  onPress={() => setQty(qty - 1)}
+                                >
+                                  {qty > 1 ? (
+                                    <MaterialCommunityIcons
+                                      name="chevron-down"
+                                      size={height / 50}
+                                    />
+                                  ) : (
+                                    <MaterialCommunityIcons
+                                      name="delete-outline"
+                                      size={height / 50}
+                                    />
+                                  )}
+                                </TouchableOpacity>
+                                <Text
+                                  style={{
+                                    fontFamily: "GlacialIndifference-Regular",
+                                    fontSize: height / 75,
+                                    textAlign: "center",
+                                  }}
+                                >
+                                  {qty}
+                                </Text>
+                                <TouchableOpacity
+                                  activeOpacity={0.5}
+                                  onPress={() => setQty(qty + 1)}
+                                >
+                                  <MaterialCommunityIcons
+                                    name="chevron-up"
+                                    size={height / 50}
+                                  />
+                                </TouchableOpacity>
+                              </View>
+                            </View>
+
                             <View
                               style={{
                                 flexDirection: "row",
                                 alignItems: "center",
+                                justifyContent: "space-between",
+                                marginTop: 5,
+                                marginBottom: 5,
                               }}
                             >
-                              <MaterialCommunityIcons
-                                name="truck-delivery-outline"
-                                size={height / 50}
-                              />
-                              <Text
+                              <View
                                 style={{
-                                  fontFamily: "GlacialIndifference-Regular",
-                                  fontSize: height / 65,
+                                  flexDirection: "row",
+                                  alignItems: "center",
                                 }}
                               >
-                                {`  `}ABC, Anywhere, Anyplace
-                              </Text>
+                                <MaterialCommunityIcons
+                                  name="truck-delivery-outline"
+                                  size={height / 50}
+                                />
+                                <Text
+                                  style={{
+                                    fontFamily: "GlacialIndifference-Regular",
+                                    fontSize: height / 65,
+                                  }}
+                                >
+                                  {`  `}ABC, Anywhere, Anyplace
+                                </Text>
+                              </View>
+                              <TouchableOpacity
+                                onPress={() => [
+                                  refRBSheetSpecific.current.open(),
+                                  setChangeSpecific(true),
+                                ]}
+                              >
+                                <Text
+                                  style={{
+                                    fontFamily: "GlacialIndifference-Regular",
+                                    fontSize: height / 65,
+                                    marginTop: 4,
+                                    color: colors.MAIN,
+                                  }}
+                                >
+                                  Change delivery address
+                                </Text>
+                              </TouchableOpacity>
                             </View>
-                            <Text
+                            <View
                               style={{
-                                fontFamily: "GlacialIndifference-Regular",
-                                fontSize: height / 65,
-                                marginTop: 4,
-                                color: colors.MAIN,
+                                height: 1,
+                                width: "100%",
+                                backgroundColor: "lightgray",
+                                marginVertical: height / 100,
                               }}
-                            >
-                              Change delivery address
-                            </Text>
+                            ></View>
                           </View>
                         </View>
                       </View>

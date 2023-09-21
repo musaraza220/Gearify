@@ -974,7 +974,10 @@ export default function Wishlist(props) {
           </View>
           <ImageBackground
             source={require("../assets/wishlistdock.png")}
-            style={styles.bottomMenuMain}
+            style={[
+              styles.bottomMenuMain,
+              { backgroundColor: "rgba(0,0,0,0.05)" },
+            ]}
           >
             <View
               style={{
