@@ -55,7 +55,7 @@ export default function SpecificList(props) {
   const [nameConfirm, setNameConfirm] = React.useState(false);
   const [deleteConfirm, setDeleteConfirm] = React.useState(false);
   const [movePress, setMovePress] = React.useState(false);
-
+  const [checkboxPromos, setCheckboxPromos] = useState(true);
   const [emailError, setEmailError] = React.useState("");
   const [password, setPassword] = React.useState("");
   const [passwordError, setPasswordError] = React.useState("");
@@ -216,7 +216,7 @@ export default function SpecificList(props) {
                               borderRadius: 5,
 
                               backgroundColor: theme.colors.background,
-                              marginTop: height / -2.6,
+                              marginTop: height / -2.1,
                               marginStart: height / 4,
                             }}
                           >
@@ -282,7 +282,7 @@ export default function SpecificList(props) {
                                 </Text>
                               </TouchableOpacity>
                             </View>
-                            <View
+                            {/* <View
                               style={{
                                 marginStart: height / 60,
                                 marginEnd: height / 15,
@@ -304,7 +304,7 @@ export default function SpecificList(props) {
                                   Delete {`    `}
                                 </Text>
                               </TouchableOpacity>
-                            </View>
+                            </View> */}
                             <View
                               style={{
                                 marginStart: height / 60,
@@ -1523,9 +1523,9 @@ export default function SpecificList(props) {
                 <TouchableOpacity
                   activeOpacity={1}
                   onPress={() => [
-                    checkboxPromo == false
-                      ? setCheckboxPromo(true)
-                      : setCheckboxPromo(false),
+                    checkboxPromos == false
+                      ? setCheckboxPromos(true)
+                      : setCheckboxPromos(false),
                   ]}
                   style={{
                     flexDirection: "row",
@@ -1534,14 +1534,17 @@ export default function SpecificList(props) {
                     marginBottom: 6,
                   }}
                 >
-                  {checkboxPromo ? (
+                  {checkboxPromos ? (
                     <MaterialCommunityIcons
                       name="square-circle"
                       color={colors.MAIN}
                       size={height / 40}
                     />
                   ) : (
-                    <FontAwesome name="square-o" size={height / 40} />
+                    <MaterialCommunityIcons
+                      name="checkbox-blank-outline"
+                      size={height / 40}
+                    />
                   )}
 
                   <Text
@@ -1576,7 +1579,10 @@ export default function SpecificList(props) {
                       size={height / 40}
                     />
                   ) : (
-                    <FontAwesome name="square-o" size={height / 40} />
+                    <MaterialCommunityIcons
+                      name="checkbox-blank-outline"
+                      size={height / 40}
+                    />
                   )}
 
                   <Text

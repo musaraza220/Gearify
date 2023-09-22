@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { StatusBar } from "expo-status-bar";
 import {
   StyleSheet,
@@ -22,6 +22,7 @@ import {
   SimpleLineIcons,
 } from "@expo/vector-icons";
 import { appleAuth } from "@invertase/react-native-apple-authentication";
+import RBSheet from "react-native-raw-bottom-sheet";
 
 // import AsyncStorage from "@react-native-async-storage/async-storage";
 import {
@@ -39,6 +40,7 @@ import { loginAPI, PersonalAccountAPI } from "./APIs";
 WebBrowser.maybeCompleteAuthSession();
 
 export default function Products(props) {
+  const refRBSheetViewInst = useRef();
   const [email, setEmail] = React.useState("");
   const [emailError, setEmailError] = React.useState("");
   const [password, setPassword] = React.useState("");
@@ -402,6 +404,7 @@ export default function Products(props) {
                             Discount
                           </Text>
                           <TouchableOpacity
+                            onPress={() => refRBSheetViewInst.current.open()}
                             style={{
                               position: "absolute",
                               top: height / 90,
@@ -1079,6 +1082,115 @@ export default function Products(props) {
               </View>
               {/* /////Deal of day///// */}
             </ScrollView>
+            <RBSheet
+              ref={refRBSheetViewInst}
+              closeOnDragDown={true}
+              closeOnPressMask={true}
+              height={height / 3.8}
+              customStyles={{
+                wrapper: {
+                  backgroundColor: "rgba(0, 0, 0, 0.5)",
+                },
+                draggableIcon: {
+                  backgroundColor: "#000",
+                },
+              }}
+            >
+              <View style={{ paddingHorizontal: height / 40 }}>
+                <Text
+                  style={{
+                    fontFamily: "GlacialIndifference-Bold",
+                    fontSize: height / 65,
+                  }}
+                >
+                  Add to list
+                </Text>
+                <Text
+                  style={{
+                    fontFamily: "GlacialIndifference-Bold",
+                    fontSize: height / 60,
+                    marginTop: height / 40,
+                  }}
+                >
+                  Select List
+                </Text>
+                <TouchableOpacity
+                  //onPress={() => setTypeSwitch(true)}
+                  style={[
+                    styles.txtView,
+                    {
+                      borderWidth: emailError !== "" ? 0.3 : 0,
+                      borderColor: emailError !== "" ? colors.MAIN : null,
+
+                      flexDirection: "row",
+                      justifyContent: "space-between",
+                      marginTop: height / 90,
+                    },
+                  ]}
+                >
+                  <Text
+                    style={{
+                      fontFamily: "GlacialIndifference-Regular",
+                      fontSize: height / 60,
+                    }}
+                  >
+                    My favourites
+                  </Text>
+                  <MaterialIcons
+                    size={height / 60}
+                    name="keyboard-arrow-down"
+                    color={"gray"}
+                  />
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                  style={{
+                    position: "absolute",
+                    bottom: -height / 20,
+                    right: height / 8,
+                  }}
+                  onPress={() => [
+                    refRBSheetViewInst.current.close(),
+                    alert("Add successfully"),
+                    //props.navigation.navigate("AddNewAddress"),
+                  ]}
+                >
+                  <Text
+                    style={{
+                      fontFamily: "Mediums-Font",
+                      fontSize: height / 65,
+                      color: colors.MAIN,
+                      textAlign: "center",
+                    }}
+                  >
+                    Add
+                  </Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                  style={{
+                    position: "absolute",
+                    bottom: -height / 20,
+                    right: height / 22,
+                  }}
+                  onPress={() => [
+                    refRBSheetViewInst.current.close(),
+                    //props.navigation.navigate("AddressBook"),
+                  ]}
+                >
+                  <Text
+                    style={{
+                      fontFamily: "Mediums-Font",
+                      fontSize: height / 65,
+                      color: colors.MAIN,
+                      textAlign: "center",
+                    }}
+                  >
+                    Cancel
+                  </Text>
+                </TouchableOpacity>
+              </View>
+            </RBSheet>
           </View>
 
           <ImageBackground

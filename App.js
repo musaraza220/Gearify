@@ -68,6 +68,7 @@ import Reserved from "./UI/Reserved";
 import ViewListsCombine from "./UI/ViewListsCombine";
 import AddInListSearch from "./UI/AddInListSearch";
 import WishlistAddProducts from "./UI/WishlistAddProducts";
+import WishlistProductDetails from "./UI/WishlistProductDetails";
 
 // const Tab = createMaterialBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -225,6 +226,11 @@ export default function App() {
           <Stack.Screen
             name="ProductDetailsWishlist"
             component={ProductDetailsWishlist}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="WishlistProductDetails"
+            component={WishlistProductDetails}
             options={{ headerShown: false }}
           />
           <Stack.Screen

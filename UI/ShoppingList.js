@@ -55,6 +55,7 @@ export default function ShoppingList(props) {
   const [nameConfirm, setNameConfirm] = React.useState(false);
   const [deleteConfirm, setDeleteConfirm] = React.useState(false);
   const [movePress, setMovePress] = React.useState(false);
+  const [checkboxPromos, setCheckboxPromos] = React.useState(true);
 
   const [emailError, setEmailError] = React.useState("");
   const [fType, setFType] = React.useState("");
@@ -213,7 +214,7 @@ export default function ShoppingList(props) {
                               borderRadius: 5,
 
                               backgroundColor: theme.colors.background,
-                              marginTop: height / -2.6,
+                              marginTop: height / -2.1,
                               marginStart: height / 4,
                             }}
                           >
@@ -279,7 +280,7 @@ export default function ShoppingList(props) {
                                 </Text>
                               </TouchableOpacity>
                             </View>
-                            <View
+                            {/* <View
                               style={{
                                 marginStart: height / 60,
                                 marginEnd: height / 15,
@@ -301,7 +302,7 @@ export default function ShoppingList(props) {
                                   Delete {`    `}
                                 </Text>
                               </TouchableOpacity>
-                            </View>
+                            </View> */}
                             <View
                               style={{
                                 marginStart: height / 60,
@@ -1465,9 +1466,9 @@ export default function ShoppingList(props) {
                 <TouchableOpacity
                   activeOpacity={1}
                   onPress={() => [
-                    checkboxPromo == false
-                      ? setCheckboxPromo(true)
-                      : setCheckboxPromo(false),
+                    checkboxPromos == false
+                      ? setCheckboxPromos(true)
+                      : setCheckboxPromos(false),
                   ]}
                   style={{
                     flexDirection: "row",
@@ -1476,14 +1477,17 @@ export default function ShoppingList(props) {
                     marginBottom: 6,
                   }}
                 >
-                  {checkboxPromo ? (
+                  {checkboxPromos ? (
                     <MaterialCommunityIcons
                       name="square-circle"
                       color={colors.MAIN}
                       size={height / 40}
                     />
                   ) : (
-                    <FontAwesome name="square-o" size={height / 40} />
+                    <MaterialCommunityIcons
+                      name="checkbox-blank-outline"
+                      size={height / 40}
+                    />
                   )}
 
                   <Text
@@ -1493,7 +1497,7 @@ export default function ShoppingList(props) {
                       marginStart: height / 60,
                     }}
                   >
-                    Make Private
+                    Private
                   </Text>
                 </TouchableOpacity>
 
@@ -1518,9 +1522,11 @@ export default function ShoppingList(props) {
                       size={height / 40}
                     />
                   ) : (
-                    <FontAwesome name="square-o" size={height / 40} />
+                    <MaterialCommunityIcons
+                      name="checkbox-blank-outline"
+                      size={height / 40}
+                    />
                   )}
-
                   <Text
                     style={{
                       fontFamily: "GlacialIndifference-Bold",

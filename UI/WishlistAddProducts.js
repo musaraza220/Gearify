@@ -259,7 +259,7 @@ export default function WishlistAddProducts(props) {
                     >
                       <TouchableOpacity
                         onPress={() =>
-                          props.navigation.navigate("SpecificList")
+                          props.navigation.navigate("WishlistProductDetails")
                         }
                       >
                         <LinearGradient

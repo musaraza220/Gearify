@@ -59,6 +59,7 @@ export default function Registry(props) {
   const [deleteConfirm, setDeleteConfirm] = React.useState(false);
   const [orderDone, setOrderDone] = React.useState(false);
   const [movePress, setMovePress] = React.useState(false);
+  const [checkboxPromos, setCheckboxPromos] = useState(true);
 
   const [emailError, setEmailError] = React.useState("");
   const [fType, setFType] = React.useState("");
@@ -268,7 +269,7 @@ export default function Registry(props) {
                           /> */}
                             </View>
 
-                            <View
+                            {/* <View
                               style={{
                                 marginStart: height / 60,
                                 marginEnd: height / 15,
@@ -290,7 +291,7 @@ export default function Registry(props) {
                                   Delete {`    `}
                                 </Text>
                               </TouchableOpacity>
-                            </View>
+                            </View> */}
                             <View
                               style={{
                                 marginStart: height / 60,
@@ -1747,9 +1748,9 @@ export default function Registry(props) {
                 <TouchableOpacity
                   activeOpacity={1}
                   onPress={() => [
-                    checkboxPromo == false
-                      ? setCheckboxPromo(true)
-                      : setCheckboxPromo(false),
+                    checkboxPromos == false
+                      ? setCheckboxPromos(true)
+                      : setCheckboxPromos(false),
                   ]}
                   style={{
                     flexDirection: "row",
@@ -1758,14 +1759,17 @@ export default function Registry(props) {
                     marginBottom: 6,
                   }}
                 >
-                  {checkboxPromo ? (
+                  {checkboxPromos ? (
                     <MaterialCommunityIcons
                       name="square-circle"
                       color={colors.MAIN}
                       size={height / 40}
                     />
                   ) : (
-                    <FontAwesome name="square-o" size={height / 40} />
+                    <MaterialCommunityIcons
+                      name="checkbox-blank-outline"
+                      size={height / 40}
+                    />
                   )}
 
                   <Text
@@ -1775,7 +1779,7 @@ export default function Registry(props) {
                       marginStart: height / 60,
                     }}
                   >
-                    Make Private
+                    Private
                   </Text>
                 </TouchableOpacity>
 
@@ -1800,7 +1804,10 @@ export default function Registry(props) {
                       size={height / 40}
                     />
                   ) : (
-                    <FontAwesome name="square-o" size={height / 40} />
+                    <MaterialCommunityIcons
+                      name="checkbox-blank-outline"
+                      size={height / 40}
+                    />
                   )}
 
                   <Text
@@ -2188,7 +2195,7 @@ export default function Registry(props) {
                     style={{
                       fontFamily: "GlacialIndifference-Regular",
                       fontSize: height / 65,
-                      marginTop: height / 40,
+                      marginTop: height / 70,
                       textAlign: "center",
                       paddingHorizontal: height / 26,
                       color: colors.MAIN,
@@ -2580,7 +2587,7 @@ export default function Registry(props) {
               </View>
             </RBSheet>
 
-            <TouchableOpacity
+            {/* <TouchableOpacity
               style={{
                 alignSelf: "flex-end",
                 marginEnd: height / 38,
@@ -2610,7 +2617,7 @@ export default function Registry(props) {
                   + Add Items
                 </Text>
               </ImageBackground>
-            </TouchableOpacity>
+            </TouchableOpacity> */}
           </View>
 
           <ImageBackground
