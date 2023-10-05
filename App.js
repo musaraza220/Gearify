@@ -69,6 +69,7 @@ import ViewListsCombine from "./UI/ViewListsCombine";
 import AddInListSearch from "./UI/AddInListSearch";
 import WishlistAddProducts from "./UI/WishlistAddProducts";
 import WishlistProductDetails from "./UI/WishlistProductDetails";
+import Pooled from "./UI/Pooled";
 
 // const Tab = createMaterialBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -231,6 +232,11 @@ export default function App() {
           <Stack.Screen
             name="WishlistProductDetails"
             component={WishlistProductDetails}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="Pooled"
+            component={Pooled}
             options={{ headerShown: false }}
           />
           <Stack.Screen

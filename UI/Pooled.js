@@ -24,6 +24,7 @@ import {
   FontAwesome,
 } from "@expo/vector-icons";
 import { appleAuth } from "@invertase/react-native-apple-authentication";
+import * as Progress from "react-native-progress";
 
 // import AsyncStorage from "@react-native-async-storage/async-storage";
 import {
@@ -41,7 +42,7 @@ import * as Font from "expo-font";
 import { loginAPI, PersonalAccountAPI } from "./APIs";
 WebBrowser.maybeCompleteAuthSession();
 
-export default function ShoppingList(props) {
+export default function Pooled(props) {
   const refRBSheetViewInst = useRef();
   const refRBSheetFrequency = useRef();
   const refRBSheetBackgrounds = useRef();
@@ -50,7 +51,16 @@ export default function ShoppingList(props) {
   const refRBSheetInstallmentsClick = useRef();
   const refRBSheetPayment = useRef();
   const refRBSheetFrequencyDetails = useRef();
+  const refRBSheetMembers = useRef();
+  const refRBSheetProgress = useRef();
+  const refRBSheetOwnership = useRef();
+  const refRBSheetOwnershipTrans = useRef();
+  const refEdits = useRef();
   const [deletePress, setDeletePress] = useState(false);
+  const [ownershipTransfer, setOwnershipTransfer] = useState(false);
+  const [ownershipTransferTrans, setOwnershipTransferTrans] = useState(false);
+  const [transferSent, setTransferSent] = useState(false);
+  const [finalTransferSend, setFinalTransferSend] = useState(false);
 
   const [email, setEmail] = React.useState("");
   const [rating, setRating] = useState(3.5);
@@ -58,9 +68,12 @@ export default function ShoppingList(props) {
   const [stopShow, setStopShow] = React.useState(false);
   const [editShow, setEditShow] = React.useState(false);
   const [nameConfirm, setNameConfirm] = React.useState(false);
+  const [inviteSend, setInviteSend] = React.useState(false);
   const [deleteConfirm, setDeleteConfirm] = React.useState(false);
   const [movePress, setMovePress] = React.useState(false);
   const [checkboxPromos, setCheckboxPromos] = React.useState(true);
+  const [cancelConfirm, setCancelConfirm] = useState(false);
+  const [nudgeSent, setNudgeSent] = useState(false);
 
   const [emailError, setEmailError] = React.useState("");
   const [fType, setFType] = React.useState("");
@@ -76,6 +89,8 @@ export default function ShoppingList(props) {
   const [listView, setListView] = React.useState(false);
   const [dateSelected, setDateSelected] = React.useState(false);
   const [Items, setItems] = useState(1);
+  const [transferConfirm, setTransferConfirm] = useState(false);
+  const [owner, setOwner] = useState(true);
 
   const [gridView, setGridView] = React.useState(false);
   const [aLoading, setALoading] = React.useState(false);
@@ -91,6 +106,9 @@ export default function ShoppingList(props) {
   const [weeklyCheckBox, setWeeklyCheckBox] = React.useState(false);
   const [monthlyCheckBox, setMonthlyCheckBox] = React.useState(false);
   const [continueStop, setContinueStop] = React.useState(false);
+  const [weeklyInstCheckBox, setWeeklyInstCheckBox] = React.useState(false);
+  const [bweeklyInstCheckBox, setBWeeklyInstCheckBox] = React.useState(false);
+  const [monthlyInstCheckBox, setMonthlyInstCheckBox] = React.useState(false);
 
   const [user, setUser] = useState({});
   const { styles } = useStyle();
@@ -195,7 +213,7 @@ export default function ShoppingList(props) {
                           marginBottom: 3,
                         }}
                       >
-                        September 15, 2023
+                        September 19, 2023
                       </Text>
                       <View
                         style={{ flexDirection: "row", alignItems: "center" }}
@@ -231,8 +249,8 @@ export default function ShoppingList(props) {
                               borderRadius: 5,
 
                               backgroundColor: theme.colors.background,
-                              marginTop: height / -2.4,
-                              marginStart: height / 5,
+                              marginTop: height / -2.0,
+                              marginStart: height / 4.4,
                             }}
                           >
                             <View style={{ marginBottom: 6 }}>
@@ -291,9 +309,11 @@ export default function ShoppingList(props) {
                                   style={{
                                     fontFamily: "Mediums-Font",
                                     fontSize: height / 75,
+                                    color: checkboxPromo ? "green" : null,
                                   }}
                                 >
-                                  Share List {`    `}
+                                  {checkboxPromo ? "Shared List" : "Share List"}{" "}
+                                  {`    `}
                                 </Text>
                               </TouchableOpacity>
                             </View>
@@ -301,14 +321,14 @@ export default function ShoppingList(props) {
                             <View
                               style={{
                                 marginStart: height / 60,
-                                marginEnd: height / 30,
+                                marginEnd: height / 15,
                                 marginTop: 10,
                               }}
                             >
                               <TouchableOpacity
                                 onPress={() => [
                                   setTypeSwitch(false),
-                                  refRBSheetFrequencyEdit.current.open(),
+                                  refRBSheetVisibility.current.open(),
                                 ]}
                               >
                                 <Text
@@ -317,10 +337,59 @@ export default function ShoppingList(props) {
                                     fontSize: height / 75,
                                   }}
                                 >
-                                  Change Order (View/Edit) {`    `}
+                                  Leave
                                 </Text>
                               </TouchableOpacity>
                             </View>
+                            <View
+                              style={{
+                                marginStart: height / 60,
+                                marginEnd: height / 15,
+                                marginTop: 10,
+                              }}
+                            >
+                              <TouchableOpacity
+                                onPress={() => [
+                                  setTypeSwitch(false),
+                                  refRBSheetVisibility.current.open(),
+                                ]}
+                              >
+                                <Text
+                                  style={{
+                                    fontFamily: "Mediums-Font",
+                                    fontSize: height / 75,
+                                  }}
+                                >
+                                  Transfer Ownership
+                                </Text>
+                              </TouchableOpacity>
+                            </View>
+                            {orderPlace ? (
+                              <View
+                                style={{
+                                  marginStart: height / 60,
+                                  marginEnd: height / 30,
+                                  marginTop: 10,
+                                }}
+                              >
+                                <TouchableOpacity
+                                  onPress={() => [
+                                    setTypeSwitch(false),
+                                    setCancelConfirm(true),
+                                    //refRBSheetFrequencyEdit.current.open(),
+                                  ]}
+                                >
+                                  <Text
+                                    style={{
+                                      fontFamily: "Mediums-Font",
+                                      fontSize: height / 75,
+                                    }}
+                                  >
+                                    Cancel Order {`    `}
+                                  </Text>
+                                </TouchableOpacity>
+                              </View>
+                            ) : null}
 
                             <View
                               style={{
@@ -345,99 +414,6 @@ export default function ShoppingList(props) {
                                 </Text>
                               </TouchableOpacity>
                             </View>
-                            <View
-                              style={{
-                                marginStart: height / 60,
-                                marginEnd: height / 15,
-                                marginTop: 10,
-                              }}
-                            >
-                              <TouchableOpacity
-                                onPress={() => [
-                                  setTypeSwitch(false),
-                                  setMovePress(true),
-                                ]}
-                              >
-                                <Text
-                                  style={{
-                                    fontFamily: "Mediums-Font",
-                                    fontSize: height / 75,
-                                  }}
-                                >
-                                  Move {`    `}
-                                </Text>
-                              </TouchableOpacity>
-                            </View>
-
-                            <View
-                              style={{
-                                marginStart: height / 60,
-                                marginEnd: height / 15,
-                                marginTop: 10,
-                              }}
-                            >
-                              <TouchableOpacity
-                                onPress={() => [
-                                  setTypeSwitch(false),
-                                  refRBSheetFrequencyDetails.current.open(),
-                                ]}
-                              >
-                                <Text
-                                  style={{
-                                    fontFamily: "Mediums-Font",
-                                    fontSize: height / 75,
-                                  }}
-                                >
-                                  Stop {`    `}
-                                </Text>
-                              </TouchableOpacity>
-                            </View>
-                            <View
-                              style={{
-                                marginStart: height / 60,
-                                marginEnd: height / 15,
-                                marginTop: 10,
-                              }}
-                            >
-                              <TouchableOpacity
-                                onPress={() => [
-                                  setTypeSwitch(false),
-                                  refRBSheetInstallmentsClick.current.open(),
-                                ]}
-                              >
-                                <Text
-                                  style={{
-                                    fontFamily: "Mediums-Font",
-                                    fontSize: height / 75,
-                                  }}
-                                >
-                                  Buy Now {`    `}
-                                </Text>
-                              </TouchableOpacity>
-                            </View>
-                            <View
-                              style={{
-                                marginStart: height / 60,
-                                marginEnd: height / 15,
-                                marginTop: 10,
-                              }}
-                            >
-                              <TouchableOpacity
-                                onPress={() => [
-                                  setTypeSwitch(false),
-                                  //refRBSheetInstallmentsClick.current.open(),
-                                ]}
-                              >
-                                <Text
-                                  style={{
-                                    fontFamily: "Mediums-Font",
-                                    fontSize: height / 75,
-                                  }}
-                                >
-                                  Add to Cart {`    `}
-                                </Text>
-                              </TouchableOpacity>
-                            </View>
                           </Overlay>
                         </TouchableOpacity>
                       </View>
@@ -449,7 +425,7 @@ export default function ShoppingList(props) {
                         fontSize: height / 47,
                       }}
                     >
-                      SHOPPING LIST
+                      POOLED
                     </Text>
                     <View
                       style={{ flexDirection: "row", alignItems: "center" }}
@@ -460,16 +436,21 @@ export default function ShoppingList(props) {
                           fontSize: height / 60,
                         }}
                       >
-                        {listName}
+                        {listName + " "}
                       </Text>
-                      <Text
-                        style={{
-                          fontFamily: "GlacialIndifference-Regular",
-                          fontSize: height / 70,
-                        }}
+                      <TouchableOpacity
+                        onPress={() => refRBSheetProgress.current.open()}
                       >
-                        {sharedView ? "  Shared (View Only)" : "  (Private)"}
-                      </Text>
+                        <Text
+                          style={{
+                            fontFamily: "GlacialIndifference-Regular",
+                            fontSize: height / 70,
+                          }}
+                        >
+                          {/* {sharedView ? "  Shared (View Only)" : "  (Private)"} */}
+                          (3 Members)
+                        </Text>
+                      </TouchableOpacity>
                     </View>
                   </View>
                 </View>
@@ -484,30 +465,156 @@ export default function ShoppingList(props) {
                   }}
                 >
                   {orderPlace ? (
-                    <View
-                      style={{ flexDirection: "row", alignItems: "center" }}
-                    >
-                      <Text
+                    <View style={{ marginTop: -10, flex: 1 }}>
+                      <TouchableOpacity
+                        style={{ flexDirection: "row" }}
+                        onPress={() => refRBSheetProgress.current.open()}
+                      >
+                        <Progress.Bar
+                          progress={0.3}
+                          width={width / 1.232}
+                          borderColor={"gray"}
+                          color="green"
+                          height={11}
+                        />
+                        <Text
+                          style={{
+                            fontFamily: "GlacialIndifference-Regular",
+                            fontSize: height / 90,
+                          }}
+                        >
+                          {`   `}20 %
+                        </Text>
+                      </TouchableOpacity>
+
+                      <View
                         style={{
-                          fontFamily: "GlacialIndifference-Regular",
-                          fontSize: height / 60,
-                          textAlign: "center",
-                          paddingVertical: height / 300,
+                          flexDirection: "row",
+                          justifyContent: "space-between",
+                          flex: 1,
+                          marginTop: height / 80,
                         }}
                       >
-                        Custom (Multiple Dates)
-                      </Text>
-                      <Text
-                        style={{
-                          fontFamily: "GlacialIndifference-Regular",
-                          fontSize: height / 80,
-                          textAlign: "center",
-                          paddingVertical: height / 300,
-                          marginStart: 8,
-                        }}
-                      >
-                        (View/Edit)
-                      </Text>
+                        <TouchableOpacity
+                          onPress={() => refRBSheetProgress.current.open()}
+                        >
+                          <Text
+                            style={{
+                              fontFamily: "GlacialIndifference-Regular",
+                              fontSize: height / 80,
+                              textAlign: "center",
+                            }}
+                          >
+                            Duration
+                          </Text>
+                          <Text
+                            style={{
+                              fontFamily: "GlacialIndifference-Bold",
+                              fontSize: height / 80,
+                              textAlign: "center",
+                            }}
+                          >
+                            {weeklyInstCheckBox
+                              ? "Weekly"
+                              : bweeklyInstCheckBox
+                              ? "Bi-Weekly"
+                              : monthlyInstCheckBox
+                              ? "Monthly"
+                              : ""}
+                          </Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                          onPress={() => refRBSheetProgress.current.open()}
+                        >
+                          <Text
+                            style={{
+                              fontFamily: "GlacialIndifference-Regular",
+                              fontSize: height / 80,
+                              textAlign: "center",
+                            }}
+                          >
+                            Due Date
+                          </Text>
+                          <Text
+                            style={{
+                              fontFamily: "GlacialIndifference-Bold",
+                              fontSize: height / 80,
+                              textAlign: "center",
+                            }}
+                          >
+                            Oct 29, 2023
+                          </Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                          onPress={() => refRBSheetProgress.current.open()}
+                        >
+                          <Text
+                            style={{
+                              fontFamily: "GlacialIndifference-Regular",
+                              fontSize: height / 80,
+                              textAlign: "center",
+                            }}
+                          >
+                            Paid
+                          </Text>
+                          <Text
+                            style={{
+                              fontFamily: "GlacialIndifference-Bold",
+                              fontSize: height / 80,
+                              textAlign: "center",
+                            }}
+                          >
+                            $83.33
+                          </Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                          onPress={() => refRBSheetProgress.current.open()}
+                        >
+                          <Text
+                            style={{
+                              fontFamily: "GlacialIndifference-Regular",
+                              fontSize: height / 80,
+                              textAlign: "center",
+                            }}
+                          >
+                            Balance
+                          </Text>
+                          <Text
+                            style={{
+                              fontFamily: "GlacialIndifference-Bold",
+                              fontSize: height / 80,
+                              textAlign: "center",
+                            }}
+                          >
+                            $916.67
+                          </Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                          onPress={() => [
+                            refRBSheetFrequency.current.open(),
+                            // setDeleteConfirm(false),
+                            // setListName(email),
+                            //refRBSheetViewName.current.close(),
+                          ]}
+                        >
+                          <ImageBackground
+                            source={require("../assets/button.png")}
+                            style={[styles.checkOutBtn, { width: height / 12 }]}
+                          >
+                            <Text
+                              style={{
+                                fontFamily: "Mediums-Font",
+                                fontSize: height / 60,
+                                textAlign: "center",
+                                color: "white",
+                                paddingVertical: height / 300,
+                              }}
+                            >
+                              Place Order
+                            </Text>
+                          </ImageBackground>
+                        </TouchableOpacity>
+                      </View>
                     </View>
                   ) : (
                     <TouchableOpacity
@@ -537,17 +644,31 @@ export default function ShoppingList(props) {
                     </TouchableOpacity>
                   )}
 
-                  <Text
-                    style={{
-                      fontFamily: "GlacialIndifference-Bold",
-                      fontSize: height / 50,
-                      textAlign: "right",
-                    }}
-                  >
-                    Total: ${(qty * 51.95).toFixed(2)}
-                  </Text>
+                  {orderPlace ? null : (
+                    <Text
+                      style={{
+                        fontFamily: "GlacialIndifference-Bold",
+                        fontSize: height / 50,
+                        textAlign: "right",
+                      }}
+                    >
+                      Total: ${(qty * 51.95).toFixed(2)}
+                    </Text>
+                  )}
                 </View>
               ) : null}
+              {orderPlace ? (
+                <View
+                  style={{
+                    width: "86%",
+                    height: 1,
+                    backgroundColor: "lightgray",
+                    marginTop: height / 60,
+                    alignSelf: "center",
+                  }}
+                ></View>
+              ) : null}
+
               <View
                 style={{
                   marginHorizontal: height / 37,
@@ -687,7 +808,7 @@ export default function ShoppingList(props) {
                     style={{
                       flexDirection: "row",
                       alignItems: "center",
-                      marginTop: height / 70.3,
+                      marginTop: 2,
                     }}
                   >
                     {deletePress || movePress ? (
@@ -720,10 +841,29 @@ export default function ShoppingList(props) {
                       style={styles.bestSellerBack}
                     >
                       <View
+                        style={{ flexDirection: "row", alignSelf: "flex-end" }}
+                      >
+                        {/* <TouchableOpacity
+                            style={{ marginEnd: height / 50 }}
+                            onPress={() => setMovePress(true)}
+                          >
+                            <MaterialCommunityIcons
+                              name="wrap"
+                              size={height / 60}
+                            />
+                          </TouchableOpacity> */}
+                        <TouchableOpacity
+                          onPress={() => refRBSheetVisibility.current.open()}
+                          style={{ marginEnd: height / 60 }}
+                        >
+                          <MaterialIcons name="ios-share" size={height / 60} />
+                        </TouchableOpacity>
+                      </View>
+                      <View
                         style={{
                           flexDirection: "row",
                           justifyContent: "space-between",
-                          marginTop: -8,
+                          marginTop: 2,
                           marginBottom: 3,
                         }}
                       >
@@ -754,29 +894,6 @@ export default function ShoppingList(props) {
                             }}
                           />
                         </View>
-
-                        <View
-                          style={{ flexDirection: "row", alignItems: "center" }}
-                        >
-                          <TouchableOpacity
-                            style={{ marginEnd: height / 50 }}
-                            onPress={() => setMovePress(true)}
-                          >
-                            <MaterialCommunityIcons
-                              name="wrap"
-                              size={height / 60}
-                            />
-                          </TouchableOpacity>
-                          <TouchableOpacity
-                            onPress={() => refRBSheetVisibility.current.open()}
-                            style={{ marginEnd: height / 60 }}
-                          >
-                            <MaterialIcons
-                              name="ios-share"
-                              size={height / 60}
-                            />
-                          </TouchableOpacity>
-                        </View>
                       </View>
 
                       <Text
@@ -788,15 +905,6 @@ export default function ShoppingList(props) {
                         $51.95
                       </Text>
 
-                      {/* <Text
-                      style={{
-                        fontSize: height / 80,
-                        marginTop: 7,
-                        fontFamily: "GlacialIndifference-Regular",
-                      }}
-                    >
-                      BRAND NAME
-                    </Text> */}
                       <Text
                         style={{
                           fontSize: height / 50,
@@ -882,61 +990,6 @@ export default function ShoppingList(props) {
                             />
                           </TouchableOpacity>
                         </View>
-                      </View>
-                      <View
-                        style={{
-                          flexDirection: "row",
-                          alignItems: "center",
-                          marginTop: height / 85,
-                        }}
-                      >
-                        <TouchableOpacity
-                          style={{
-                            paddingHorizontal: height / 53,
-                            paddingVertical: height / 150,
-                            backgroundColor: "white",
-                            borderWidth: 1,
-                            borderColor: colors.MAIN,
-                            borderRadius: 5,
-                            marginEnd: 4,
-                          }}
-                        >
-                          <Text
-                            style={{
-                              fontFamily: "GlacialIndifference-Bold",
-                              fontSize: height / 80,
-                            }}
-                          >
-                            MOVE TO CART
-                          </Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity
-                          onPress={() =>
-                            refRBSheetInstallmentsClick.current.open()
-                          }
-                        >
-                          <ImageBackground
-                            source={require("../assets/button.png")}
-                            style={{
-                              height: height / 30,
-                              width: height / 10,
-                              overflow: "hidden",
-                              alignItems: "center",
-                              borderRadius: 5,
-                              justifyContent: "center",
-                            }}
-                          >
-                            <Text
-                              style={{
-                                fontFamily: "GlacialIndifference-Bold",
-                                fontSize: height / 80,
-                                color: "white",
-                              }}
-                            >
-                              BUY NOW
-                            </Text>
-                          </ImageBackground>
-                        </TouchableOpacity>
                       </View>
                     </LinearGradient>
                     <View style={styles.sellerCircle}>
@@ -1145,6 +1198,100 @@ export default function ShoppingList(props) {
                   <TouchableOpacity
                     onPress={() => [
                       setDeleteConfirm(false),
+                      //refRBSheetViewName.current.close(),
+                    ]}
+                    style={{
+                      paddingHorizontal: height / 53,
+                      paddingVertical: height / 300,
+                      backgroundColor: "white",
+                      borderWidth: 1,
+                      borderColor: colors.MAIN,
+                      borderRadius: 4,
+                      marginEnd: 4,
+                      width: height / 8,
+                    }}
+                  >
+                    <Text
+                      style={{
+                        fontFamily: "Mediums-Font",
+                        fontSize: height / 60,
+                        textAlign: "center",
+                      }}
+                    >
+                      No
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+              </Overlay>
+
+              <Overlay
+                visible={cancelConfirm}
+                overlayStyle={{
+                  borderRadius: 5,
+                  padding: height / 20,
+                  backgroundColor: theme.colors.background,
+                }}
+              >
+                <View>
+                  <Text
+                    style={{
+                      fontFamily: "GlacialIndifference-Bold",
+                      fontSize: height / 45,
+                      textAlign: "center",
+                    }}
+                  >
+                    Are you sure you want{`\n`}to cancel the order?
+                  </Text>
+                  <Text
+                    style={{
+                      fontFamily: "GlacialIndifference-Regular",
+                      fontSize: height / 75,
+                      textAlign: "center",
+                      marginTop: 3,
+                    }}
+                  >
+                    (You can cancel this order with{`\n`}full refund before
+                    DD-MM-YYYY)
+                  </Text>
+                </View>
+                <View
+                  style={{
+                    flexDirection: "row",
+                    alignItems: "center",
+                    marginTop: height / 62,
+                  }}
+                >
+                  <TouchableOpacity
+                    onPress={() => [
+                      setCancelConfirm(false),
+                      setOrderPlace(false),
+                      // setListName(email),
+                      //refRBSheetViewName.current.close(),
+                    ]}
+                  >
+                    <ImageBackground
+                      source={require("../assets/topbar.png")}
+                      style={[
+                        styles.checkOutBtn,
+                        { width: height / 8, marginEnd: 13 },
+                      ]}
+                    >
+                      <Text
+                        style={{
+                          fontFamily: "Mediums-Font",
+                          fontSize: height / 60,
+                          textAlign: "center",
+                          color: "white",
+                          paddingVertical: height / 300,
+                        }}
+                      >
+                        Yes
+                      </Text>
+                    </ImageBackground>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    onPress={() => [
+                      setCancelConfirm(false),
                       //refRBSheetViewName.current.close(),
                     ]}
                     style={{
@@ -1644,6 +1791,747 @@ export default function ShoppingList(props) {
                   </TouchableOpacity>
                 </View>
               </Overlay>
+              <RBSheet
+                ref={refRBSheetMembers}
+                closeOnDragDown={true}
+                closeOnPressMask={true}
+                height={height / 1.3}
+                customStyles={{
+                  wrapper: {
+                    backgroundColor: "rgba(0, 0, 0, 0.5)",
+                  },
+                  draggableIcon: {
+                    backgroundColor: "#000",
+                  },
+                }}
+              >
+                <Overlay
+                  visible={inviteSend}
+                  overlayStyle={{
+                    borderRadius: 5,
+                    padding: height / 20,
+                    backgroundColor: theme.colors.background,
+                  }}
+                >
+                  <View>
+                    <Text
+                      style={{
+                        fontFamily: "GlacialIndifference-Bold",
+                        fontSize: height / 45,
+                        textAlign: "center",
+                      }}
+                    >
+                      Invite Sent!{`\n`}Proceed to{"\n"}place an order.
+                    </Text>
+                  </View>
+                  <View
+                    style={{
+                      flexDirection: "row",
+                      alignItems: "center",
+                      marginTop: height / 52,
+                    }}
+                  >
+                    <TouchableOpacity
+                      onPress={() => [
+                        setInviteSend(false),
+                        //refRBSheetFrequency.current.close(),
+                      ]}
+                      style={{
+                        paddingHorizontal: height / 53,
+                        paddingVertical: height / 300,
+                        backgroundColor: "white",
+                        borderWidth: 1,
+                        borderColor: colors.MAIN,
+                        borderRadius: 4,
+                        marginEnd: 4,
+                        width: height / 8,
+                      }}
+                    >
+                      <Text
+                        style={{
+                          fontFamily: "Mediums-Font",
+                          fontSize: height / 60,
+                          textAlign: "center",
+                        }}
+                      >
+                        CANCEL
+                      </Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      onPress={() => [
+                        setInviteSend(false),
+
+                        refRBSheetInstallmentsClick.current.open(),
+
+                        // setListName(email),
+                        // refRBSheetFrequency.current.close(),
+                      ]}
+                    >
+                      <ImageBackground
+                        source={require("../assets/button.png")}
+                        style={[
+                          styles.checkOutBtn,
+                          { width: height / 8, marginEnd: 13 },
+                        ]}
+                      >
+                        <Text
+                          style={{
+                            fontFamily: "Mediums-Font",
+                            fontSize: height / 60,
+                            textAlign: "center",
+                            color: "white",
+                            paddingVertical: height / 300,
+                          }}
+                        >
+                          PROCEED
+                        </Text>
+                      </ImageBackground>
+                    </TouchableOpacity>
+                  </View>
+                </Overlay>
+                <RBSheet
+                  ref={refRBSheetInstallmentsClick}
+                  closeOnDragDown={true}
+                  closeOnPressMask={true}
+                  height={height / 2.32}
+                  customStyles={{
+                    wrapper: {
+                      backgroundColor: "rgba(0, 0, 0, 0.5)",
+                    },
+                    draggableIcon: {
+                      backgroundColor: "#000",
+                    },
+                  }}
+                >
+                  <View style={{ paddingHorizontal: height / 40 }}>
+                    <View
+                      style={{
+                        flexDirection: "row",
+                        justifyContent: "space-between",
+                      }}
+                    >
+                      <TouchableOpacity
+                        onPress={() =>
+                          refRBSheetInstallmentsClick.current.close()
+                        }
+                      >
+                        <Text
+                          style={{
+                            fontFamily: "GlacialIndifference-Bold",
+                            fontSize: height / 80,
+                            color: colors.MAIN,
+                            paddingEnd: 3,
+                          }}
+                        >
+                          BACK
+                        </Text>
+                      </TouchableOpacity>
+                      <TouchableOpacity
+                        onPress={() =>
+                          refRBSheetInstallmentsClick.current.close()
+                        }
+                      >
+                        <Text
+                          style={{
+                            fontFamily: "GlacialIndifference-Bold",
+                            fontSize: height / 80,
+                            color: colors.MAIN,
+                            textAlign: "right",
+                            paddingEnd: 3,
+                          }}
+                        >
+                          CANCEL
+                        </Text>
+                      </TouchableOpacity>
+                    </View>
+
+                    <View
+                      style={{
+                        flexDirection: "row",
+                        justifyContent: "space-between",
+                        marginTop: 3,
+                      }}
+                    >
+                      <Text
+                        style={{
+                          fontFamily: "GlacialIndifference-Bold",
+                          fontSize: height / 55,
+                          marginTop: 10,
+                          textAlign: "left",
+                        }}
+                      >
+                        INSTALLMENTS -{" "}
+                        {weeklyInstCheckBox
+                          ? "WEEKLY"
+                          : bweeklyInstCheckBox
+                          ? "BI-WEEKLY"
+                          : monthlyInstCheckBox
+                          ? "MONTHLY"
+                          : ""}
+                      </Text>
+                      <Text
+                        style={{
+                          fontFamily: "GlacialIndifference-Bold",
+                          fontSize: height / 55,
+                          marginTop: 10,
+                          textAlign: "right",
+                        }}
+                      >
+                        Total ${(qty * 51.92).toFixed(2)}
+                      </Text>
+                    </View>
+
+                    <View
+                      style={{
+                        flexDirection: "row",
+                        alignItems: "center",
+                        marginTop: height / 40,
+                      }}
+                    >
+                      <View
+                        style={{
+                          flexDirection: "row",
+                          alignItems: "center",
+                          marginTop: height / 80,
+                        }}
+                      >
+                        <Text
+                          style={{
+                            fontFamily: "GlacialIndifference-Regular",
+                            fontSize: height / 55,
+                            marginTop: 3,
+                          }}
+                        >
+                          Start Date
+                        </Text>
+                        <Text
+                          style={{
+                            fontFamily: "GlacialIndifference-Bold",
+                            fontSize: height / 55,
+                            marginTop: 3,
+                            marginStart: height / 20,
+                          }}
+                        >
+                          DD-MM-YYYY
+                        </Text>
+                      </View>
+                    </View>
+                    <Text
+                      style={{
+                        fontFamily: "GlacialIndifference-Regular",
+                        fontSize: height / 55,
+                        marginTop: height / 30,
+                        textAlign: "center",
+                        paddingHorizontal: height / 46,
+                      }}
+                    >
+                      By pressing "Place your Order", default payment method
+                      {`\n`}
+                      ending in *6789 will be charged
+                    </Text>
+
+                    <TouchableOpacity
+                      style={{ marginTop: height / 10 }}
+                      onPress={() => [
+                        setOrderPlace(true),
+                        refRBSheetInstallmentsClick.current.close(),
+                        refRBSheetFrequency.current.close(),
+
+                        props.navigation.navigate("CheckoutCompleteInfo"),
+                      ]}
+                    >
+                      <ImageBackground
+                        source={require("../assets/topbar.png")}
+                        style={styles.checkOutBtn}
+                      >
+                        <Text
+                          style={{
+                            fontFamily: "Mediums-Font",
+                            fontSize: height / 45,
+                            textAlign: "center",
+                            color: "white",
+                            paddingVertical: height / 200,
+                          }}
+                        >
+                          Place your order
+                        </Text>
+                      </ImageBackground>
+                    </TouchableOpacity>
+                  </View>
+                </RBSheet>
+                <View style={{ paddingHorizontal: height / 40 }}>
+                  <TouchableOpacity
+                    onPress={() => refRBSheetMembers.current.close()}
+                  >
+                    <Text
+                      style={{
+                        fontFamily: "GlacialIndifference-Bold",
+                        fontSize: height / 80,
+                        color: colors.MAIN,
+                        textAlign: "right",
+                        paddingEnd: 3,
+                      }}
+                    >
+                      CANCEL
+                    </Text>
+                  </TouchableOpacity>
+
+                  <Text
+                    style={{
+                      fontFamily: "GlacialIndifference-Bold",
+                      fontSize: height / 50,
+                      marginTop: height / 50,
+                    }}
+                  >
+                    ADD MEMBERS
+                  </Text>
+
+                  <View
+                    style={{
+                      marginTop: height / 90,
+                      flexDirection: "row",
+                      alignItems: "center",
+                    }}
+                  >
+                    <View
+                      style={[
+                        styles.txtViews,
+                        {
+                          borderWidth: 1,
+                          borderColor: "lightgray",
+                          width: width / 1.4,
+                          marginEnd: 10,
+                        },
+                      ]}
+                    >
+                      <TextInput
+                        placeholder="Add Email Address"
+                        placeholderTextColor={theme.colors.secondary}
+                        style={[
+                          styles.textSize,
+                          {
+                            backgroundColor: colors.grays,
+                          },
+                        ]}
+                        autoCorrect={false}
+                        value={email}
+                        onChangeText={(value) => [
+                          setEmail(value),
+                          setEmailError(""),
+                        ]}
+                      />
+                    </View>
+                    <View>
+                      <TouchableOpacity
+                        activeOpacity={1}
+                        onPress={() => [
+                          customCheckBox == false
+                            ? setCustomCheckBox(true)
+                            : setCustomCheckBox(false),
+                          setDailyCheckBox(false),
+                          setWeeklyCheckBox(false),
+                          setMonthlyCheckBox(false),
+                        ]}
+                        style={{
+                          flexDirection: "row",
+                          alignItems: "center",
+                          marginBottom: 6,
+                        }}
+                      >
+                        {customCheckBox ? (
+                          <MaterialCommunityIcons
+                            name="square-circle"
+                            color={colors.MAIN}
+                            size={height / 70}
+                          />
+                        ) : (
+                          <MaterialCommunityIcons
+                            name="square-outline"
+                            size={height / 70}
+                          />
+                        )}
+
+                        <Text
+                          style={{
+                            fontFamily: "GlacialIndifference-Regular",
+                            fontSize: height / 75,
+                            marginStart: height / 200,
+                          }}
+                        >
+                          View Only
+                        </Text>
+                      </TouchableOpacity>
+                      <TouchableOpacity
+                        activeOpacity={1}
+                        onPress={() => [
+                          weeklyCheckBox == false
+                            ? setWeeklyCheckBox(true)
+                            : setWeeklyCheckBox(false),
+                          setCustomCheckBox(false),
+                          setDailyCheckBox(false),
+                          setMonthlyCheckBox(false),
+                        ]}
+                        style={{
+                          flexDirection: "row",
+                          alignItems: "center",
+                          marginBottom: 6,
+                        }}
+                      >
+                        {weeklyCheckBox ? (
+                          <MaterialCommunityIcons
+                            name="square-circle"
+                            color={colors.MAIN}
+                            size={height / 70}
+                          />
+                        ) : (
+                          <MaterialCommunityIcons
+                            name="square-outline"
+                            size={height / 70}
+                          />
+                        )}
+
+                        <Text
+                          style={{
+                            fontFamily: "GlacialIndifference-Regular",
+                            fontSize: height / 75,
+                            marginStart: height / 200,
+                          }}
+                        >
+                          View & Edit
+                        </Text>
+                      </TouchableOpacity>
+                    </View>
+
+                    {/*<TouchableOpacity
+                      activeOpacity={1}
+                      onPress={() => [
+                        dailyCheckBox == false
+                          ? setDailyCheckBox(true)
+                          : setDailyCheckBox(false),
+                        setCustomCheckBox(false),
+                        setWeeklyCheckBox(false),
+                        setMonthlyCheckBox(false),
+                      ]}
+                      style={{
+                        flexDirection: "row",
+                        alignItems: "center",
+                        marginStart: height / 40,
+                        marginBottom: 6,
+                      }}
+                    >
+                      {dailyCheckBox ? (
+                        <MaterialCommunityIcons
+                          name="square-circle"
+                          color={colors.MAIN}
+                          size={height / 50}
+                        />
+                      ) : (
+                        <MaterialCommunityIcons
+                          name="square-outline"
+                          size={height / 50}
+                        />
+                      )}
+
+                      <Text
+                        style={{
+                          fontFamily: "GlacialIndifference-Regular",
+                          fontSize: height / 55,
+                          marginStart: height / 90,
+                        }}
+                      >
+                        6 Months
+                      </Text>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity
+                      activeOpacity={1}
+                      onPress={() => [
+                        weeklyCheckBox == false
+                          ? setWeeklyCheckBox(true)
+                          : setWeeklyCheckBox(false),
+                        setCustomCheckBox(false),
+                        setDailyCheckBox(false),
+                        setMonthlyCheckBox(false),
+                      ]}
+                      style={{
+                        flexDirection: "row",
+                        alignItems: "center",
+                        marginBottom: 6,
+                        marginStart: height / 40,
+                      }}
+                    >
+                      {weeklyCheckBox ? (
+                        <MaterialCommunityIcons
+                          name="square-circle"
+                          color={colors.MAIN}
+                          size={height / 50}
+                        />
+                      ) : (
+                        <MaterialCommunityIcons
+                          name="square-outline"
+                          size={height / 50}
+                        />
+                      )}
+
+                      <Text
+                        style={{
+                          fontFamily: "GlacialIndifference-Regular",
+                          fontSize: height / 55,
+                          marginStart: height / 90,
+                        }}
+                      >
+                        12 Months
+                      </Text>
+                    </TouchableOpacity> */}
+                  </View>
+
+                  <View
+                    style={{
+                      marginTop: height / 40,
+                      flexDirection: "row",
+                      alignItems: "center",
+                    }}
+                  >
+                    <View
+                      style={[
+                        styles.txtViews,
+                        {
+                          borderWidth: 1,
+                          borderColor: "lightgray",
+                          width: width / 1.4,
+                          marginEnd: 10,
+                        },
+                      ]}
+                    >
+                      <TextInput
+                        placeholder="Add Email Address"
+                        placeholderTextColor={theme.colors.secondary}
+                        style={[
+                          styles.textSize,
+                          {
+                            backgroundColor: colors.grays,
+                          },
+                        ]}
+                        autoCorrect={false}
+                        value={email}
+                        onChangeText={(value) => [
+                          setEmail(value),
+                          setEmailError(""),
+                        ]}
+                      />
+                    </View>
+                    <View>
+                      <TouchableOpacity
+                        activeOpacity={1}
+                        onPress={() => [
+                          customCheckBox == false
+                            ? setCustomCheckBox(true)
+                            : setCustomCheckBox(false),
+                          setDailyCheckBox(false),
+                          setWeeklyCheckBox(false),
+                          setMonthlyCheckBox(false),
+                        ]}
+                        style={{
+                          flexDirection: "row",
+                          alignItems: "center",
+                          marginBottom: 6,
+                        }}
+                      >
+                        {customCheckBox ? (
+                          <MaterialCommunityIcons
+                            name="square-circle"
+                            color={colors.MAIN}
+                            size={height / 70}
+                          />
+                        ) : (
+                          <MaterialCommunityIcons
+                            name="square-outline"
+                            size={height / 70}
+                          />
+                        )}
+
+                        <Text
+                          style={{
+                            fontFamily: "GlacialIndifference-Regular",
+                            fontSize: height / 75,
+                            marginStart: height / 200,
+                          }}
+                        >
+                          View Only
+                        </Text>
+                      </TouchableOpacity>
+                      <TouchableOpacity
+                        activeOpacity={1}
+                        onPress={() => [
+                          weeklyCheckBox == false
+                            ? setWeeklyCheckBox(true)
+                            : setWeeklyCheckBox(false),
+                          setCustomCheckBox(false),
+                          setDailyCheckBox(false),
+                          setMonthlyCheckBox(false),
+                        ]}
+                        style={{
+                          flexDirection: "row",
+                          alignItems: "center",
+                          marginBottom: 6,
+                        }}
+                      >
+                        {weeklyCheckBox ? (
+                          <MaterialCommunityIcons
+                            name="square-circle"
+                            color={colors.MAIN}
+                            size={height / 70}
+                          />
+                        ) : (
+                          <MaterialCommunityIcons
+                            name="square-outline"
+                            size={height / 70}
+                          />
+                        )}
+
+                        <Text
+                          style={{
+                            fontFamily: "GlacialIndifference-Regular",
+                            fontSize: height / 75,
+                            marginStart: height / 200,
+                          }}
+                        >
+                          View & Edit
+                        </Text>
+                      </TouchableOpacity>
+                    </View>
+
+                    {/*<TouchableOpacity
+                      activeOpacity={1}
+                      onPress={() => [
+                        dailyCheckBox == false
+                          ? setDailyCheckBox(true)
+                          : setDailyCheckBox(false),
+                        setCustomCheckBox(false),
+                        setWeeklyCheckBox(false),
+                        setMonthlyCheckBox(false),
+                      ]}
+                      style={{
+                        flexDirection: "row",
+                        alignItems: "center",
+                        marginStart: height / 40,
+                        marginBottom: 6,
+                      }}
+                    >
+                      {dailyCheckBox ? (
+                        <MaterialCommunityIcons
+                          name="square-circle"
+                          color={colors.MAIN}
+                          size={height / 50}
+                        />
+                      ) : (
+                        <MaterialCommunityIcons
+                          name="square-outline"
+                          size={height / 50}
+                        />
+                      )}
+
+                      <Text
+                        style={{
+                          fontFamily: "GlacialIndifference-Regular",
+                          fontSize: height / 55,
+                          marginStart: height / 90,
+                        }}
+                      >
+                        6 Months
+                      </Text>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity
+                      activeOpacity={1}
+                      onPress={() => [
+                        weeklyCheckBox == false
+                          ? setWeeklyCheckBox(true)
+                          : setWeeklyCheckBox(false),
+                        setCustomCheckBox(false),
+                        setDailyCheckBox(false),
+                        setMonthlyCheckBox(false),
+                      ]}
+                      style={{
+                        flexDirection: "row",
+                        alignItems: "center",
+                        marginBottom: 6,
+                        marginStart: height / 40,
+                      }}
+                    >
+                      {weeklyCheckBox ? (
+                        <MaterialCommunityIcons
+                          name="square-circle"
+                          color={colors.MAIN}
+                          size={height / 50}
+                        />
+                      ) : (
+                        <MaterialCommunityIcons
+                          name="square-outline"
+                          size={height / 50}
+                        />
+                      )}
+
+                      <Text
+                        style={{
+                          fontFamily: "GlacialIndifference-Regular",
+                          fontSize: height / 55,
+                          marginStart: height / 90,
+                        }}
+                      >
+                        12 Months
+                      </Text>
+                    </TouchableOpacity> */}
+                  </View>
+                  <TouchableOpacity
+                    style={{ marginTop: height / 19 }}
+                    onPress={() => refRBSheetMembers.current.close()}
+                  >
+                    <Text
+                      style={{
+                        fontFamily: "GlacialIndifference-Bold",
+                        fontSize: height / 60,
+                        textAlign: "right",
+                        paddingEnd: 3,
+                      }}
+                    >
+                      Add
+                    </Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    style={{
+                      position: "absolute",
+                      top: height / 1.5,
+                      right: height / 30,
+                    }}
+                    onPress={() => [
+                      //setOrderPlace(true),
+                      //setNameConfirm(true),
+                      // refRBSheetInstallmentsClick.current.open(),
+                      //refRBSheetFrequency.current.close(),
+                      setInviteSend(true),
+                      // setStopShow(true),
+                      //props.navigation.navigate("CheckoutCompleteInfo"),
+                    ]}
+                  >
+                    <Text
+                      style={{
+                        fontFamily: "GlacialIndifference-Bold",
+                        fontSize: height / 60,
+                        color: colors.MAIN,
+                        textAlign: "right",
+                        paddingEnd: 3,
+                      }}
+                    >
+                      {weeklyInstCheckBox ||
+                      bweeklyInstCheckBox ||
+                      monthlyInstCheckBox
+                        ? "CONTINUE"
+                        : ""}
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+              </RBSheet>
               <View style={{ paddingHorizontal: height / 40 }}>
                 <TouchableOpacity
                   onPress={() => refRBSheetFrequency.current.close()}
@@ -1668,7 +2556,7 @@ export default function ShoppingList(props) {
                     marginTop: height / 50,
                   }}
                 >
-                  FREQUENCY
+                  DURATION
                 </Text>
 
                 <View
@@ -1676,6 +2564,7 @@ export default function ShoppingList(props) {
                     flexDirection: "row",
                     alignItems: "center",
                     marginTop: height / 50,
+                    justifyContent: "space-between",
                   }}
                 >
                   <TouchableOpacity
@@ -1714,7 +2603,7 @@ export default function ShoppingList(props) {
                         marginStart: height / 90,
                       }}
                     >
-                      Custom
+                      3 Months
                     </Text>
                   </TouchableOpacity>
 
@@ -1755,7 +2644,7 @@ export default function ShoppingList(props) {
                         marginStart: height / 90,
                       }}
                     >
-                      Daily
+                      6 Months
                     </Text>
                   </TouchableOpacity>
 
@@ -1796,58 +2685,15 @@ export default function ShoppingList(props) {
                         marginStart: height / 90,
                       }}
                     >
-                      Weekly
-                    </Text>
-                  </TouchableOpacity>
-
-                  <TouchableOpacity
-                    activeOpacity={1}
-                    onPress={() => [
-                      monthlyCheckBox == false
-                        ? setMonthlyCheckBox(true)
-                        : setMonthlyCheckBox(false),
-                      setCustomCheckBox(false),
-                      setDailyCheckBox(false),
-                      setWeeklyCheckBox(false),
-                    ]}
-                    style={{
-                      flexDirection: "row",
-                      alignItems: "center",
-                      marginStart: height / 40,
-                      marginBottom: 6,
-                    }}
-                  >
-                    {monthlyCheckBox ? (
-                      <MaterialCommunityIcons
-                        name="square-circle"
-                        color={colors.MAIN}
-                        size={height / 50}
-                      />
-                    ) : (
-                      <MaterialCommunityIcons
-                        name="square-outline"
-                        size={height / 50}
-                      />
-                    )}
-
-                    <Text
-                      style={{
-                        fontFamily: "GlacialIndifference-Regular",
-                        fontSize: height / 55,
-                        marginStart: height / 90,
-                      }}
-                    >
-                      Monthly
+                      12 Months
                     </Text>
                   </TouchableOpacity>
                 </View>
 
-                {customCheckBox ? (
+                {customCheckBox || dailyCheckBox || weeklyCheckBox ? (
                   <View
                     style={{
-                      flexDirection: "row",
                       marginTop: height / 39,
-                      alignItems: "center",
                     }}
                   >
                     <Text
@@ -1856,342 +2702,135 @@ export default function ShoppingList(props) {
                         fontSize: height / 50,
                       }}
                     >
-                      Start
+                      INSTALLMENTS
                     </Text>
 
-                    <TouchableOpacity
-                      onPress={() => setDateSelected(true)}
-                      style={{
-                        marginStart: height / 60,
-                        borderWidth: 1,
-                        borderColor: "lightgray",
-                        width: height / 7,
-                        justifyContent: "center",
-                        paddingVertical: height / 150,
-                      }}
-                    >
-                      <Text
-                        style={{
-                          fontFamily: "GlacialIndifference-Regular",
-                          fontSize: height / 60,
-                          textAlign: "center",
-                          color: dateSelected ? colors.MAIN : null,
-                        }}
-                      >
-                        {dateSelected ? "Multiple" : "DD-MM-YYYY"}
-                      </Text>
-                    </TouchableOpacity>
-                  </View>
-                ) : dailyCheckBox ? (
-                  <View
-                    style={{
-                      flexDirection: "row",
-                      marginTop: height / 39,
-                      alignItems: "center",
-                    }}
-                  >
-                    <Text
-                      style={{
-                        fontFamily: "GlacialIndifference-Bold",
-                        fontSize: height / 50,
-                      }}
-                    >
-                      Start
-                    </Text>
-
-                    <TouchableOpacity
-                      onPress={() => setDateSelected(true)}
-                      style={{
-                        marginStart: height / 60,
-                        borderWidth: 1,
-                        borderColor: "lightgray",
-                        width: height / 7,
-                        justifyContent: "center",
-                        paddingVertical: height / 150,
-                      }}
-                    >
-                      <Text
-                        style={{
-                          fontFamily: "GlacialIndifference-Regular",
-                          fontSize: height / 60,
-                          textAlign: "center",
-                          color: dateSelected ? colors.MAIN : null,
-                        }}
-                      >
-                        {dateSelected ? "Selected" : "DD-MM-YYYY"}
-                      </Text>
-                    </TouchableOpacity>
-
-                    {continueStop ? null : (
-                      <View
-                        style={{ flexDirection: "row", alignItems: "center" }}
-                      >
-                        <Text
-                          style={{
-                            fontFamily: "GlacialIndifference-Bold",
-                            fontSize: height / 50,
-                            marginStart: height / 50,
-                          }}
-                        >
-                          End
-                        </Text>
-                        <TouchableOpacity
-                          onPress={() => setDateSelected(true)}
-                          style={{
-                            marginStart: height / 60,
-                            borderWidth: 1,
-                            borderColor: "lightgray",
-                            width: height / 7,
-                            justifyContent: "center",
-                            paddingVertical: height / 150,
-                          }}
-                        >
-                          <Text
-                            style={{
-                              fontFamily: "GlacialIndifference-Regular",
-                              fontSize: height / 60,
-                              textAlign: "center",
-                              color: dateSelected ? colors.MAIN : null,
-                            }}
-                          >
-                            {dateSelected ? "Selected" : "DD-MM-YYYY"}
-                          </Text>
-                        </TouchableOpacity>
-                      </View>
-                    )}
-                  </View>
-                ) : weeklyCheckBox ? (
-                  <View>
                     <View
                       style={{
                         flexDirection: "row",
-                        marginTop: height / 39,
                         alignItems: "center",
+                        marginTop: height / 50,
+                        justifyContent: "space-between",
                       }}
                     >
-                      <Text
-                        style={{
-                          fontFamily: "GlacialIndifference-Bold",
-                          fontSize: height / 50,
-                        }}
-                      >
-                        Number of Weeks
-                      </Text>
                       <TouchableOpacity
-                        onPress={() => setDateSelected(true)}
+                        activeOpacity={1}
+                        onPress={() => [
+                          weeklyInstCheckBox == false
+                            ? setWeeklyInstCheckBox(true)
+                            : setWeeklyInstCheckBox(false),
+                          setBWeeklyInstCheckBox(false),
+                          setMonthlyInstCheckBox(false),
+                        ]}
                         style={{
-                          marginStart: height / 60,
-                          borderWidth: 1,
-                          borderColor: "lightgray",
-                          width: height / 7,
-                          justifyContent: "center",
-                          paddingVertical: height / 150,
+                          flexDirection: "row",
+                          alignItems: "center",
+                          marginBottom: 6,
                         }}
                       >
+                        {weeklyInstCheckBox ? (
+                          <MaterialCommunityIcons
+                            name="square-circle"
+                            color={colors.MAIN}
+                            size={height / 50}
+                          />
+                        ) : (
+                          <MaterialCommunityIcons
+                            name="square-outline"
+                            size={height / 50}
+                          />
+                        )}
+
                         <Text
                           style={{
                             fontFamily: "GlacialIndifference-Regular",
-                            fontSize: height / 60,
-                            textAlign: "center",
+                            fontSize: height / 55,
+                            marginStart: height / 90,
                           }}
                         >
-                          3
+                          Weekly
                         </Text>
                       </TouchableOpacity>
-                    </View>
 
-                    <View
-                      style={{
-                        flexDirection: "row",
-                        marginTop: height / 39,
-                        alignItems: "center",
-                      }}
-                    >
-                      <Text
-                        style={{
-                          fontFamily: "GlacialIndifference-Bold",
-                          fontSize: height / 50,
-                        }}
-                      >
-                        Start
-                      </Text>
                       <TouchableOpacity
-                        onPress={() => setDateSelected(true)}
+                        activeOpacity={1}
+                        onPress={() => [
+                          bweeklyInstCheckBox == false
+                            ? setBWeeklyInstCheckBox(true)
+                            : setBWeeklyInstCheckBox(false),
+                          setWeeklyInstCheckBox(false),
+                          setMonthlyInstCheckBox(false),
+                        ]}
                         style={{
-                          marginStart: height / 60,
-                          borderWidth: 1,
-                          borderColor: "lightgray",
-                          width: height / 7,
-                          justifyContent: "center",
-                          paddingVertical: height / 150,
+                          flexDirection: "row",
+                          alignItems: "center",
+                          marginStart: height / 40,
+                          marginBottom: 6,
                         }}
                       >
+                        {bweeklyInstCheckBox ? (
+                          <MaterialCommunityIcons
+                            name="square-circle"
+                            color={colors.MAIN}
+                            size={height / 50}
+                          />
+                        ) : (
+                          <MaterialCommunityIcons
+                            name="square-outline"
+                            size={height / 50}
+                          />
+                        )}
+
                         <Text
                           style={{
                             fontFamily: "GlacialIndifference-Regular",
-                            fontSize: height / 60,
-                            textAlign: "center",
-                            color: dateSelected ? colors.MAIN : null,
+                            fontSize: height / 55,
+                            marginStart: height / 90,
                           }}
                         >
-                          {dateSelected ? "Selected" : "DD-MM-YYYY"}
+                          Bi-Weekly
                         </Text>
                       </TouchableOpacity>
 
-                      {/* {continueStop ? null : (
-                        <View
-                          style={{ flexDirection: "row", alignItems: "center" }}
-                        >
-                          <Text
-                            style={{
-                              fontFamily: "GlacialIndifference-Bold",
-                              fontSize: height / 50,
-                              marginStart: height / 50,
-                            }}
-                          >
-                            End
-                          </Text>
-                          <TouchableOpacity
-                            onPress={() => setDateSelected(true)}
-                            style={{
-                              marginStart: height / 60,
-                              borderWidth: 1,
-                              borderColor: "lightgray",
-                              width: height / 7,
-                              justifyContent: "center",
-                              paddingVertical: height / 150,
-                            }}
-                          >
-                            <Text
-                              style={{
-                                fontFamily: "GlacialIndifference-Regular",
-                                fontSize: height / 60,
-                                textAlign: "center",
-                                color: dateSelected ? colors.MAIN : null,
-                              }}
-                            >
-                              {dateSelected ? "Selected" : "DD-MM-YYYY"}
-                            </Text>
-                          </TouchableOpacity>
-                        </View>
-                      )} */}
-                    </View>
-                  </View>
-                ) : monthlyCheckBox ? (
-                  <View>
-                    <View
-                      style={{
-                        flexDirection: "row",
-                        marginTop: height / 39,
-                        alignItems: "center",
-                      }}
-                    >
-                      <Text
-                        style={{
-                          fontFamily: "GlacialIndifference-Bold",
-                          fontSize: height / 50,
-                        }}
-                      >
-                        Number of Months
-                      </Text>
                       <TouchableOpacity
-                        onPress={() => setDateSelected(true)}
+                        activeOpacity={1}
+                        onPress={() => [
+                          monthlyInstCheckBox == false
+                            ? setMonthlyInstCheckBox(true)
+                            : setMonthlyInstCheckBox(false),
+                          setWeeklyInstCheckBox(false),
+                          setBWeeklyInstCheckBox(false),
+                        ]}
                         style={{
-                          marginStart: height / 60,
-                          borderWidth: 1,
-                          borderColor: "lightgray",
-                          width: height / 7,
-                          justifyContent: "center",
-                          paddingVertical: height / 150,
+                          flexDirection: "row",
+                          alignItems: "center",
+                          marginBottom: 6,
+                          marginStart: height / 40,
                         }}
                       >
+                        {monthlyInstCheckBox ? (
+                          <MaterialCommunityIcons
+                            name="square-circle"
+                            color={colors.MAIN}
+                            size={height / 50}
+                          />
+                        ) : (
+                          <MaterialCommunityIcons
+                            name="square-outline"
+                            size={height / 50}
+                          />
+                        )}
+
                         <Text
                           style={{
                             fontFamily: "GlacialIndifference-Regular",
-                            fontSize: height / 60,
-                            textAlign: "center",
+                            fontSize: height / 55,
+                            marginStart: height / 90,
                           }}
                         >
-                          3
+                          Monthly
                         </Text>
                       </TouchableOpacity>
-                    </View>
-
-                    <View
-                      style={{
-                        flexDirection: "row",
-                        marginTop: height / 39,
-                        alignItems: "center",
-                      }}
-                    >
-                      <Text
-                        style={{
-                          fontFamily: "GlacialIndifference-Bold",
-                          fontSize: height / 50,
-                        }}
-                      >
-                        Start
-                      </Text>
-                      <TouchableOpacity
-                        onPress={() => setDateSelected(true)}
-                        style={{
-                          marginStart: height / 60,
-                          borderWidth: 1,
-                          borderColor: "lightgray",
-                          width: height / 7,
-                          justifyContent: "center",
-                          paddingVertical: height / 150,
-                        }}
-                      >
-                        <Text
-                          style={{
-                            fontFamily: "GlacialIndifference-Regular",
-                            fontSize: height / 60,
-                            textAlign: "center",
-                            color: dateSelected ? colors.MAIN : null,
-                          }}
-                        >
-                          {dateSelected ? "Selected" : "DD-MM-YYYY"}
-                        </Text>
-                      </TouchableOpacity>
-
-                      {/* {continueStop ? null : (
-                        <View
-                          style={{ flexDirection: "row", alignItems: "center" }}
-                        >
-                          <Text
-                            style={{
-                              fontFamily: "GlacialIndifference-Bold",
-                              fontSize: height / 50,
-                              marginStart: height / 50,
-                            }}
-                          >
-                            End
-                          </Text>
-                          <TouchableOpacity
-                            onPress={() => setDateSelected(true)}
-                            style={{
-                              marginStart: height / 60,
-                              borderWidth: 1,
-                              borderColor: "lightgray",
-                              width: height / 7,
-                              justifyContent: "center",
-                              paddingVertical: height / 150,
-                            }}
-                          >
-                            <Text
-                              style={{
-                                fontFamily: "GlacialIndifference-Regular",
-                                fontSize: height / 60,
-                                textAlign: "center",
-                                color: dateSelected ? colors.MAIN : null,
-                              }}
-                            >
-                              {dateSelected ? "Selected" : "DD-MM-YYYY"}
-                            </Text>
-                          </TouchableOpacity>
-                        </View>
-                      )} */}
                     </View>
                   </View>
                 ) : null}
@@ -2226,7 +2865,7 @@ export default function ShoppingList(props) {
                       />
                     )}
 
-                    <Text
+                    {/* <Text
                       style={{
                         fontFamily: "GlacialIndifference-Regular",
                         fontSize: height / 55,
@@ -2234,7 +2873,7 @@ export default function ShoppingList(props) {
                       }}
                     >
                       Continue untill stopped
-                    </Text>
+                    </Text> */}
                   </TouchableOpacity>
                 ) : null}
 
@@ -2245,9 +2884,13 @@ export default function ShoppingList(props) {
                     right: height / 30,
                   }}
                   onPress={() => [
-                    setOrderPlace(true),
-                    refRBSheetFrequency.current.close(),
-                    props.navigation.navigate("CheckoutCompleteInfo"),
+                    //setOrderPlace(true),
+                    //setNameConfirm(true),
+                    // refRBSheetInstallmentsClick.current.open(),
+                    //refRBSheetFrequency.current.close(),
+                    refRBSheetMembers.current.open(),
+                    // setStopShow(true),
+                    //props.navigation.navigate("CheckoutCompleteInfo"),
                   ]}
                 >
                   <Text
@@ -2259,12 +2902,1985 @@ export default function ShoppingList(props) {
                       paddingEnd: 3,
                     }}
                   >
-                    {dateSelected ? "CONTINUE TO CHECKOUT" : ""}
+                    {weeklyInstCheckBox ||
+                    bweeklyInstCheckBox ||
+                    monthlyInstCheckBox
+                      ? "CONTINUE"
+                      : ""}
                   </Text>
                 </TouchableOpacity>
               </View>
             </RBSheet>
 
+            <RBSheet
+              ref={refRBSheetProgress}
+              closeOnDragDown={true}
+              closeOnPressMask={true}
+              height={height / 1.2}
+              customStyles={{
+                wrapper: {
+                  backgroundColor: "rgba(0, 0, 0, 0.5)",
+                },
+                draggableIcon: {
+                  backgroundColor: "#000",
+                },
+              }}
+            >
+              <Overlay
+                visible={nameConfirm}
+                overlayStyle={{
+                  borderRadius: 5,
+                  padding: height / 20,
+                  backgroundColor: theme.colors.background,
+                }}
+              >
+                <View>
+                  <Text
+                    style={{
+                      fontFamily: "GlacialIndifference-Bold",
+                      fontSize: height / 45,
+                      textAlign: "center",
+                    }}
+                  >
+                    Are you sure you want{`\n`}to change the name?
+                  </Text>
+                </View>
+                <View
+                  style={{
+                    flexDirection: "row",
+                    alignItems: "center",
+                    marginTop: height / 22,
+                  }}
+                >
+                  <TouchableOpacity
+                    onPress={() => [
+                      setNameConfirm(false),
+                      setListName(email),
+                      refRBSheetFrequency.current.close(),
+                    ]}
+                  >
+                    <ImageBackground
+                      source={require("../assets/topbar.png")}
+                      style={[
+                        styles.checkOutBtn,
+                        { width: height / 8, marginEnd: 13 },
+                      ]}
+                    >
+                      <Text
+                        style={{
+                          fontFamily: "Mediums-Font",
+                          fontSize: height / 60,
+                          textAlign: "center",
+                          color: "white",
+                          paddingVertical: height / 300,
+                        }}
+                      >
+                        Yes
+                      </Text>
+                    </ImageBackground>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    onPress={() => [
+                      setNameConfirm(false),
+                      refRBSheetFrequency.current.close(),
+                    ]}
+                    style={{
+                      paddingHorizontal: height / 53,
+                      paddingVertical: height / 300,
+                      backgroundColor: "white",
+                      borderWidth: 1,
+                      borderColor: colors.MAIN,
+                      borderRadius: 4,
+                      marginEnd: 4,
+                      width: height / 8,
+                    }}
+                  >
+                    <Text
+                      style={{
+                        fontFamily: "Mediums-Font",
+                        fontSize: height / 60,
+                        textAlign: "center",
+                      }}
+                    >
+                      No
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+              </Overlay>
+
+              <Overlay
+                visible={nudgeSent}
+                overlayStyle={{
+                  borderRadius: 5,
+                  padding: height / 20,
+                  backgroundColor: theme.colors.background,
+                }}
+              >
+                <View>
+                  <Text
+                    style={{
+                      fontFamily: "GlacialIndifference-Bold",
+                      fontSize: height / 45,
+                      textAlign: "center",
+                    }}
+                  >
+                    Nudge Sent!
+                  </Text>
+                </View>
+                <View
+                  style={{
+                    flexDirection: "row",
+                    alignItems: "center",
+                    marginTop: height / 22,
+                  }}
+                >
+                  <TouchableOpacity
+                    onPress={() => [
+                      // setNameConfirm(false),
+                      // setListName(email),
+                      // refRBSheetFrequency.current.close(),
+                      setNudgeSent(false),
+                    ]}
+                  >
+                    <ImageBackground
+                      source={require("../assets/topbar.png")}
+                      style={[
+                        styles.checkOutBtn,
+                        { width: height / 8, marginEnd: 13 },
+                      ]}
+                    >
+                      <Text
+                        style={{
+                          fontFamily: "Mediums-Font",
+                          fontSize: height / 60,
+                          textAlign: "center",
+                          color: "white",
+                          paddingVertical: height / 300,
+                        }}
+                      >
+                        Close
+                      </Text>
+                    </ImageBackground>
+                  </TouchableOpacity>
+                </View>
+              </Overlay>
+
+              <Overlay
+                visible={ownershipTransfer}
+                overlayStyle={{
+                  borderRadius: 5,
+                  padding: height / 20,
+                  backgroundColor: theme.colors.background,
+                }}
+              >
+                <View>
+                  <Text
+                    style={{
+                      fontFamily: "GlacialIndifference-Bold",
+                      fontSize: height / 45,
+                      textAlign: "center",
+                    }}
+                  >
+                    Transfer ownership before{`\n`}you leave this team?
+                  </Text>
+                </View>
+                <View
+                  style={{
+                    flexDirection: "row",
+                    alignItems: "center",
+                    marginTop: height / 22,
+                  }}
+                >
+                  <TouchableOpacity
+                    onPress={() => [
+                      // setNameConfirm(false),
+                      // setListName(email),
+                      // refRBSheetFrequency.current.close(),
+                      setOwnershipTransfer(false),
+                      refRBSheetOwnership.current.open(),
+                    ]}
+                  >
+                    <ImageBackground
+                      source={require("../assets/topbar.png")}
+                      style={[
+                        styles.checkOutBtn,
+                        { width: height / 8, marginEnd: 13 },
+                      ]}
+                    >
+                      <Text
+                        style={{
+                          fontFamily: "Mediums-Font",
+                          fontSize: height / 60,
+                          textAlign: "center",
+                          color: "white",
+                          paddingVertical: height / 300,
+                        }}
+                      >
+                        Yes
+                      </Text>
+                    </ImageBackground>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    onPress={() => [
+                      setOwnershipTransfer(false),
+                      //refRBSheetFrequency.current.close(),
+                    ]}
+                    style={{
+                      paddingHorizontal: height / 53,
+                      paddingVertical: height / 300,
+                      backgroundColor: "white",
+                      borderWidth: 1,
+                      borderColor: colors.MAIN,
+                      borderRadius: 4,
+                      marginEnd: 4,
+                      width: height / 8,
+                    }}
+                  >
+                    <Text
+                      style={{
+                        fontFamily: "Mediums-Font",
+                        fontSize: height / 60,
+                        textAlign: "center",
+                      }}
+                    >
+                      No
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+              </Overlay>
+
+              <RBSheet
+                ref={refRBSheetOwnership}
+                closeOnDragDown={true}
+                closeOnPressMask={true}
+                height={height / 1.2}
+                customStyles={{
+                  wrapper: {
+                    backgroundColor: "rgba(0, 0, 0, 0.5)",
+                  },
+                  draggableIcon: {
+                    backgroundColor: "#000",
+                  },
+                }}
+              >
+                <Overlay
+                  visible={transferConfirm}
+                  overlayStyle={{
+                    borderRadius: 5,
+                    padding: height / 20,
+                    backgroundColor: theme.colors.background,
+                  }}
+                >
+                  <View>
+                    <Text
+                      style={{
+                        fontFamily: "GlacialIndifference-Bold",
+                        fontSize: height / 45,
+                        textAlign: "center",
+                      }}
+                    >
+                      You will remain the owner{`\n`}untill the transfer has
+                      been{`\n`}accepted.{`\n`}Would you like to proceed?
+                    </Text>
+                  </View>
+                  <View
+                    style={{
+                      flexDirection: "row",
+                      alignItems: "center",
+                      marginTop: height / 22,
+                    }}
+                  >
+                    <TouchableOpacity
+                      onPress={() => [
+                        // setNameConfirm(false),
+                        // setListName(email),
+                        // refRBSheetFrequency.current.close(),
+                        setTransferConfirm(false),
+                        setTransferSent(true),
+                        //refRBSheetOwnership.current.open(),
+                      ]}
+                    >
+                      <ImageBackground
+                        source={require("../assets/topbar.png")}
+                        style={[
+                          styles.checkOutBtn,
+                          { width: height / 8, marginEnd: 13 },
+                        ]}
+                      >
+                        <Text
+                          style={{
+                            fontFamily: "Mediums-Font",
+                            fontSize: height / 60,
+                            textAlign: "center",
+                            color: "white",
+                            paddingVertical: height / 300,
+                          }}
+                        >
+                          Yes
+                        </Text>
+                      </ImageBackground>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      onPress={() => [
+                        setTransferConfirm(false),
+                        //refRBSheetFrequency.current.close(),
+                      ]}
+                      style={{
+                        paddingHorizontal: height / 53,
+                        paddingVertical: height / 300,
+                        backgroundColor: "white",
+                        borderWidth: 1,
+                        borderColor: colors.MAIN,
+                        borderRadius: 4,
+                        marginEnd: 4,
+                        width: height / 8,
+                      }}
+                    >
+                      <Text
+                        style={{
+                          fontFamily: "Mediums-Font",
+                          fontSize: height / 60,
+                          textAlign: "center",
+                        }}
+                      >
+                        No
+                      </Text>
+                    </TouchableOpacity>
+                  </View>
+                </Overlay>
+                <Overlay
+                  visible={transferSent}
+                  overlayStyle={{
+                    borderRadius: 5,
+                    padding: height / 20,
+                    backgroundColor: theme.colors.background,
+                  }}
+                >
+                  <View>
+                    <Text
+                      style={{
+                        fontFamily: "GlacialIndifference-Bold",
+                        fontSize: height / 45,
+                        textAlign: "center",
+                      }}
+                    >
+                      Ownership Transfer{`\n`}Request Sent.
+                      {`\n`}Leave Pool?
+                    </Text>
+                  </View>
+                  <View
+                    style={{
+                      flexDirection: "row",
+                      alignItems: "center",
+                      marginTop: height / 42,
+                    }}
+                  >
+                    <TouchableOpacity
+                      onPress={() => [
+                        // setNameConfirm(false),
+                        // setListName(email),
+                        // refRBSheetFrequency.current.close(),
+                        setTransferSent(false),
+                        setFinalTransferSend(true),
+                        //refRBSheetOwnership.current.open(),
+                      ]}
+                    >
+                      <ImageBackground
+                        source={require("../assets/topbar.png")}
+                        style={[
+                          styles.checkOutBtn,
+                          { width: height / 8, marginEnd: 13 },
+                        ]}
+                      >
+                        <Text
+                          style={{
+                            fontFamily: "Mediums-Font",
+                            fontSize: height / 60,
+                            textAlign: "center",
+                            color: "white",
+                            paddingVertical: height / 300,
+                          }}
+                        >
+                          Yes
+                        </Text>
+                      </ImageBackground>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      onPress={() => [
+                        setTransferSent(false),
+                        //refRBSheetFrequency.current.close(),
+                      ]}
+                      style={{
+                        paddingHorizontal: height / 53,
+                        paddingVertical: height / 300,
+                        backgroundColor: "white",
+                        borderWidth: 1,
+                        borderColor: colors.MAIN,
+                        borderRadius: 4,
+                        marginEnd: 4,
+                        width: height / 8,
+                      }}
+                    >
+                      <Text
+                        style={{
+                          fontFamily: "Mediums-Font",
+                          fontSize: height / 60,
+                          textAlign: "center",
+                        }}
+                      >
+                        No
+                      </Text>
+                    </TouchableOpacity>
+                  </View>
+                </Overlay>
+
+                <Overlay
+                  visible={finalTransferSend}
+                  overlayStyle={{
+                    borderRadius: 5,
+                    padding: height / 20,
+                    backgroundColor: theme.colors.background,
+                  }}
+                >
+                  <View>
+                    <Text
+                      style={{
+                        fontFamily: "GlacialIndifference-Bold",
+                        fontSize: height / 45,
+                        textAlign: "center",
+                      }}
+                    >
+                      Your request will be completed{`\n`}once the ownership
+                      transfer has been accepted by Ben.
+                    </Text>
+                  </View>
+                  <View
+                    style={{
+                      alignItems: "center",
+                      marginTop: height / 42,
+                    }}
+                  >
+                    <TouchableOpacity
+                      onPress={() => [
+                        // setNameConfirm(false),
+                        // setListName(email),
+                        // refRBSheetFrequency.current.close(),
+                        setFinalTransferSend(false),
+                        setOwner(false),
+                        refRBSheetOwnership.current.close(),
+                        //refRBSheetOwnership.current.open(),
+                      ]}
+                    >
+                      <ImageBackground
+                        source={require("../assets/topbar.png")}
+                        style={[
+                          styles.checkOutBtn,
+                          { width: height / 8, marginEnd: 13 },
+                        ]}
+                      >
+                        <Text
+                          style={{
+                            fontFamily: "Mediums-Font",
+                            fontSize: height / 60,
+                            textAlign: "center",
+                            color: "white",
+                            paddingVertical: height / 300,
+                          }}
+                        >
+                          Continue
+                        </Text>
+                      </ImageBackground>
+                    </TouchableOpacity>
+                  </View>
+                </Overlay>
+                <View style={{ paddingHorizontal: height / 40 }}>
+                  <TouchableOpacity
+                    onPress={() => refRBSheetOwnership.current.close()}
+                  >
+                    <Text
+                      style={{
+                        fontFamily: "GlacialIndifference-Bold",
+                        fontSize: height / 80,
+                        color: colors.MAIN,
+                        textAlign: "right",
+                        paddingEnd: 3,
+                      }}
+                    >
+                      CANCEL
+                    </Text>
+                  </TouchableOpacity>
+
+                  <Text
+                    style={{
+                      fontFamily: "GlacialIndifference-Bold",
+                      fontSize: height / 50,
+                    }}
+                  >
+                    TRANSFER OWNERSHIP & LEAVE
+                  </Text>
+
+                  <View
+                    style={{
+                      flexDirection: "row",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      marginBottom: 5,
+                      marginTop: height / 25,
+                    }}
+                  >
+                    <View
+                      style={{
+                        flexDirection: "row",
+                        alignItems: "center",
+                      }}
+                    >
+                      <Text
+                        style={{
+                          fontFamily: "GlacialIndifference-Regular",
+                          fontSize: height / 55,
+                          marginStart: height / 30,
+                          width: width / 2.8,
+                          color: "purple",
+                        }}
+                      ></Text>
+                    </View>
+                    <Text
+                      style={{
+                        fontFamily: "GlacialIndifference-Regular",
+                        fontSize: height / 74,
+                        width: width / 2.8,
+                      }}
+                    >
+                      {`       `}Contribution
+                    </Text>
+                    <Text
+                      style={{
+                        fontFamily: "GlacialIndifference-Regular",
+                        fontSize: height / 74,
+                        width: width / 9,
+                      }}
+                    >
+                      Payment
+                    </Text>
+                  </View>
+                  <View
+                    style={{
+                      flexDirection: "row",
+                      alignItems: "center",
+                      justifyContent: "center",
+                    }}
+                  >
+                    <TouchableOpacity
+                      activeOpacity={1}
+                      onPress={() => [
+                        customCheckBox == false
+                          ? setCustomCheckBox(true)
+                          : setCustomCheckBox(false),
+                        setDailyCheckBox(false),
+                        setWeeklyCheckBox(false),
+                        setMonthlyCheckBox(false),
+                      ]}
+                      style={{
+                        flexDirection: "row",
+                        alignItems: "center",
+                        marginBottom: 6,
+                      }}
+                    >
+                      {customCheckBox ? (
+                        <MaterialCommunityIcons
+                          name="square-circle"
+                          color={colors.MAIN}
+                          size={height / 50}
+                        />
+                      ) : (
+                        <MaterialCommunityIcons
+                          name="square-outline"
+                          size={height / 50}
+                        />
+                      )}
+                      <View
+                        style={{
+                          marginStart: height / 90,
+                          flexDirection: "row",
+                          width: width / 2.8,
+                          alignItems: "center",
+                        }}
+                      >
+                        <Text
+                          style={{
+                            fontFamily: "GlacialIndifference-Regular",
+                            fontSize: height / 55,
+
+                            color: "purple",
+                          }}
+                        >
+                          Marya Amal
+                        </Text>
+                        <Text
+                          style={{
+                            fontFamily: "GlacialIndifference-Regular",
+                            fontSize: height / 90,
+                          }}
+                        >
+                          {`  `}
+                          {owner ? "(Owner)" : ""}
+                        </Text>
+                      </View>
+                    </TouchableOpacity>
+                    <Text
+                      style={{
+                        fontFamily: "GlacialIndifference-Regular",
+                        fontSize: height / 55,
+                        width: width / 2.8,
+                      }}
+                    >
+                      $1000000
+                    </Text>
+                    <Text
+                      style={{
+                        fontFamily: "GlacialIndifference-Regular",
+                        fontSize: height / 55,
+                        width: width / 30,
+                      }}
+                    >
+                      3
+                    </Text>
+                  </View>
+
+                  <View
+                    style={{
+                      flexDirection: "row",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      marginTop: height / 42,
+                    }}
+                  >
+                    <TouchableOpacity
+                      activeOpacity={1}
+                      onPress={() => [
+                        dailyCheckBox == false
+                          ? setDailyCheckBox(true)
+                          : setDailyCheckBox(false),
+                        setCustomCheckBox(false),
+                        setWeeklyCheckBox(false),
+                        setMonthlyCheckBox(false),
+                      ]}
+                      style={{
+                        flexDirection: "row",
+                        alignItems: "center",
+                        marginBottom: 6,
+                      }}
+                    >
+                      {dailyCheckBox ? (
+                        <MaterialCommunityIcons
+                          name="square-circle"
+                          color={colors.MAIN}
+                          size={height / 50}
+                        />
+                      ) : (
+                        <MaterialCommunityIcons
+                          name="square-outline"
+                          size={height / 50}
+                        />
+                      )}
+
+                      <Text
+                        style={{
+                          fontFamily: "GlacialIndifference-Regular",
+                          fontSize: height / 55,
+                          marginStart: height / 90,
+                          width: width / 2.8,
+                          color: "blue",
+                        }}
+                      >
+                        Adeel Salman
+                      </Text>
+                    </TouchableOpacity>
+                    <Text
+                      style={{
+                        fontFamily: "GlacialIndifference-Regular",
+                        fontSize: height / 55,
+                        width: width / 2.8,
+                      }}
+                    >
+                      $1000000
+                    </Text>
+                    <Text
+                      style={{
+                        fontFamily: "GlacialIndifference-Regular",
+                        fontSize: height / 55,
+                        width: width / 30,
+                      }}
+                    >
+                      3
+                    </Text>
+                  </View>
+
+                  <View
+                    style={{
+                      flexDirection: "row",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      marginTop: height / 42,
+                    }}
+                  >
+                    <TouchableOpacity
+                      activeOpacity={1}
+                      onPress={() => [
+                        weeklyCheckBox == false
+                          ? setWeeklyCheckBox(true)
+                          : setWeeklyCheckBox(false),
+                        setCustomCheckBox(false),
+                        setDailyCheckBox(false),
+                        setMonthlyCheckBox(false),
+                      ]}
+                      style={{
+                        flexDirection: "row",
+                        alignItems: "center",
+                        marginBottom: 6,
+                      }}
+                    >
+                      {weeklyCheckBox ? (
+                        <MaterialCommunityIcons
+                          name="square-circle"
+                          color={colors.MAIN}
+                          size={height / 50}
+                        />
+                      ) : (
+                        <MaterialCommunityIcons
+                          name="square-outline"
+                          size={height / 50}
+                        />
+                      )}
+
+                      <Text
+                        style={{
+                          fontFamily: "GlacialIndifference-Regular",
+                          fontSize: height / 55,
+                          marginStart: height / 90,
+                          width: width / 2.8,
+                          color: "brown",
+                        }}
+                      >
+                        Ben Levesque
+                      </Text>
+                    </TouchableOpacity>
+                    <Text
+                      style={{
+                        fontFamily: "GlacialIndifference-Regular",
+                        fontSize: height / 55,
+                        width: width / 2.8,
+                      }}
+                    >
+                      $1000000
+                    </Text>
+                    <Text
+                      style={{
+                        fontFamily: "GlacialIndifference-Regular",
+                        fontSize: height / 55,
+                        width: width / 30,
+                      }}
+                    >
+                      3
+                    </Text>
+                  </View>
+
+                  <TouchableOpacity
+                    style={{
+                      position: "absolute",
+                      top: height / 1.4,
+                      right: height / 30,
+                    }}
+                    onPress={() => [
+                      //setOrderPlace(true),
+                      //setNameConfirm(true),
+                      // refRBSheetInstallmentsClick.current.open(),
+                      //refRBSheetFrequency.current.close(),
+                      //refRBSheetProgress.current.close(),
+                      // setStopShow(true),
+                      setTransferConfirm(true),
+                      //props.navigation.navigate("CheckoutCompleteInfo"),
+                    ]}
+                  >
+                    <Text
+                      style={{
+                        fontFamily: "GlacialIndifference-Bold",
+                        fontSize: height / 60,
+                        color: colors.MAIN,
+                        textAlign: "right",
+                        paddingEnd: 3,
+                      }}
+                    >
+                      {weeklyInstCheckBox ||
+                      bweeklyInstCheckBox ||
+                      monthlyInstCheckBox
+                        ? "CONTINUE"
+                        : ""}
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+              </RBSheet>
+
+              <RBSheet
+                ref={refRBSheetOwnershipTrans}
+                closeOnDragDown={true}
+                closeOnPressMask={true}
+                height={height / 1.2}
+                customStyles={{
+                  wrapper: {
+                    backgroundColor: "rgba(0, 0, 0, 0.5)",
+                  },
+                  draggableIcon: {
+                    backgroundColor: "#000",
+                  },
+                }}
+              >
+                <Overlay
+                  visible={transferConfirm}
+                  overlayStyle={{
+                    borderRadius: 5,
+                    padding: height / 20,
+                    backgroundColor: theme.colors.background,
+                  }}
+                >
+                  <View>
+                    <Text
+                      style={{
+                        fontFamily: "GlacialIndifference-Bold",
+                        fontSize: height / 45,
+                        textAlign: "center",
+                      }}
+                    >
+                      You will remain the owner{`\n`}untill the transfer has
+                      been{`\n`}accepted.{`\n`}Would you like to proceed?
+                    </Text>
+                  </View>
+                  <View
+                    style={{
+                      flexDirection: "row",
+                      alignItems: "center",
+                      marginTop: height / 22,
+                    }}
+                  >
+                    <TouchableOpacity
+                      onPress={() => [
+                        // setNameConfirm(false),
+                        // setListName(email),
+                        // refRBSheetFrequency.current.close(),
+                        setTransferConfirm(false),
+                        setFinalTransferSend(true),
+                        //refRBSheetOwnership.current.open(),
+                      ]}
+                    >
+                      <ImageBackground
+                        source={require("../assets/topbar.png")}
+                        style={[
+                          styles.checkOutBtn,
+                          { width: height / 8, marginEnd: 13 },
+                        ]}
+                      >
+                        <Text
+                          style={{
+                            fontFamily: "Mediums-Font",
+                            fontSize: height / 60,
+                            textAlign: "center",
+                            color: "white",
+                            paddingVertical: height / 300,
+                          }}
+                        >
+                          Yes
+                        </Text>
+                      </ImageBackground>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      onPress={() => [
+                        setTransferConfirm(false),
+                        //refRBSheetFrequency.current.close(),
+                      ]}
+                      style={{
+                        paddingHorizontal: height / 53,
+                        paddingVertical: height / 300,
+                        backgroundColor: "white",
+                        borderWidth: 1,
+                        borderColor: colors.MAIN,
+                        borderRadius: 4,
+                        marginEnd: 4,
+                        width: height / 8,
+                      }}
+                    >
+                      <Text
+                        style={{
+                          fontFamily: "Mediums-Font",
+                          fontSize: height / 60,
+                          textAlign: "center",
+                        }}
+                      >
+                        No
+                      </Text>
+                    </TouchableOpacity>
+                  </View>
+                </Overlay>
+                <Overlay
+                  visible={transferSent}
+                  overlayStyle={{
+                    borderRadius: 5,
+                    padding: height / 20,
+                    backgroundColor: theme.colors.background,
+                  }}
+                >
+                  <View>
+                    <Text
+                      style={{
+                        fontFamily: "GlacialIndifference-Bold",
+                        fontSize: height / 45,
+                        textAlign: "center",
+                      }}
+                    >
+                      Ownership Transfer{`\n`}Request Sent.
+                      {`\n`}Leave Pool?
+                    </Text>
+                  </View>
+                  <View
+                    style={{
+                      flexDirection: "row",
+                      alignItems: "center",
+                      marginTop: height / 42,
+                    }}
+                  >
+                    <TouchableOpacity
+                      onPress={() => [
+                        // setNameConfirm(false),
+                        // setListName(email),
+                        // refRBSheetFrequency.current.close(),
+                        setTransferSent(false),
+                        setFinalTransferSend(true),
+                        //refRBSheetOwnership.current.open(),
+                      ]}
+                    >
+                      <ImageBackground
+                        source={require("../assets/topbar.png")}
+                        style={[
+                          styles.checkOutBtn,
+                          { width: height / 8, marginEnd: 13 },
+                        ]}
+                      >
+                        <Text
+                          style={{
+                            fontFamily: "Mediums-Font",
+                            fontSize: height / 60,
+                            textAlign: "center",
+                            color: "white",
+                            paddingVertical: height / 300,
+                          }}
+                        >
+                          Yes
+                        </Text>
+                      </ImageBackground>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      onPress={() => [
+                        setTransferSent(false),
+                        //refRBSheetFrequency.current.close(),
+                      ]}
+                      style={{
+                        paddingHorizontal: height / 53,
+                        paddingVertical: height / 300,
+                        backgroundColor: "white",
+                        borderWidth: 1,
+                        borderColor: colors.MAIN,
+                        borderRadius: 4,
+                        marginEnd: 4,
+                        width: height / 8,
+                      }}
+                    >
+                      <Text
+                        style={{
+                          fontFamily: "Mediums-Font",
+                          fontSize: height / 60,
+                          textAlign: "center",
+                        }}
+                      >
+                        No
+                      </Text>
+                    </TouchableOpacity>
+                  </View>
+                </Overlay>
+
+                <Overlay
+                  visible={finalTransferSend}
+                  overlayStyle={{
+                    borderRadius: 5,
+                    padding: height / 20,
+                    backgroundColor: theme.colors.background,
+                  }}
+                >
+                  <View>
+                    <Text
+                      style={{
+                        fontFamily: "GlacialIndifference-Bold",
+                        fontSize: height / 45,
+                        textAlign: "center",
+                      }}
+                    >
+                      Your request will be completed{`\n`}once the ownership
+                      transfer has been accepted by Ben.
+                    </Text>
+                  </View>
+                  <View
+                    style={{
+                      alignItems: "center",
+                      marginTop: height / 42,
+                    }}
+                  >
+                    <TouchableOpacity
+                      onPress={() => [
+                        // setNameConfirm(false),
+                        // setListName(email),
+                        // refRBSheetFrequency.current.close(),
+                        setFinalTransferSend(false),
+                        setOwner(false),
+                        refRBSheetOwnershipTrans.current.close(),
+                        //refRBSheetOwnership.current.open(),
+                      ]}
+                    >
+                      <ImageBackground
+                        source={require("../assets/topbar.png")}
+                        style={[
+                          styles.checkOutBtn,
+                          { width: height / 8, marginEnd: 13 },
+                        ]}
+                      >
+                        <Text
+                          style={{
+                            fontFamily: "Mediums-Font",
+                            fontSize: height / 60,
+                            textAlign: "center",
+                            color: "white",
+                            paddingVertical: height / 300,
+                          }}
+                        >
+                          Continue
+                        </Text>
+                      </ImageBackground>
+                    </TouchableOpacity>
+                  </View>
+                </Overlay>
+                <View style={{ paddingHorizontal: height / 40 }}>
+                  <TouchableOpacity
+                    onPress={() => refRBSheetOwnershipTrans.current.close()}
+                  >
+                    <Text
+                      style={{
+                        fontFamily: "GlacialIndifference-Bold",
+                        fontSize: height / 80,
+                        color: colors.MAIN,
+                        textAlign: "right",
+                        paddingEnd: 3,
+                      }}
+                    >
+                      CANCEL
+                    </Text>
+                  </TouchableOpacity>
+
+                  <Text
+                    style={{
+                      fontFamily: "GlacialIndifference-Bold",
+                      fontSize: height / 50,
+                    }}
+                  >
+                    TRANSFER OWNERSHIP
+                  </Text>
+
+                  <View
+                    style={{
+                      flexDirection: "row",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      marginBottom: 5,
+                      marginTop: height / 25,
+                    }}
+                  >
+                    <View
+                      style={{
+                        flexDirection: "row",
+                        alignItems: "center",
+                      }}
+                    >
+                      <Text
+                        style={{
+                          fontFamily: "GlacialIndifference-Regular",
+                          fontSize: height / 55,
+                          marginStart: height / 30,
+                          width: width / 2.8,
+                          color: "purple",
+                        }}
+                      ></Text>
+                    </View>
+                    <Text
+                      style={{
+                        fontFamily: "GlacialIndifference-Regular",
+                        fontSize: height / 74,
+                        width: width / 2.8,
+                      }}
+                    >
+                      {`       `}Contribution
+                    </Text>
+                    <Text
+                      style={{
+                        fontFamily: "GlacialIndifference-Regular",
+                        fontSize: height / 74,
+                        width: width / 9,
+                      }}
+                    >
+                      Payment
+                    </Text>
+                  </View>
+                  <View
+                    style={{
+                      flexDirection: "row",
+                      alignItems: "center",
+                      justifyContent: "center",
+                    }}
+                  >
+                    <TouchableOpacity
+                      activeOpacity={1}
+                      onPress={() => [
+                        customCheckBox == false
+                          ? setCustomCheckBox(true)
+                          : setCustomCheckBox(false),
+                        setDailyCheckBox(false),
+                        setWeeklyCheckBox(false),
+                        setMonthlyCheckBox(false),
+                      ]}
+                      style={{
+                        flexDirection: "row",
+                        alignItems: "center",
+                        marginBottom: 6,
+                      }}
+                    >
+                      {customCheckBox ? (
+                        <MaterialCommunityIcons
+                          name="square-circle"
+                          color={colors.MAIN}
+                          size={height / 50}
+                        />
+                      ) : (
+                        <MaterialCommunityIcons
+                          name="square-outline"
+                          size={height / 50}
+                        />
+                      )}
+                      <View
+                        style={{
+                          marginStart: height / 90,
+                          flexDirection: "row",
+                          width: width / 2.8,
+                          alignItems: "center",
+                        }}
+                      >
+                        <Text
+                          style={{
+                            fontFamily: "GlacialIndifference-Regular",
+                            fontSize: height / 55,
+
+                            color: "purple",
+                          }}
+                        >
+                          Marya Amal
+                        </Text>
+                        <Text
+                          style={{
+                            fontFamily: "GlacialIndifference-Regular",
+                            fontSize: height / 90,
+                          }}
+                        >
+                          {`  `}
+                          {owner ? "(Owner)" : ""}
+                        </Text>
+                      </View>
+                    </TouchableOpacity>
+                    <Text
+                      style={{
+                        fontFamily: "GlacialIndifference-Regular",
+                        fontSize: height / 55,
+                        width: width / 2.8,
+                      }}
+                    >
+                      $1000000
+                    </Text>
+                    <Text
+                      style={{
+                        fontFamily: "GlacialIndifference-Regular",
+                        fontSize: height / 55,
+                        width: width / 30,
+                      }}
+                    >
+                      3
+                    </Text>
+                  </View>
+
+                  <View
+                    style={{
+                      flexDirection: "row",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      marginTop: height / 42,
+                    }}
+                  >
+                    <TouchableOpacity
+                      activeOpacity={1}
+                      onPress={() => [
+                        dailyCheckBox == false
+                          ? setDailyCheckBox(true)
+                          : setDailyCheckBox(false),
+                        setCustomCheckBox(false),
+                        setWeeklyCheckBox(false),
+                        setMonthlyCheckBox(false),
+                      ]}
+                      style={{
+                        flexDirection: "row",
+                        alignItems: "center",
+                        marginBottom: 6,
+                      }}
+                    >
+                      {dailyCheckBox ? (
+                        <MaterialCommunityIcons
+                          name="square-circle"
+                          color={colors.MAIN}
+                          size={height / 50}
+                        />
+                      ) : (
+                        <MaterialCommunityIcons
+                          name="square-outline"
+                          size={height / 50}
+                        />
+                      )}
+
+                      <Text
+                        style={{
+                          fontFamily: "GlacialIndifference-Regular",
+                          fontSize: height / 55,
+                          marginStart: height / 90,
+                          width: width / 2.8,
+                          color: "blue",
+                        }}
+                      >
+                        Adeel Salman
+                      </Text>
+                    </TouchableOpacity>
+                    <Text
+                      style={{
+                        fontFamily: "GlacialIndifference-Regular",
+                        fontSize: height / 55,
+                        width: width / 2.8,
+                      }}
+                    >
+                      $1000000
+                    </Text>
+                    <Text
+                      style={{
+                        fontFamily: "GlacialIndifference-Regular",
+                        fontSize: height / 55,
+                        width: width / 30,
+                      }}
+                    >
+                      3
+                    </Text>
+                  </View>
+
+                  <View
+                    style={{
+                      flexDirection: "row",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      marginTop: height / 42,
+                    }}
+                  >
+                    <TouchableOpacity
+                      activeOpacity={1}
+                      onPress={() => [
+                        weeklyCheckBox == false
+                          ? setWeeklyCheckBox(true)
+                          : setWeeklyCheckBox(false),
+                        setCustomCheckBox(false),
+                        setDailyCheckBox(false),
+                        setMonthlyCheckBox(false),
+                      ]}
+                      style={{
+                        flexDirection: "row",
+                        alignItems: "center",
+                        marginBottom: 6,
+                      }}
+                    >
+                      {weeklyCheckBox ? (
+                        <MaterialCommunityIcons
+                          name="square-circle"
+                          color={colors.MAIN}
+                          size={height / 50}
+                        />
+                      ) : (
+                        <MaterialCommunityIcons
+                          name="square-outline"
+                          size={height / 50}
+                        />
+                      )}
+
+                      <Text
+                        style={{
+                          fontFamily: "GlacialIndifference-Regular",
+                          fontSize: height / 55,
+                          marginStart: height / 90,
+                          width: width / 2.8,
+                          color: "brown",
+                        }}
+                      >
+                        Ben Levesque
+                      </Text>
+                    </TouchableOpacity>
+                    <Text
+                      style={{
+                        fontFamily: "GlacialIndifference-Regular",
+                        fontSize: height / 55,
+                        width: width / 2.8,
+                      }}
+                    >
+                      $1000000
+                    </Text>
+                    <Text
+                      style={{
+                        fontFamily: "GlacialIndifference-Regular",
+                        fontSize: height / 55,
+                        width: width / 30,
+                      }}
+                    >
+                      3
+                    </Text>
+                  </View>
+
+                  <TouchableOpacity
+                    style={{
+                      position: "absolute",
+                      top: height / 1.4,
+                      right: height / 30,
+                    }}
+                    onPress={() => [
+                      //setOrderPlace(true),
+                      //setNameConfirm(true),
+                      // refRBSheetInstallmentsClick.current.open(),
+                      //refRBSheetFrequency.current.close(),
+                      //refRBSheetProgress.current.close(),
+                      // setStopShow(true),
+                      setTransferConfirm(true),
+                      //props.navigation.navigate("CheckoutCompleteInfo"),
+                    ]}
+                  >
+                    <Text
+                      style={{
+                        fontFamily: "GlacialIndifference-Bold",
+                        fontSize: height / 60,
+                        color: colors.MAIN,
+                        textAlign: "right",
+                        paddingEnd: 3,
+                      }}
+                    >
+                      CONTINUE
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+              </RBSheet>
+              <View style={{ paddingHorizontal: height / 40 }}>
+                <TouchableOpacity
+                  onPress={() => refRBSheetProgress.current.close()}
+                >
+                  <Text
+                    style={{
+                      fontFamily: "GlacialIndifference-Bold",
+                      fontSize: height / 80,
+                      color: colors.MAIN,
+                      textAlign: "right",
+                      paddingEnd: 3,
+                    }}
+                  >
+                    CANCEL
+                  </Text>
+                </TouchableOpacity>
+
+                <Text
+                  style={{
+                    fontFamily: "GlacialIndifference-Bold",
+                    fontSize: height / 50,
+                  }}
+                >
+                  DETAILS
+                </Text>
+
+                <View
+                  style={{
+                    marginTop: height / 10,
+                    marginBottom: 8,
+                  }}
+                >
+                  <Text
+                    style={{
+                      fontFamily: "GlacialIndifference-Bold",
+                      fontSize: height / 50,
+                      textAlign: "right",
+                    }}
+                  >
+                    $ 30000000
+                  </Text>
+                </View>
+                <View
+                  style={{
+                    flexDirection: "row",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    marginBottom: 5,
+                  }}
+                >
+                  <View
+                    style={{
+                      flexDirection: "row",
+                      alignItems: "center",
+                    }}
+                  >
+                    <Text
+                      style={{
+                        fontFamily: "GlacialIndifference-Regular",
+                        fontSize: height / 55,
+                        marginStart: height / 30,
+                        width: width / 2.8,
+                        color: "purple",
+                      }}
+                    ></Text>
+                  </View>
+                  <Text
+                    style={{
+                      fontFamily: "GlacialIndifference-Regular",
+                      fontSize: height / 74,
+                      width: width / 2.8,
+                    }}
+                  >
+                    {`       `}Contribution
+                  </Text>
+                  <Text
+                    style={{
+                      fontFamily: "GlacialIndifference-Regular",
+                      fontSize: height / 74,
+                      width: width / 9,
+                    }}
+                  >
+                    Payment
+                  </Text>
+                </View>
+                <View
+                  style={{
+                    flexDirection: "row",
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                >
+                  <TouchableOpacity
+                    activeOpacity={1}
+                    onPress={() => [
+                      customCheckBox == false
+                        ? setCustomCheckBox(true)
+                        : setCustomCheckBox(false),
+                      setDailyCheckBox(false),
+                      setWeeklyCheckBox(false),
+                      setMonthlyCheckBox(false),
+                    ]}
+                    style={{
+                      flexDirection: "row",
+                      alignItems: "center",
+                      marginBottom: 6,
+                    }}
+                  >
+                    {customCheckBox ? (
+                      <MaterialCommunityIcons
+                        name="square-circle"
+                        color={colors.MAIN}
+                        size={height / 50}
+                      />
+                    ) : (
+                      <MaterialCommunityIcons
+                        name="square-outline"
+                        size={height / 50}
+                      />
+                    )}
+                    <View
+                      style={{
+                        marginStart: height / 90,
+                        flexDirection: "row",
+                        width: width / 2.8,
+                        alignItems: "center",
+                      }}
+                    >
+                      <Text
+                        style={{
+                          fontFamily: "GlacialIndifference-Regular",
+                          fontSize: height / 55,
+
+                          color: "purple",
+                        }}
+                      >
+                        Marya Amal
+                      </Text>
+                      <Text
+                        style={{
+                          fontFamily: "GlacialIndifference-Regular",
+                          fontSize: height / 90,
+                        }}
+                      >
+                        {`  `}
+                        {owner ? "(Owner)" : ""}
+                      </Text>
+                    </View>
+                  </TouchableOpacity>
+                  <Text
+                    style={{
+                      fontFamily: "GlacialIndifference-Regular",
+                      fontSize: height / 55,
+                      width: width / 2.8,
+                    }}
+                  >
+                    $1000000
+                  </Text>
+                  <Text
+                    style={{
+                      fontFamily: "GlacialIndifference-Regular",
+                      fontSize: height / 55,
+                      width: width / 30,
+                    }}
+                  >
+                    3
+                  </Text>
+                </View>
+                {customCheckBox ? (
+                  <View
+                    style={{ flexDirection: "row", marginStart: height / 19 }}
+                  >
+                    <TouchableOpacity
+                      onPress={() => setOwnershipTransfer(true)}
+                    >
+                      <Text
+                        style={{
+                          fontFamily: "GlacialIndifference-Regular",
+                          fontSize: height / 55,
+
+                          color: "red",
+                        }}
+                      >
+                        Leave
+                      </Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      style={{ marginStart: height / 40 }}
+                      onPress={() => refRBSheetOwnershipTrans.current.open()}
+                    >
+                      <Text
+                        style={{
+                          fontFamily: "GlacialIndifference-Regular",
+                          fontSize: height / 55,
+                        }}
+                      >
+                        Transfer
+                      </Text>
+                    </TouchableOpacity>
+                  </View>
+                ) : null}
+
+                <View
+                  style={{
+                    flexDirection: "row",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    marginTop: height / 42,
+                  }}
+                >
+                  <TouchableOpacity
+                    activeOpacity={1}
+                    onPress={() => [
+                      dailyCheckBox == false
+                        ? setDailyCheckBox(true)
+                        : setDailyCheckBox(false),
+                      setCustomCheckBox(false),
+                      setWeeklyCheckBox(false),
+                      setMonthlyCheckBox(false),
+                    ]}
+                    style={{
+                      flexDirection: "row",
+                      alignItems: "center",
+                      marginBottom: 6,
+                    }}
+                  >
+                    {dailyCheckBox ? (
+                      <MaterialCommunityIcons
+                        name="square-circle"
+                        color={colors.MAIN}
+                        size={height / 50}
+                      />
+                    ) : (
+                      <MaterialCommunityIcons
+                        name="square-outline"
+                        size={height / 50}
+                      />
+                    )}
+
+                    <Text
+                      style={{
+                        fontFamily: "GlacialIndifference-Regular",
+                        fontSize: height / 55,
+                        marginStart: height / 90,
+                        width: width / 2.8,
+                        color: "blue",
+                      }}
+                    >
+                      Adeel Salman
+                    </Text>
+                  </TouchableOpacity>
+                  <Text
+                    style={{
+                      fontFamily: "GlacialIndifference-Regular",
+                      fontSize: height / 55,
+                      width: width / 2.8,
+                    }}
+                  >
+                    $1000000
+                  </Text>
+                  <Text
+                    style={{
+                      fontFamily: "GlacialIndifference-Regular",
+                      fontSize: height / 55,
+                      width: width / 30,
+                    }}
+                  >
+                    3
+                  </Text>
+                </View>
+
+                {dailyCheckBox ? (
+                  <View
+                    style={{ flexDirection: "row", marginStart: height / 19 }}
+                  >
+                    <TouchableOpacity onPress={() => setNudgeSent(true)}>
+                      <Text
+                        style={{
+                          fontFamily: "GlacialIndifference-Regular",
+                          fontSize: height / 55,
+                        }}
+                      >
+                        Nudge
+                      </Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={{ marginStart: height / 40 }}>
+                      <Text
+                        style={{
+                          fontFamily: "GlacialIndifference-Regular",
+                          fontSize: height / 55,
+                        }}
+                      >
+                        Remove
+                      </Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={{ marginStart: height / 40 }}>
+                      <Text
+                        style={{
+                          fontFamily: "GlacialIndifference-Regular",
+                          fontSize: height / 55,
+                        }}
+                      >
+                        Transfer
+                      </Text>
+                    </TouchableOpacity>
+                  </View>
+                ) : null}
+
+                <View
+                  style={{
+                    flexDirection: "row",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    marginTop: height / 42,
+                  }}
+                >
+                  <TouchableOpacity
+                    activeOpacity={1}
+                    onPress={() => [
+                      weeklyCheckBox == false
+                        ? setWeeklyCheckBox(true)
+                        : setWeeklyCheckBox(false),
+                      setCustomCheckBox(false),
+                      setDailyCheckBox(false),
+                      setMonthlyCheckBox(false),
+                    ]}
+                    style={{
+                      flexDirection: "row",
+                      alignItems: "center",
+                      marginBottom: 6,
+                    }}
+                  >
+                    {weeklyCheckBox ? (
+                      <MaterialCommunityIcons
+                        name="square-circle"
+                        color={colors.MAIN}
+                        size={height / 50}
+                      />
+                    ) : (
+                      <MaterialCommunityIcons
+                        name="square-outline"
+                        size={height / 50}
+                      />
+                    )}
+
+                    <Text
+                      style={{
+                        fontFamily: "GlacialIndifference-Regular",
+                        fontSize: height / 55,
+                        marginStart: height / 90,
+                        width: width / 2.8,
+                        color: "brown",
+                      }}
+                    >
+                      Ben Levesque
+                    </Text>
+                  </TouchableOpacity>
+                  <Text
+                    style={{
+                      fontFamily: "GlacialIndifference-Regular",
+                      fontSize: height / 55,
+                      width: width / 2.8,
+                    }}
+                  >
+                    $1000000
+                  </Text>
+                  <Text
+                    style={{
+                      fontFamily: "GlacialIndifference-Regular",
+                      fontSize: height / 55,
+                      width: width / 30,
+                    }}
+                  >
+                    3
+                  </Text>
+                </View>
+                <TouchableOpacity
+                  onPress={() => refRBSheetBackgrounds.current.close()}
+                >
+                  <Text
+                    style={{
+                      fontFamily: "GlacialIndifference-Regular",
+                      fontSize: height / 60,
+                      textAlign: "right",
+                      paddingEnd: 3,
+                      marginTop: height / 40,
+                    }}
+                  >
+                    Add
+                  </Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                  style={{
+                    position: "absolute",
+                    top: height / 1.4,
+                    right: height / 30,
+                  }}
+                  onPress={() => [
+                    //setOrderPlace(true),
+                    //setNameConfirm(true),
+                    // refRBSheetInstallmentsClick.current.open(),
+                    //refRBSheetFrequency.current.close(),
+                    refRBSheetProgress.current.close(),
+                    // setStopShow(true),
+                    //props.navigation.navigate("CheckoutCompleteInfo"),
+                  ]}
+                >
+                  <Text
+                    style={{
+                      fontFamily: "GlacialIndifference-Bold",
+                      fontSize: height / 60,
+                      color: colors.MAIN,
+                      textAlign: "right",
+                      paddingEnd: 3,
+                    }}
+                  >
+                    {weeklyInstCheckBox ||
+                    bweeklyInstCheckBox ||
+                    monthlyInstCheckBox
+                      ? "CONTINUE"
+                      : ""}
+                  </Text>
+                </TouchableOpacity>
+              </View>
+            </RBSheet>
+
+            <RBSheet
+              ref={refRBSheetInstallmentsClick}
+              closeOnDragDown={true}
+              closeOnPressMask={true}
+              height={height / 2.32}
+              customStyles={{
+                wrapper: {
+                  backgroundColor: "rgba(0, 0, 0, 0.5)",
+                },
+                draggableIcon: {
+                  backgroundColor: "#000",
+                },
+              }}
+            >
+              <View style={{ paddingHorizontal: height / 40 }}>
+                <View
+                  style={{
+                    flexDirection: "row",
+                    justifyContent: "space-between",
+                  }}
+                >
+                  <TouchableOpacity
+                    onPress={() => refRBSheetInstallmentsClick.current.close()}
+                  >
+                    <Text
+                      style={{
+                        fontFamily: "GlacialIndifference-Bold",
+                        fontSize: height / 80,
+                        color: colors.MAIN,
+                        paddingEnd: 3,
+                      }}
+                    >
+                      BACK
+                    </Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    onPress={() => refRBSheetInstallmentsClick.current.close()}
+                  >
+                    <Text
+                      style={{
+                        fontFamily: "GlacialIndifference-Bold",
+                        fontSize: height / 80,
+                        color: colors.MAIN,
+                        textAlign: "right",
+                        paddingEnd: 3,
+                      }}
+                    >
+                      CANCEL
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+
+                <View
+                  style={{
+                    flexDirection: "row",
+                    justifyContent: "space-between",
+                    marginTop: 3,
+                  }}
+                >
+                  <Text
+                    style={{
+                      fontFamily: "GlacialIndifference-Bold",
+                      fontSize: height / 55,
+                      marginTop: 10,
+                      textAlign: "left",
+                    }}
+                  >
+                    INSTALLMENTS -{" "}
+                    {weeklyInstCheckBox
+                      ? "WEEKLY"
+                      : bweeklyInstCheckBox
+                      ? "BI-WEEKLY"
+                      : monthlyInstCheckBox
+                      ? "MONTHLY"
+                      : ""}
+                  </Text>
+                  <Text
+                    style={{
+                      fontFamily: "GlacialIndifference-Bold",
+                      fontSize: height / 55,
+                      marginTop: 10,
+                      textAlign: "right",
+                    }}
+                  >
+                    Total ${(qty * 51.92).toFixed(2)}
+                  </Text>
+                </View>
+
+                <View
+                  style={{
+                    flexDirection: "row",
+                    alignItems: "center",
+                    marginTop: height / 40,
+                  }}
+                >
+                  <View
+                    style={{
+                      flexDirection: "row",
+                      alignItems: "center",
+                      marginTop: height / 80,
+                    }}
+                  >
+                    <Text
+                      style={{
+                        fontFamily: "GlacialIndifference-Regular",
+                        fontSize: height / 55,
+                        marginTop: 3,
+                      }}
+                    >
+                      Start Date
+                    </Text>
+                    <Text
+                      style={{
+                        fontFamily: "GlacialIndifference-Bold",
+                        fontSize: height / 55,
+                        marginTop: 3,
+                        marginStart: height / 20,
+                      }}
+                    >
+                      DD-MM-YYYY
+                    </Text>
+                  </View>
+                </View>
+                <Text
+                  style={{
+                    fontFamily: "GlacialIndifference-Regular",
+                    fontSize: height / 55,
+                    marginTop: height / 30,
+                    textAlign: "center",
+                    paddingHorizontal: height / 46,
+                  }}
+                >
+                  By pressing "Place your Order", default payment method
+                  {`\n`}
+                  ending in *6789 will be charged
+                </Text>
+
+                <TouchableOpacity
+                  style={{ marginTop: height / 10 }}
+                  onPress={() => [
+                    setOrderPlace(true),
+                    refRBSheetInstallmentsClick.current.close(),
+                    refRBSheetFrequency.current.close(),
+
+                    props.navigation.navigate("CheckoutCompleteInfo"),
+                  ]}
+                >
+                  <ImageBackground
+                    source={require("../assets/topbar.png")}
+                    style={styles.checkOutBtn}
+                  >
+                    <Text
+                      style={{
+                        fontFamily: "Mediums-Font",
+                        fontSize: height / 45,
+                        textAlign: "center",
+                        color: "white",
+                        paddingVertical: height / 200,
+                      }}
+                    >
+                      Place your order
+                    </Text>
+                  </ImageBackground>
+                </TouchableOpacity>
+              </View>
+            </RBSheet>
             <RBSheet
               ref={refRBSheetFrequencyEdit}
               closeOnDragDown={true}
@@ -2947,7 +5563,7 @@ export default function ShoppingList(props) {
                     fontSize: height / 50,
                   }}
                 >
-                  YOUR ORDER HAS BEEN CONFIRMED
+                  YOURBORDER HAS BEEN CONFIRMED
                 </Text>
                 <Text
                   style={{
@@ -4180,7 +6796,7 @@ export default function ShoppingList(props) {
               </View>
             </RBSheet>
 
-            <RBSheet
+            {/* <RBSheet
               ref={refRBSheetInstallmentsClick}
               closeOnDragDown={true}
               closeOnPressMask={true}
@@ -4220,12 +6836,46 @@ export default function ShoppingList(props) {
                 >
                   Total ${(qty * 51.92).toFixed(2)}
                 </Text>
-
+                <View
+                  style={{
+                    flexDirection: "row",
+                    alignItems: "center",
+                    marginTop: height / 80,
+                  }}
+                >
+                  <View
+                    style={{
+                      flexDirection: "row",
+                      alignItems: "center",
+                      marginTop: height / 80,
+                    }}
+                  >
+                    <Text
+                      style={{
+                        fontFamily: "GlacialIndifference-Regular",
+                        fontSize: height / 55,
+                        marginTop: 3,
+                      }}
+                    >
+                      Start Date
+                    </Text>
+                    <Text
+                      style={{
+                        fontFamily: "GlacialIndifference-Bold",
+                        fontSize: height / 55,
+                        marginTop: 3,
+                        marginStart: height / 20,
+                      }}
+                    >
+                      DD-MM-YYYY
+                    </Text>
+                  </View>
+                </View>
                 <Text
                   style={{
                     fontFamily: "GlacialIndifference-Regular",
                     fontSize: height / 55,
-                    marginTop: height / 15,
+                    marginTop: height / 40,
                     textAlign: "center",
                     paddingHorizontal: height / 46,
                   }}
@@ -4259,7 +6909,7 @@ export default function ShoppingList(props) {
                   </ImageBackground>
                 </TouchableOpacity>
               </View>
-            </RBSheet>
+            </RBSheet> */}
           </View>
 
           <ImageBackground
@@ -4407,6 +7057,11 @@ const useStyle = () => {
       padding: 13,
       backgroundColor: colors.grays,
       marginTop: height / 30,
+      borderRadius: 3,
+    },
+    txtViews: {
+      padding: 13,
+      backgroundColor: colors.grays,
       borderRadius: 3,
     },
     checkOutBtn: {

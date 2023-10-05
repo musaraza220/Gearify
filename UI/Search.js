@@ -291,7 +291,7 @@ export default function Search(props) {
                 style={styles.dockIconStyle}
               ></TouchableOpacity>
               <TouchableOpacity
-                onPress={() => props.navigation.navigate("Wishlist")}
+                onPress={() => props.navigation.navigate("ViewLists")}
               >
                 <Image
                   source={require("../assets/whishlisticon.png")}

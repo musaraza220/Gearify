@@ -61,7 +61,9 @@ export default function ViewLists(props) {
   const [fLoading, setFLoading] = React.useState(false);
   const [authLoading, setAuthLoading] = React.useState(false);
   const [disable, setDisable] = React.useState(false);
+  const [deleteConfirm, setDeleteConfirm] = React.useState(false);
   const [secureEntry, setSecureEntry] = React.useState(true);
+  const [deletePress, setDeletePress] = React.useState(false);
   const [rightIcon, setRightIcon] = React.useState("eye");
   const [checkboxPromo, setCheckboxPromo] = React.useState(false);
 
@@ -164,24 +166,37 @@ export default function ViewLists(props) {
                     </Text>
                   </View>
 
-                  <TouchableOpacity
-                    onPress={() => refRBSheetViewInst.current.open()}
-                    style={{ flexDirection: "row" }}
+                  <View
+                    //onPress={() => refRBSheetViewInst.current.open()}
+                    style={{
+                      flexDirection: "row",
+                    }}
                   >
                     <MaterialCommunityIcons
-                      name="plus"
+                      name="sort"
                       color={"black"}
                       size={height / 50}
+                      style={{ marginEnd: 15 }}
                     />
-                    <Text
-                      style={{
-                        fontFamily: "GlacialIndifference-Regular",
-                        fontSize: height / 70,
-                      }}
+                    <TouchableOpacity onPress={() => setDeletePress(true)}>
+                      <MaterialCommunityIcons
+                        name="delete"
+                        color={"red"}
+                        size={height / 50}
+                        style={{ marginEnd: 15 }}
+                      />
+                    </TouchableOpacity>
+
+                    <TouchableOpacity
+                      onPress={() => refRBSheetViewInst.current.open()}
                     >
-                      Create a List
-                    </Text>
-                  </TouchableOpacity>
+                      <MaterialCommunityIcons
+                        name="plus"
+                        color={"black"}
+                        size={height / 50}
+                      />
+                    </TouchableOpacity>
+                  </View>
                 </View>
               </View>
 
@@ -256,171 +271,482 @@ export default function ViewLists(props) {
                   paddingBottom: 1,
                 }}
               >
-                <TouchableOpacity
-                  onPress={() => props.navigation.navigate("SpecificList")}
-                  style={{
-                    marginTop: 3,
-                    flexDirection: "row",
-                  }}
-                >
-                  <LinearGradient
-                    colors={["#ffffff", "lightgray"]}
-                    style={styles.bestSellerBacks}
-                  ></LinearGradient>
-                  <View
-                    style={{
-                      marginStart: height / 50,
-                      justifyContent: "center",
-                    }}
-                  >
-                    <Text style={[styles.textSize, { fontSize: height / 50 }]}>
-                      My favourites
-                    </Text>
-                    <View
-                      style={{ marginTop: height / 80, flexDirection: "row" }}
-                    >
-                      <Text
-                        style={[styles.textSize, { fontSize: height / 70 }]}
+                {deletePress ? (
+                  <View>
+                    {checkboxPromo ? (
+                      <View
+                        style={{
+                          flexDirection: "row",
+                          alignItems: "center",
+                          justifyContent: "flex-end",
+                        }}
                       >
-                        Default
-                      </Text>
-                      <Text
-                        style={[
-                          styles.textSize,
-                          { fontSize: height / 70, marginStart: height / 50 },
-                        ]}
-                      >
-                        Private
-                      </Text>
-                    </View>
-                  </View>
-                </TouchableOpacity>
+                        <TouchableOpacity
+                          onPress={() => setDeletePress(false)}
+                          style={{
+                            alignSelf: "flex-end",
+                            marginEnd: height / 30,
+                          }}
+                        >
+                          <Text
+                            style={{
+                              fontFamily: "GlacialIndifference-Regular",
+                              fontSize: height / 70,
+                              textAlign: "right",
+                            }}
+                          >
+                            Cancel
+                          </Text>
+                        </TouchableOpacity>
 
-                <TouchableOpacity
-                  onPress={() => props.navigation.navigate("Registry")}
-                  style={{
-                    marginTop: height / 33,
-                    flexDirection: "row",
-                  }}
-                >
-                  <LinearGradient
-                    colors={["#ffffff", "lightgray"]}
-                    style={styles.bestSellerBacks}
-                  ></LinearGradient>
-                  <View
-                    style={{
-                      marginStart: height / 50,
-                      justifyContent: "center",
-                    }}
-                  >
-                    <Text style={[styles.textSize, { fontSize: height / 50 }]}>
-                      Registry
-                    </Text>
-                    <View
-                      style={{ marginTop: height / 80, flexDirection: "row" }}
-                    >
-                      <Text
-                        style={[styles.textSize, { fontSize: height / 70 }]}
+                        <TouchableOpacity
+                          onPress={() => setDeleteConfirm(true)}
+                          style={{ alignSelf: "flex-end", marginEnd: 4 }}
+                        >
+                          <Text
+                            style={{
+                              fontFamily: "GlacialIndifference-Regular",
+                              fontSize: height / 70,
+                              textAlign: "right",
+                              color: colors.MAIN,
+                            }}
+                          >
+                            Delete
+                          </Text>
+                        </TouchableOpacity>
+                      </View>
+                    ) : (
+                      <TouchableOpacity
+                        // onPress={() => setTypeSwitch(true)}
+                        style={{ alignSelf: "flex-end", marginEnd: 4 }}
                       >
-                        Private
-                      </Text>
-                    </View>
+                        <Text
+                          style={{
+                            fontFamily: "GlacialIndifference-Regular",
+                            fontSize: height / 70,
+                            textAlign: "right",
+                          }}
+                        >
+                          Select All
+                        </Text>
+                      </TouchableOpacity>
+                    )}
                   </View>
-                </TouchableOpacity>
+                ) : null}
 
-                <TouchableOpacity
-                  onPress={() => props.navigation.navigate("ShoppingList")}
-                  style={{
-                    marginTop: height / 33,
-                    flexDirection: "row",
-                  }}
-                >
-                  <LinearGradient
-                    colors={["#ffffff", "lightgray"]}
-                    style={styles.bestSellerBacks}
-                  ></LinearGradient>
-                  <View
+                <View style={{ flexDirection: "row", alignItems: "center" }}>
+                  {deletePress ? (
+                    <TouchableOpacity
+                      activeOpacity={1}
+                      onPress={() => [
+                        checkboxPromo == false
+                          ? setCheckboxPromo(true)
+                          : setCheckboxPromo(false),
+                      ]}
+                      style={{
+                        flexDirection: "row",
+                        marginEnd: height / 50,
+                      }}
+                    >
+                      {checkboxPromo ? (
+                        <MaterialCommunityIcons
+                          name="square-circle"
+                          color={colors.MAIN}
+                          size={height / 40}
+                        />
+                      ) : (
+                        <FontAwesome name="square-o" size={height / 40} />
+                      )}
+                    </TouchableOpacity>
+                  ) : null}
+                  <TouchableOpacity
+                    onPress={() => props.navigation.navigate("SpecificList")}
                     style={{
-                      marginStart: height / 50,
-                      justifyContent: "center",
+                      marginTop: 3,
+                      flexDirection: "row",
                     }}
                   >
-                    <Text style={[styles.textSize, { fontSize: height / 50 }]}>
-                      Shopping List
-                    </Text>
+                    <LinearGradient
+                      colors={["#ffffff", "lightgray"]}
+                      style={styles.bestSellerBacks}
+                    ></LinearGradient>
                     <View
-                      style={{ marginTop: height / 80, flexDirection: "row" }}
+                      style={{
+                        marginStart: height / 50,
+                        justifyContent: "center",
+                      }}
                     >
                       <Text
-                        style={[styles.textSize, { fontSize: height / 70 }]}
+                        style={[styles.textSize, { fontSize: height / 50 }]}
                       >
-                        Private
+                        My favourites
                       </Text>
-                    </View>
-                  </View>
-                </TouchableOpacity>
-
-                <TouchableOpacity
-                  onPress={() => props.navigation.navigate("Reserved")}
-                  style={{
-                    marginTop: height / 33,
-                    flexDirection: "row",
-                  }}
-                >
-                  <LinearGradient
-                    colors={["#ffffff", "lightgray"]}
-                    style={styles.bestSellerBacks}
-                  ></LinearGradient>
-                  <View
-                    style={{
-                      marginStart: height / 50,
-                      justifyContent: "center",
-                    }}
-                  >
-                    <Text style={[styles.textSize, { fontSize: height / 50 }]}>
-                      Reserved
-                    </Text>
-                    <View
-                      style={{ marginTop: height / 80, flexDirection: "row" }}
-                    >
-                      <Text
-                        style={[styles.textSize, { fontSize: height / 70 }]}
+                      <View
+                        style={{ marginTop: height / 80, flexDirection: "row" }}
                       >
-                        Private
-                      </Text>
+                        <Text
+                          style={[styles.textSize, { fontSize: height / 70 }]}
+                        >
+                          Default
+                        </Text>
+                        <Text
+                          style={[
+                            styles.textSize,
+                            { fontSize: height / 70, marginStart: height / 50 },
+                          ]}
+                        >
+                          Private
+                        </Text>
+                      </View>
                     </View>
-                  </View>
-                </TouchableOpacity>
+                  </TouchableOpacity>
+                </View>
 
                 <View
                   style={{
-                    marginTop: height / 33,
                     flexDirection: "row",
+                    alignItems: "center",
+                    marginTop: height / 70,
                   }}
                 >
-                  <LinearGradient
-                    colors={["#ffffff", "lightgray"]}
-                    style={styles.bestSellerBacks}
-                  ></LinearGradient>
-                  <View
+                  {deletePress ? (
+                    <TouchableOpacity
+                      activeOpacity={1}
+                      onPress={() => [
+                        checkboxPromo == false
+                          ? setCheckboxPromo(true)
+                          : setCheckboxPromo(false),
+                      ]}
+                      style={{
+                        flexDirection: "row",
+                        marginEnd: height / 50,
+                      }}
+                    >
+                      {checkboxPromo ? (
+                        <MaterialCommunityIcons
+                          name="square-circle"
+                          color={colors.MAIN}
+                          size={height / 40}
+                        />
+                      ) : (
+                        <FontAwesome name="square-o" size={height / 40} />
+                      )}
+                    </TouchableOpacity>
+                  ) : null}
+                  <TouchableOpacity
+                    onPress={() => props.navigation.navigate("SpecificList")}
                     style={{
-                      marginStart: height / 50,
-                      justifyContent: "center",
+                      marginTop: 3,
+                      flexDirection: "row",
                     }}
                   >
-                    <Text style={[styles.textSize, { fontSize: height / 50 }]}>
-                      List 2
-                    </Text>
-                    <View style={{ marginTop: height / 80 }}>
+                    <LinearGradient
+                      colors={["#ffffff", "lightgray"]}
+                      style={styles.bestSellerBacks}
+                    ></LinearGradient>
+                    <View
+                      style={{
+                        marginStart: height / 50,
+                        justifyContent: "center",
+                      }}
+                    >
                       <Text
-                        style={[styles.textSize, { fontSize: height / 70 }]}
+                        style={[styles.textSize, { fontSize: height / 50 }]}
                       >
-                        Private
+                        Registry
                       </Text>
+                      <View
+                        style={{ marginTop: height / 80, flexDirection: "row" }}
+                      >
+                        <Text
+                          style={[styles.textSize, { fontSize: height / 70 }]}
+                        >
+                          Private
+                        </Text>
+                      </View>
                     </View>
-                  </View>
+                  </TouchableOpacity>
+                </View>
+
+                <View
+                  style={{
+                    flexDirection: "row",
+                    alignItems: "center",
+                    marginTop: height / 70,
+                  }}
+                >
+                  {deletePress ? (
+                    <TouchableOpacity
+                      activeOpacity={1}
+                      onPress={() => [
+                        checkboxPromo == false
+                          ? setCheckboxPromo(true)
+                          : setCheckboxPromo(false),
+                      ]}
+                      style={{
+                        flexDirection: "row",
+                        marginEnd: height / 50,
+                      }}
+                    >
+                      {checkboxPromo ? (
+                        <MaterialCommunityIcons
+                          name="square-circle"
+                          color={colors.MAIN}
+                          size={height / 40}
+                        />
+                      ) : (
+                        <FontAwesome name="square-o" size={height / 40} />
+                      )}
+                    </TouchableOpacity>
+                  ) : null}
+                  <TouchableOpacity
+                    onPress={() => props.navigation.navigate("ShoppingList")}
+                    style={{
+                      marginTop: 3,
+                      flexDirection: "row",
+                    }}
+                  >
+                    <LinearGradient
+                      colors={["#ffffff", "lightgray"]}
+                      style={styles.bestSellerBacks}
+                    ></LinearGradient>
+                    <View
+                      style={{
+                        marginStart: height / 50,
+                        justifyContent: "center",
+                      }}
+                    >
+                      <Text
+                        style={[styles.textSize, { fontSize: height / 50 }]}
+                      >
+                        Shopping List
+                      </Text>
+                      <View
+                        style={{ marginTop: height / 80, flexDirection: "row" }}
+                      >
+                        <Text
+                          style={[styles.textSize, { fontSize: height / 70 }]}
+                        >
+                          Private
+                        </Text>
+                      </View>
+                    </View>
+                  </TouchableOpacity>
+                </View>
+
+                <View
+                  style={{
+                    flexDirection: "row",
+                    alignItems: "center",
+                    marginTop: height / 70,
+                  }}
+                >
+                  {deletePress ? (
+                    <TouchableOpacity
+                      activeOpacity={1}
+                      onPress={() => [
+                        checkboxPromo == false
+                          ? setCheckboxPromo(true)
+                          : setCheckboxPromo(false),
+                      ]}
+                      style={{
+                        flexDirection: "row",
+                        marginEnd: height / 50,
+                      }}
+                    >
+                      {checkboxPromo ? (
+                        <MaterialCommunityIcons
+                          name="square-circle"
+                          color={colors.MAIN}
+                          size={height / 40}
+                        />
+                      ) : (
+                        <FontAwesome name="square-o" size={height / 40} />
+                      )}
+                    </TouchableOpacity>
+                  ) : null}
+                  <TouchableOpacity
+                    onPress={() => props.navigation.navigate("Reserved")}
+                    style={{
+                      marginTop: 3,
+                      flexDirection: "row",
+                    }}
+                  >
+                    <LinearGradient
+                      colors={["#ffffff", "lightgray"]}
+                      style={styles.bestSellerBacks}
+                    ></LinearGradient>
+                    <View
+                      style={{
+                        marginStart: height / 50,
+                        justifyContent: "center",
+                      }}
+                    >
+                      <Text
+                        style={[styles.textSize, { fontSize: height / 50 }]}
+                      >
+                        Reserved
+                      </Text>
+                      <View
+                        style={{ marginTop: height / 80, flexDirection: "row" }}
+                      >
+                        <Text
+                          style={[styles.textSize, { fontSize: height / 70 }]}
+                        >
+                          Private
+                        </Text>
+                      </View>
+                    </View>
+                  </TouchableOpacity>
+                </View>
+
+                <View
+                  style={{
+                    flexDirection: "row",
+                    alignItems: "center",
+                    marginTop: height / 70,
+                  }}
+                >
+                  {deletePress ? (
+                    <TouchableOpacity
+                      activeOpacity={1}
+                      onPress={() => [
+                        checkboxPromo == false
+                          ? setCheckboxPromo(true)
+                          : setCheckboxPromo(false),
+                      ]}
+                      style={{
+                        flexDirection: "row",
+                        marginEnd: height / 50,
+                      }}
+                    >
+                      {checkboxPromo ? (
+                        <MaterialCommunityIcons
+                          name="square-circle"
+                          color={colors.MAIN}
+                          size={height / 40}
+                        />
+                      ) : (
+                        <FontAwesome name="square-o" size={height / 40} />
+                      )}
+                    </TouchableOpacity>
+                  ) : null}
+                  <TouchableOpacity
+                    onPress={() => props.navigation.navigate("Pooled")}
+                    style={{
+                      marginTop: 3,
+                      flexDirection: "row",
+                    }}
+                  >
+                    <LinearGradient
+                      colors={["#ffffff", "lightgray"]}
+                      style={styles.bestSellerBacks}
+                    ></LinearGradient>
+                    <View
+                      style={{
+                        marginStart: height / 50,
+                        justifyContent: "center",
+                      }}
+                    >
+                      <Text
+                        style={[styles.textSize, { fontSize: height / 50 }]}
+                      >
+                        Pooled
+                      </Text>
+                      <View
+                        style={{ marginTop: height / 80, flexDirection: "row" }}
+                      >
+                        <Text
+                          style={[styles.textSize, { fontSize: height / 70 }]}
+                        >
+                          Private
+                        </Text>
+                      </View>
+                    </View>
+                  </TouchableOpacity>
                 </View>
               </View>
+              <Overlay
+                visible={deleteConfirm}
+                overlayStyle={{
+                  borderRadius: 5,
+                  padding: height / 20,
+                  backgroundColor: theme.colors.background,
+                }}
+              >
+                <View>
+                  <Text
+                    style={{
+                      fontFamily: "GlacialIndifference-Bold",
+                      fontSize: height / 45,
+                      textAlign: "center",
+                    }}
+                  >
+                    Are you sure{`\n`}you want to delete?
+                  </Text>
+                </View>
+                <View
+                  style={{
+                    flexDirection: "row",
+                    alignItems: "center",
+                    marginTop: height / 22,
+                  }}
+                >
+                  <TouchableOpacity
+                    onPress={() => [
+                      setDeleteConfirm(false),
+                      // setListName(email),
+                      //refRBSheetViewName.current.close(),
+                    ]}
+                  >
+                    <ImageBackground
+                      source={require("../assets/topbar.png")}
+                      style={[
+                        styles.checkOutBtn,
+                        { width: height / 8, marginEnd: 13 },
+                      ]}
+                    >
+                      <Text
+                        style={{
+                          fontFamily: "Mediums-Font",
+                          fontSize: height / 60,
+                          textAlign: "center",
+                          color: "white",
+                          paddingVertical: height / 300,
+                        }}
+                      >
+                        Yes
+                      </Text>
+                    </ImageBackground>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    onPress={() => [
+                      setDeleteConfirm(false),
+                      //refRBSheetViewName.current.close(),
+                    ]}
+                    style={{
+                      paddingHorizontal: height / 53,
+                      paddingVertical: height / 300,
+                      backgroundColor: "white",
+                      borderWidth: 1,
+                      borderColor: colors.MAIN,
+                      borderRadius: 4,
+                      marginEnd: 4,
+                      width: height / 8,
+                    }}
+                  >
+                    <Text
+                      style={{
+                        fontFamily: "Mediums-Font",
+                        fontSize: height / 60,
+                        textAlign: "center",
+                      }}
+                    >
+                      No
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+              </Overlay>
             </ScrollView>
 
             <RBSheet
@@ -869,7 +1195,7 @@ export default function ViewLists(props) {
                 </Text>
               </TouchableOpacity>
               <TouchableOpacity
-                onPress={() => props.navigation.navigate("Wishlist")}
+                onPress={() => props.navigation.navigate("ViewLists")}
                 style={styles.dockIconStyle}
               ></TouchableOpacity>
               <TouchableOpacity

@@ -54,8 +54,14 @@ export default function SpecificList(props) {
   const [editShow, setEditShow] = React.useState(false);
   const [nameConfirm, setNameConfirm] = React.useState(false);
   const [deleteConfirm, setDeleteConfirm] = React.useState(false);
+  const [moveConfirm, setMoveConfirm] = useState(false);
   const [movePress, setMovePress] = React.useState(false);
   const [checkboxPromos, setCheckboxPromos] = useState(true);
+  const [checkBoxExtList, setCheckBoxExtList] = useState(false);
+  const [checkBoxNewList, setCheckBoxNewList] = useState(false);
+  const [copyClick, setCopyClick] = useState(false);
+  const [moveClick, setMoveClick] = useState(true);
+  const [deletePress, setDeletePress] = useState(false);
   const [emailError, setEmailError] = React.useState("");
   const [password, setPassword] = React.useState("");
   const [passwordError, setPasswordError] = React.useState("");
@@ -77,6 +83,7 @@ export default function SpecificList(props) {
   const [checkboxPromo, setCheckboxPromo] = React.useState(false);
 
   const [user, setUser] = useState({});
+  const [Items, setItems] = useState(1);
   const { styles } = useStyle();
   const { width, height } = useWindowDimensions();
   let customFonts = {
@@ -195,13 +202,16 @@ export default function SpecificList(props) {
                             size={height / 50}
                           />
                         </TouchableOpacity>
-                        <View style={{ marginEnd: height / 50 }}>
+                        <TouchableOpacity
+                          onPress={() => refRBSheetVisibility.current.open()}
+                          style={{ marginEnd: height / 50 }}
+                        >
                           <MaterialIcons
                             name="ios-share"
-                            color={"black"}
+                            color={checkboxPromo ? "green" : "black"}
                             size={height / 50}
                           />
-                        </View>
+                        </TouchableOpacity>
 
                         <TouchableOpacity onPress={() => setTypeSwitch(true)}>
                           <MaterialCommunityIcons
@@ -276,13 +286,14 @@ export default function SpecificList(props) {
                                   style={{
                                     fontFamily: "Mediums-Font",
                                     fontSize: height / 75,
+                                    color: checkboxPromo ? "green" : null,
                                   }}
                                 >
-                                  Visibility {`    `}
+                                  {checkboxPromo ? "Shared List" : "Share List"}
                                 </Text>
                               </TouchableOpacity>
                             </View>
-                            {/* <View
+                            <View
                               style={{
                                 marginStart: height / 60,
                                 marginEnd: height / 15,
@@ -292,7 +303,7 @@ export default function SpecificList(props) {
                               <TouchableOpacity
                                 onPress={() => [
                                   setTypeSwitch(false),
-                                  setDeleteConfirm(true),
+                                  setDeletePress(true),
                                 ]}
                               >
                                 <Text
@@ -301,10 +312,10 @@ export default function SpecificList(props) {
                                     fontSize: height / 75,
                                   }}
                                 >
-                                  Delete {`    `}
+                                  Delete Items{`    `}
                                 </Text>
                               </TouchableOpacity>
-                            </View> */}
+                            </View>
                             <View
                               style={{
                                 marginStart: height / 60,
@@ -328,7 +339,7 @@ export default function SpecificList(props) {
                                 </Text>
                               </TouchableOpacity>
                             </View>
-                            <View
+                            {/* <View
                               style={{
                                 marginStart: height / 60,
                                 marginEnd: height / 15,
@@ -350,7 +361,7 @@ export default function SpecificList(props) {
                                   Combine {`    `}
                                 </Text>
                               </TouchableOpacity>
-                            </View>
+                            </View> */}
                           </Overlay>
                         </TouchableOpacity>
                       </View>
@@ -423,7 +434,8 @@ export default function SpecificList(props) {
                         </TouchableOpacity>
 
                         <TouchableOpacity
-                          onPress={() => props.navigation.navigate("ViewLists")}
+                          onPress={() => setMoveConfirm(true)}
+                          // onPress={() => props.navigation.navigate("ViewLists")}
                           style={{ alignSelf: "flex-end", marginEnd: 4 }}
                         >
                           <Text
@@ -457,52 +469,176 @@ export default function SpecificList(props) {
                   </View>
                 ) : null}
 
-                <View
-                  style={{
-                    flexDirection: "row",
-                    alignItems: "center",
-                    marginTop: 1,
-                  }}
-                >
-                  {movePress ? (
-                    <TouchableOpacity
-                      activeOpacity={1}
-                      onPress={() => [
-                        checkboxPromo == false
-                          ? setCheckboxPromo(true)
-                          : setCheckboxPromo(false),
-                      ]}
-                      style={{
-                        flexDirection: "row",
-                        marginBottom: 6,
-                      }}
-                    >
-                      {checkboxPromo ? (
-                        <MaterialCommunityIcons
-                          name="square-circle"
-                          color={colors.MAIN}
-                          size={height / 40}
-                        />
-                      ) : (
-                        <FontAwesome name="square-o" size={height / 40} />
-                      )}
-                    </TouchableOpacity>
-                  ) : null}
+                {deletePress ? (
+                  <View>
+                    {checkboxPromo ? (
+                      <View
+                        style={{
+                          flexDirection: "row",
+                          alignItems: "center",
+                          justifyContent: "flex-end",
+                        }}
+                      >
+                        <TouchableOpacity
+                          onPress={() => setDeletePress(false)}
+                          style={{
+                            alignSelf: "flex-end",
+                            marginEnd: height / 30,
+                          }}
+                        >
+                          <Text
+                            style={{
+                              fontFamily: "GlacialIndifference-Regular",
+                              fontSize: height / 70,
+                              textAlign: "right",
+                            }}
+                          >
+                            Cancel
+                          </Text>
+                        </TouchableOpacity>
 
-                  <LinearGradient
-                    colors={["#ffffff", "lightgray"]}
-                    style={styles.bestSellerBack}
+                        <TouchableOpacity
+                          onPress={() => setDeleteConfirm(true)}
+                          style={{ alignSelf: "flex-end", marginEnd: 4 }}
+                        >
+                          <Text
+                            style={{
+                              fontFamily: "GlacialIndifference-Regular",
+                              fontSize: height / 70,
+                              textAlign: "right",
+                              color: colors.MAIN,
+                            }}
+                          >
+                            Delete
+                          </Text>
+                        </TouchableOpacity>
+                      </View>
+                    ) : (
+                      <TouchableOpacity
+                        // onPress={() => setTypeSwitch(true)}
+                        style={{ alignSelf: "flex-end", marginEnd: 4 }}
+                      >
+                        <Text
+                          style={{
+                            fontFamily: "GlacialIndifference-Regular",
+                            fontSize: height / 70,
+                            textAlign: "right",
+                          }}
+                        >
+                          Select All
+                        </Text>
+                      </TouchableOpacity>
+                    )}
+                  </View>
+                ) : null}
+
+                {Items > 0 ? (
+                  <View
+                    style={{
+                      flexDirection: "row",
+                      alignItems: "center",
+                      marginTop: height / 70.3,
+                    }}
                   >
-                    <Text
-                      style={{
-                        fontSize: height / 55,
-                        fontFamily: "GlacialIndifference-Bold",
-                      }}
-                    >
-                      $51.95
-                    </Text>
+                    {deletePress || movePress ? (
+                      <TouchableOpacity
+                        activeOpacity={1}
+                        onPress={() => [
+                          checkboxPromo == false
+                            ? setCheckboxPromo(true)
+                            : setCheckboxPromo(false),
+                        ]}
+                        style={{
+                          flexDirection: "row",
+                          marginBottom: 6,
+                        }}
+                      >
+                        {checkboxPromo ? (
+                          <MaterialCommunityIcons
+                            name="square-circle"
+                            color={colors.MAIN}
+                            size={height / 40}
+                          />
+                        ) : (
+                          <FontAwesome name="square-o" size={height / 40} />
+                        )}
+                      </TouchableOpacity>
+                    ) : null}
 
-                    {/* <Text
+                    <LinearGradient
+                      colors={["#ffffff", "lightgray"]}
+                      style={styles.bestSellerBack}
+                    >
+                      <View
+                        style={{
+                          flexDirection: "row",
+                          justifyContent: "space-between",
+                          marginTop: -8,
+                          marginBottom: 3,
+                        }}
+                      >
+                        <View
+                          style={{
+                            flexDirection: "row",
+                          }}
+                        >
+                          <Text
+                            style={{
+                              fontSize: height / 70,
+                              fontFamily: "Mediums-Font",
+                            }}
+                          >
+                            {rating}
+                          </Text>
+                          <StarRating
+                            rating={rating}
+                            onChange={setRating}
+                            color={colors.MAIN}
+                            starSize={height / 60}
+                            style={{ marginStart: height / 80 }}
+                            maxStars={5}
+                            starStyle={{
+                              padding: 0,
+                              margin: 0,
+                              marginStart: -height / 90,
+                            }}
+                          />
+                        </View>
+
+                        <View
+                          style={{ flexDirection: "row", alignItems: "center" }}
+                        >
+                          <TouchableOpacity
+                            style={{ marginEnd: height / 50 }}
+                            onPress={() => setMovePress(true)}
+                          >
+                            <MaterialCommunityIcons
+                              name="wrap"
+                              size={height / 60}
+                            />
+                          </TouchableOpacity>
+                          <TouchableOpacity
+                            onPress={() => refRBSheetVisibility.current.open()}
+                            style={{ marginEnd: height / 60 }}
+                          >
+                            <MaterialIcons
+                              name="ios-share"
+                              size={height / 60}
+                            />
+                          </TouchableOpacity>
+                        </View>
+                      </View>
+
+                      <Text
+                        style={{
+                          fontSize: height / 55,
+                          fontFamily: "GlacialIndifference-Bold",
+                        }}
+                      >
+                        $51.95
+                      </Text>
+
+                      {/* <Text
                       style={{
                         fontSize: height / 80,
                         marginTop: 7,
@@ -511,397 +647,218 @@ export default function SpecificList(props) {
                     >
                       BRAND NAME
                     </Text> */}
-                    <Text
-                      style={{
-                        fontSize: height / 50,
-                        fontFamily: "GlacialIndifference-Regular",
-                      }}
-                    >
-                      Product Name
-                    </Text>
+                      <Text
+                        style={{
+                          fontSize: height / 50,
+                          fontFamily: "GlacialIndifference-Regular",
+                        }}
+                      >
+                        Product Name
+                      </Text>
 
-                    <View
-                      style={{
-                        flexDirection: "row",
-                        alignItems: "center",
-                        marginTop: height / 45,
-                      }}
-                    >
-                      <TouchableOpacity
-                        style={{
-                          paddingHorizontal: height / 90,
-                          paddingVertical: height / 150,
-                          backgroundColor: "white",
-                          borderWidth: 1,
-                          borderColor: colors.MAIN,
-                          borderRadius: 5,
-                          marginEnd: 4,
-                        }}
-                      >
-                        <Text
-                          style={{
-                            fontFamily: "GlacialIndifference-Bold",
-                            fontSize: height / 80,
-                          }}
-                        >
-                          DELETE
-                        </Text>
-                      </TouchableOpacity>
-                      <TouchableOpacity
-                        style={{
-                          paddingHorizontal: height / 100,
-                          paddingVertical: height / 150,
-                          backgroundColor: "white",
-                          borderWidth: 1,
-                          borderColor: colors.MAIN,
-                          borderRadius: 5,
-                        }}
-                      >
-                        <Text
-                          style={{
-                            fontFamily: "GlacialIndifference-Bold",
-                            fontSize: height / 80,
-                          }}
-                        >
-                          COMPARE
-                        </Text>
-                      </TouchableOpacity>
                       <View
-                        style={[
-                          styles.filterBtnPrice,
-                          {
-                            borderColor: "gray",
-                            flexDirection: "row",
-                            justifyContent: "space-between",
-                            alignItems: "center",
-                          },
-                        ]}
-                      >
-                        <TouchableOpacity
-                          activeOpacity={0.5}
-                          disabled={qty > 1 ? false : true}
-                          onPress={() => setQty(qty - 1)}
-                        >
-                          {qty > 1 ? (
-                            <MaterialCommunityIcons
-                              name="chevron-down"
-                              size={height / 50}
-                            />
-                          ) : (
-                            <MaterialCommunityIcons
-                              name="delete-outline"
-                              size={height / 50}
-                            />
-                          )}
-                        </TouchableOpacity>
-                        <Text
-                          style={{
-                            fontFamily: "GlacialIndifference-Regular",
-                            fontSize: height / 75,
-                            textAlign: "center",
-                          }}
-                        >
-                          {qty}
-                        </Text>
-                        <TouchableOpacity
-                          activeOpacity={0.5}
-                          onPress={() => setQty(qty + 1)}
-                        >
-                          <MaterialCommunityIcons
-                            name="chevron-up"
-                            size={height / 50}
-                          />
-                        </TouchableOpacity>
-                      </View>
-                    </View>
-                    <View
-                      style={{
-                        flexDirection: "row",
-                        alignItems: "center",
-                        marginTop: height / 85,
-                      }}
-                    >
-                      <TouchableOpacity
                         style={{
-                          paddingHorizontal: height / 53,
-                          paddingVertical: height / 150,
-                          backgroundColor: "white",
-                          borderWidth: 1,
-                          borderColor: colors.MAIN,
-                          borderRadius: 5,
-                          marginEnd: 4,
+                          flexDirection: "row",
+                          alignItems: "center",
+                          marginTop: height / 95,
                         }}
                       >
-                        <Text
+                        <TouchableOpacity
                           style={{
-                            fontFamily: "GlacialIndifference-Bold",
-                            fontSize: height / 80,
-                          }}
-                        >
-                          MOVE TO CART
-                        </Text>
-                      </TouchableOpacity>
-                      <TouchableOpacity
-                      //</View>onPress={() => setOrderDone(true)}
-                      >
-                        <ImageBackground
-                          source={require("../assets/topbar.png")}
-                          style={{
-                            height: height / 30,
-                            width: height / 10,
-                            overflow: "hidden",
-                            alignItems: "center",
+                            paddingHorizontal: height / 100,
+                            paddingVertical: height / 150,
+                            backgroundColor: "white",
+                            borderWidth: 1,
+                            borderColor: colors.MAIN,
                             borderRadius: 5,
-                            justifyContent: "center",
+                            width: height / 9.2,
                           }}
                         >
                           <Text
                             style={{
                               fontFamily: "GlacialIndifference-Bold",
                               fontSize: height / 80,
-                              color: "white",
+                              textAlign: "center",
                             }}
                           >
-                            ADD SIMILAR
+                            REMOVE
                           </Text>
-                        </ImageBackground>
-                      </TouchableOpacity>
+                        </TouchableOpacity>
+                        <View
+                          style={[
+                            styles.filterBtnPrice,
+                            {
+                              borderColor: "gray",
+                              flexDirection: "row",
+                              justifyContent: "space-between",
+                              alignItems: "center",
+                              width: height / 10.3,
+                            },
+                          ]}
+                        >
+                          <TouchableOpacity
+                            activeOpacity={0.5}
+                            disabled={qty > 1 ? false : true}
+                            onPress={() => setQty(qty - 1)}
+                          >
+                            {qty > 1 ? (
+                              <MaterialCommunityIcons
+                                name="chevron-down"
+                                size={height / 50}
+                              />
+                            ) : (
+                              <MaterialCommunityIcons
+                                name="delete-outline"
+                                size={height / 50}
+                              />
+                            )}
+                          </TouchableOpacity>
+                          <Text
+                            style={{
+                              fontFamily: "GlacialIndifference-Regular",
+                              fontSize: height / 75,
+                              textAlign: "center",
+                            }}
+                          >
+                            {qty}
+                          </Text>
+                          <TouchableOpacity
+                            activeOpacity={0.5}
+                            onPress={() => setQty(qty + 1)}
+                          >
+                            <MaterialCommunityIcons
+                              name="chevron-up"
+                              size={height / 50}
+                            />
+                          </TouchableOpacity>
+                        </View>
+                      </View>
+                      <View
+                        style={{
+                          flexDirection: "row",
+                          alignItems: "center",
+                          marginTop: height / 85,
+                        }}
+                      >
+                        <TouchableOpacity
+                          style={{
+                            paddingHorizontal: height / 53,
+                            paddingVertical: height / 150,
+                            backgroundColor: "white",
+                            borderWidth: 1,
+                            borderColor: colors.MAIN,
+                            borderRadius: 5,
+                            marginEnd: 4,
+                          }}
+                        >
+                          <Text
+                            style={{
+                              fontFamily: "GlacialIndifference-Bold",
+                              fontSize: height / 80,
+                            }}
+                          >
+                            MOVE TO CART
+                          </Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                        //</View>onPress={() => setOrderDone(true)}
+                        >
+                          <ImageBackground
+                            source={require("../assets/button.png")}
+                            style={{
+                              height: height / 30,
+                              width: height / 10,
+                              overflow: "hidden",
+                              alignItems: "center",
+                              borderRadius: 5,
+                              justifyContent: "center",
+                            }}
+                          >
+                            <Text
+                              style={{
+                                fontFamily: "GlacialIndifference-Bold",
+                                fontSize: height / 80,
+                                color: "white",
+                              }}
+                            >
+                              BUY NOW
+                            </Text>
+                          </ImageBackground>
+                        </TouchableOpacity>
+                      </View>
+                    </LinearGradient>
+                    <View style={styles.sellerCircle}>
+                      <Image
+                        source={require("../assets/product.png")}
+                        style={{ height: 80, width: 80, resizeMode: "contain" }}
+                      />
                     </View>
-                  </LinearGradient>
-                  <View style={styles.sellerCircle}>
-                    <Image
-                      source={require("../assets/product.png")}
-                      style={{ height: 80, width: 80, resizeMode: "contain" }}
-                    />
                   </View>
-                </View>
-                <View
-                  style={{
-                    flexDirection: "row",
-                    alignItems: "center",
-                    marginTop: height / 5.3,
-                  }}
-                >
-                  {movePress ? (
-                    <TouchableOpacity
-                      activeOpacity={1}
-                      onPress={() => [
-                        checkboxPromo == false
-                          ? setCheckboxPromo(true)
-                          : setCheckboxPromo(false),
-                      ]}
-                      style={{
-                        flexDirection: "row",
-                        marginBottom: 6,
-                      }}
-                    >
-                      {checkboxPromo ? (
-                        <MaterialCommunityIcons
-                          name="square-circle"
-                          color={colors.MAIN}
-                          size={height / 40}
-                        />
-                      ) : (
-                        <FontAwesome name="square-o" size={height / 40} />
-                      )}
-                    </TouchableOpacity>
-                  ) : null}
-
-                  <LinearGradient
-                    colors={["#ffffff", "lightgray"]}
-                    style={styles.bestSellerBack}
-                  >
+                ) : (
+                  <View style={{ marginTop: height / 5 }}>
                     <Text
                       style={{
-                        fontSize: height / 55,
                         fontFamily: "GlacialIndifference-Bold",
-                      }}
-                    >
-                      $51.95
-                    </Text>
-
-                    {/* <Text
-                      style={{
-                        fontSize: height / 80,
-                        marginTop: 7,
-                        fontFamily: "GlacialIndifference-Regular",
-                      }}
-                    >
-                      BRAND NAME
-                    </Text> */}
-                    <Text
-                      style={{
                         fontSize: height / 50,
-                        fontFamily: "GlacialIndifference-Regular",
+                        textAlign: "center",
                       }}
                     >
-                      Product Name
+                      Your list is empty.
                     </Text>
 
-                    <View
-                      style={{
-                        flexDirection: "row",
-                        alignItems: "center",
-                        marginTop: height / 45,
-                      }}
-                    >
-                      <TouchableOpacity
-                        style={{
-                          paddingHorizontal: height / 90,
-                          paddingVertical: height / 150,
-                          backgroundColor: "white",
-                          borderWidth: 1,
-                          borderColor: colors.MAIN,
-                          borderRadius: 5,
-                          marginEnd: 4,
-                        }}
-                      >
-                        <Text
-                          style={{
-                            fontFamily: "GlacialIndifference-Bold",
-                            fontSize: height / 80,
-                          }}
-                        >
-                          DELETE
-                        </Text>
-                      </TouchableOpacity>
-                      <TouchableOpacity
-                        style={{
-                          paddingHorizontal: height / 100,
-                          paddingVertical: height / 150,
-                          backgroundColor: "white",
-                          borderWidth: 1,
-                          borderColor: colors.MAIN,
-                          borderRadius: 5,
-                        }}
-                      >
-                        <Text
-                          style={{
-                            fontFamily: "GlacialIndifference-Bold",
-                            fontSize: height / 80,
-                          }}
-                        >
-                          COMPARE
-                        </Text>
-                      </TouchableOpacity>
+                    <View style={{ marginTop: 10 }}>
                       <View
-                        style={[
-                          styles.filterBtnPrice,
-                          {
-                            borderColor: "gray",
-                            flexDirection: "row",
-                            justifyContent: "space-between",
-                            alignItems: "center",
-                          },
-                        ]}
+                        style={{
+                          flexDirection: "row",
+                          alignItems: "center",
+                          justifyContent: "center",
+                        }}
                       >
-                        <TouchableOpacity
-                          activeOpacity={0.5}
-                          disabled={qty > 1 ? false : true}
-                          onPress={() => setQty(qty - 1)}
-                        >
-                          {qty > 1 ? (
-                            <MaterialCommunityIcons
-                              name="chevron-down"
-                              size={height / 50}
-                            />
-                          ) : (
-                            <MaterialCommunityIcons
-                              name="delete-outline"
-                              size={height / 50}
-                            />
-                          )}
-                        </TouchableOpacity>
                         <Text
                           style={{
                             fontFamily: "GlacialIndifference-Regular",
-                            fontSize: height / 75,
+                            fontSize: height / 60,
                             textAlign: "center",
                           }}
                         >
-                          {qty}
+                          You can add items by pressing '+' or{` `}
                         </Text>
-                        <TouchableOpacity
-                          activeOpacity={0.5}
-                          onPress={() => setQty(qty + 1)}
-                        >
-                          <MaterialCommunityIcons
-                            name="chevron-up"
-                            size={height / 50}
-                          />
-                        </TouchableOpacity>
                       </View>
-                    </View>
-                    <View
-                      style={{
-                        flexDirection: "row",
-                        alignItems: "center",
-                        marginTop: height / 85,
-                      }}
-                    >
-                      <TouchableOpacity
+                      <View
                         style={{
-                          paddingHorizontal: height / 53,
-                          paddingVertical: height / 150,
-                          backgroundColor: "white",
-                          borderWidth: 1,
-                          borderColor: colors.MAIN,
-                          borderRadius: 5,
-                          marginEnd: 4,
+                          flexDirection: "row",
+                          justifyContent: "center",
+                          alignItems: "center",
                         }}
                       >
                         <Text
                           style={{
-                            fontFamily: "GlacialIndifference-Bold",
-                            fontSize: height / 80,
+                            fontFamily: "GlacialIndifference-Regular",
+                            fontSize: height / 60,
+                            textAlign: "center",
                           }}
                         >
-                          MOVE TO CART
+                          by tapping on the{` `}
                         </Text>
-                      </TouchableOpacity>
-                      <TouchableOpacity
-                      //</View>onPress={() => setOrderDone(true)}
-                      >
-                        <ImageBackground
-                          source={require("../assets/topbar.png")}
+
+                        <MaterialCommunityIcons
+                          name="cards-heart-outline"
+                          color={colors.MAIN}
+                          size={height / 60}
+                        />
+                        <Text
                           style={{
-                            height: height / 30,
-                            width: height / 10,
-                            overflow: "hidden",
-                            alignItems: "center",
-                            borderRadius: 5,
-                            justifyContent: "center",
+                            fontFamily: "GlacialIndifference-Regular",
+                            fontSize: height / 60,
+                            textAlign: "center",
                           }}
                         >
-                          <Text
-                            style={{
-                              fontFamily: "GlacialIndifference-Bold",
-                              fontSize: height / 80,
-                              color: "white",
-                            }}
-                          >
-                            ADD SIMILAR
-                          </Text>
-                        </ImageBackground>
-                      </TouchableOpacity>
+                          on the products.
+                        </Text>
+                      </View>
                     </View>
-                  </LinearGradient>
-                  <View style={styles.sellerCircle}>
-                    <Image
-                      source={require("../assets/product.png")}
-                      style={{ height: 80, width: 80, resizeMode: "contain" }}
-                    />
                   </View>
-                </View>
-                {/* <Text
-                  style={{
-                    fontFamily: "GlacialIndifference-Regular",
-                    fontSize: height / 60,
-                    textAlign: "center",
-                  }}
-                >
-                  There are no items in this List.
-                </Text> */}
+                )}
               </View>
               <Overlay
                 visible={deleteConfirm}
@@ -984,6 +941,238 @@ export default function SpecificList(props) {
                   </TouchableOpacity>
                 </View>
               </Overlay>
+
+              <Overlay
+                visible={moveConfirm}
+                overlayStyle={{
+                  borderRadius: 5,
+                  padding: height / 50,
+                  backgroundColor: theme.colors.background,
+                  width: height / 3,
+                }}
+              >
+                <View>
+                  <TouchableOpacity
+                    onPress={() => [
+                      setMoveConfirm(false),
+                      //refRBSheetViewName.current.close(),
+                    ]}
+                    style={{ marginBottom: height / 50 }}
+                  >
+                    <Text
+                      style={{
+                        fontFamily: "Mediums-Font",
+                        fontSize: height / 85,
+                        textAlign: "right",
+                        color: colors.MAIN,
+                      }}
+                    >
+                      CANCEL
+                    </Text>
+                  </TouchableOpacity>
+
+                  <View
+                    style={{
+                      flexDirection: "row",
+                      marginBottom: height / 60,
+                      justifyContent: "center",
+                    }}
+                  >
+                    <TouchableOpacity
+                      activeOpacity={1}
+                      onPress={() => [
+                        copyClick == false
+                          ? setCopyClick(true)
+                          : setCopyClick(false),
+                        setMoveClick(false),
+                      ]}
+                      style={{
+                        flexDirection: "row",
+                        alignItems: "center",
+                        marginTop: height / 118,
+                        marginBottom: 6,
+                      }}
+                    >
+                      {copyClick ? (
+                        <MaterialCommunityIcons
+                          name="square-circle"
+                          color={colors.MAIN}
+                          size={height / 50}
+                        />
+                      ) : (
+                        <MaterialCommunityIcons
+                          name="checkbox-blank-outline"
+                          size={height / 50}
+                        />
+                      )}
+
+                      <Text
+                        style={{
+                          fontFamily: "GlacialIndifference-Bold",
+                          fontSize: height / 50,
+                          marginStart: height / 90,
+                        }}
+                      >
+                        Copy
+                      </Text>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity
+                      activeOpacity={1}
+                      onPress={() => [
+                        moveClick == false
+                          ? setMoveClick(true)
+                          : setMoveClick(false),
+                        setCopyClick(false),
+                      ]}
+                      style={{
+                        flexDirection: "row",
+                        alignItems: "center",
+                        marginTop: height / 118,
+                        marginBottom: 6,
+                        marginStart: height / 30,
+                      }}
+                    >
+                      {moveClick ? (
+                        <MaterialCommunityIcons
+                          name="square-circle"
+                          color={colors.MAIN}
+                          size={height / 50}
+                        />
+                      ) : (
+                        <MaterialCommunityIcons
+                          name="checkbox-blank-outline"
+                          size={height / 50}
+                        />
+                      )}
+
+                      <Text
+                        style={{
+                          fontFamily: "GlacialIndifference-Bold",
+                          fontSize: height / 50,
+                          marginStart: height / 90,
+                        }}
+                      >
+                        Move
+                      </Text>
+                    </TouchableOpacity>
+                  </View>
+                  <TouchableOpacity
+                    activeOpacity={1}
+                    onPress={() => [
+                      checkBoxNewList == false
+                        ? setCheckBoxNewList(true)
+                        : setCheckBoxNewList(false),
+                      setCheckBoxExtList(false),
+                    ]}
+                    style={{
+                      flexDirection: "row",
+                      alignItems: "center",
+                      marginTop: height / 118,
+                      marginBottom: 6,
+                    }}
+                  >
+                    {checkBoxNewList ? (
+                      <MaterialCommunityIcons
+                        name="square-circle"
+                        color={colors.MAIN}
+                        size={height / 40}
+                      />
+                    ) : (
+                      <MaterialCommunityIcons
+                        name="checkbox-blank-outline"
+                        size={height / 40}
+                      />
+                    )}
+
+                    <Text
+                      style={{
+                        fontFamily: "GlacialIndifference-Bold",
+                        fontSize: height / 50,
+                        marginStart: height / 60,
+                      }}
+                    >
+                      New List
+                    </Text>
+                  </TouchableOpacity>
+
+                  <TouchableOpacity
+                    activeOpacity={1}
+                    onPress={() => [
+                      checkBoxExtList == false
+                        ? setCheckBoxExtList(true)
+                        : setCheckBoxExtList(false),
+                      setCheckBoxNewList(false),
+                    ]}
+                    style={{
+                      flexDirection: "row",
+                      alignItems: "center",
+                      marginTop: height / 98,
+                      marginBottom: 6,
+                    }}
+                  >
+                    {checkBoxExtList ? (
+                      <MaterialCommunityIcons
+                        name="square-circle"
+                        color={colors.MAIN}
+                        size={height / 40}
+                      />
+                    ) : (
+                      <MaterialCommunityIcons
+                        name="checkbox-blank-outline"
+                        size={height / 40}
+                      />
+                    )}
+
+                    <Text
+                      style={{
+                        fontFamily: "GlacialIndifference-Bold",
+                        fontSize: height / 50,
+                        marginStart: height / 60,
+                      }}
+                    >
+                      Existing List
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+                <View
+                  style={{
+                    flexDirection: "row",
+                    alignItems: "center",
+                    marginTop: height / 42,
+                    justifyContent: "flex-end",
+                  }}
+                >
+                  <TouchableOpacity
+                    onPress={() => [
+                      setMoveConfirm(false),
+                      checkBoxNewList
+                        ? props.navigation.navigate("ViewListsCombine")
+                        : props.navigation.navigate("ViewLists"),
+
+                      // setListName(email),
+                      //refRBSheetViewName.current.close(),
+                    ]}
+                  >
+                    <ImageBackground
+                      source={require("../assets/topbar.png")}
+                      style={[styles.checkOutBtn, { width: height / 10 }]}
+                    >
+                      <Text
+                        style={{
+                          fontFamily: "GlacialIndifference-Bold",
+                          fontSize: height / 80,
+                          textAlign: "center",
+                          color: "white",
+                          padding: 3,
+                        }}
+                      >
+                        CONFIRM
+                      </Text>
+                    </ImageBackground>
+                  </TouchableOpacity>
+                </View>
+              </Overlay>
             </ScrollView>
             <Overlay
               visible={editShow}
@@ -991,7 +1180,7 @@ export default function SpecificList(props) {
                 borderRadius: 5,
 
                 backgroundColor: theme.colors.background,
-                marginTop: height / -2.4,
+                marginTop: height / -2.1,
                 marginStart: height / 5,
               }}
             >
@@ -1186,6 +1375,28 @@ export default function SpecificList(props) {
                   </TouchableOpacity>
                 </View>
               </Overlay>
+              <TouchableOpacity
+                style={{
+                  position: "absolute",
+                  top: height / 90,
+                  right: height / 25,
+                }}
+                onPress={() => [
+                  refRBSheetViewName.current.close(),
+                  //props.navigation.navigate("AddressBook"),
+                ]}
+              >
+                <Text
+                  style={{
+                    fontFamily: "Mediums-Font",
+                    fontSize: height / 80,
+                    color: colors.MAIN,
+                    textAlign: "center",
+                  }}
+                >
+                  CANCEL
+                </Text>
+              </TouchableOpacity>
               <View style={{ paddingHorizontal: height / 40 }}>
                 <Text
                   style={{
@@ -1231,7 +1442,7 @@ export default function SpecificList(props) {
                   style={{
                     position: "absolute",
                     bottom: -height / 20,
-                    right: height / 8,
+                    right: height / 30,
                   }}
                   onPress={() => [
                     setNameConfirm(true),
@@ -1242,16 +1453,16 @@ export default function SpecificList(props) {
                   <Text
                     style={{
                       fontFamily: "Mediums-Font",
-                      fontSize: height / 65,
+                      fontSize: height / 60,
                       color: colors.MAIN,
                       textAlign: "center",
                     }}
                   >
-                    Update
+                    UPDATE
                   </Text>
                 </TouchableOpacity>
 
-                <TouchableOpacity
+                {/* <TouchableOpacity
                   style={{
                     position: "absolute",
                     bottom: -height / 20,
@@ -1272,7 +1483,7 @@ export default function SpecificList(props) {
                   >
                     Cancel
                   </Text>
-                </TouchableOpacity>
+                </TouchableOpacity> */}
               </View>
             </RBSheet>
             <RBSheet
@@ -1519,6 +1730,24 @@ export default function SpecificList(props) {
                 },
               }}
             >
+              <TouchableOpacity
+                style={{ marginEnd: height / 40 }}
+                onPress={() => [
+                  refRBSheetVisibility.current.close(),
+                  //props.navigation.navigate("AddressBook"),
+                ]}
+              >
+                <Text
+                  style={{
+                    fontFamily: "Mediums-Font",
+                    fontSize: height / 80,
+                    color: colors.MAIN,
+                    textAlign: "right",
+                  }}
+                >
+                  CANCEL
+                </Text>
+              </TouchableOpacity>
               <View style={{ paddingHorizontal: height / 25 }}>
                 <TouchableOpacity
                   activeOpacity={1}
@@ -1526,6 +1755,7 @@ export default function SpecificList(props) {
                     checkboxPromos == false
                       ? setCheckboxPromos(true)
                       : setCheckboxPromos(false),
+                    setCheckboxPromo(false),
                   ]}
                   style={{
                     flexDirection: "row",
@@ -1564,6 +1794,7 @@ export default function SpecificList(props) {
                     checkboxPromo == false
                       ? setCheckboxPromo(true)
                       : setCheckboxPromo(false),
+                    setCheckboxPromos(false),
                   ]}
                   style={{
                     flexDirection: "row",
@@ -1597,83 +1828,85 @@ export default function SpecificList(props) {
                 </TouchableOpacity>
               </View>
 
-              <View
-                style={{
-                  paddingHorizontal: height / 12,
-                  flexDirection: "row",
-                  alignItems: "center",
-                  marginTop: height / 70,
-                }}
-              >
-                <TouchableOpacity
-                  activeOpacity={1}
-                  onPress={() => [
-                    checkboxPromo == false
-                      ? setCheckboxPromo(true)
-                      : setCheckboxPromo(false),
-                  ]}
+              {checkboxPromo ? (
+                <View
                   style={{
+                    paddingHorizontal: height / 12,
                     flexDirection: "row",
                     alignItems: "center",
+                    marginTop: height / 70,
                   }}
                 >
-                  {checkboxPromo ? (
-                    <MaterialCommunityIcons
-                      name="square-circle"
-                      color={colors.MAIN}
-                      size={height / 45}
-                    />
-                  ) : (
-                    <FontAwesome name="square-o" size={height / 45} />
-                  )}
-
-                  <Text
+                  <TouchableOpacity
+                    activeOpacity={1}
+                    onPress={() => [
+                      checkboxPromo == false
+                        ? setCheckboxPromo(true)
+                        : setCheckboxPromo(false),
+                    ]}
                     style={{
-                      fontFamily: "GlacialIndifference-Regular",
-                      fontSize: height / 58,
-                      marginStart: height / 70,
+                      flexDirection: "row",
+                      alignItems: "center",
                     }}
                   >
-                    View Only
-                  </Text>
-                </TouchableOpacity>
+                    {!checkboxPromo ? (
+                      <MaterialCommunityIcons
+                        name="square-circle"
+                        color={colors.MAIN}
+                        size={height / 45}
+                      />
+                    ) : (
+                      <FontAwesome name="square-o" size={height / 45} />
+                    )}
 
-                <TouchableOpacity
-                  activeOpacity={1}
-                  onPress={() => [
-                    checkboxPromo == false
-                      ? setCheckboxPromo(true)
-                      : setCheckboxPromo(false),
-                  ]}
-                  style={{
-                    flexDirection: "row",
-                    alignItems: "center",
-                    marginStart: height / 25,
-                  }}
-                >
-                  {checkboxPromo ? (
-                    <MaterialCommunityIcons
-                      name="square-circle"
-                      color={colors.MAIN}
-                      size={height / 45}
-                    />
-                  ) : (
-                    <FontAwesome name="square-o" size={height / 45} />
-                  )}
+                    <Text
+                      style={{
+                        fontFamily: "GlacialIndifference-Regular",
+                        fontSize: height / 58,
+                        marginStart: height / 70,
+                      }}
+                    >
+                      View Only
+                    </Text>
+                  </TouchableOpacity>
 
-                  <Text
+                  <TouchableOpacity
+                    activeOpacity={1}
+                    onPress={() => [
+                      checkboxPromo == false
+                        ? setCheckboxPromo(true)
+                        : setCheckboxPromo(false),
+                    ]}
                     style={{
-                      fontFamily: "GlacialIndifference-Regular",
-                      fontSize: height / 58,
-                      marginStart: height / 60,
+                      flexDirection: "row",
+                      alignItems: "center",
+                      marginStart: height / 25,
                     }}
                   >
-                    With Edit
-                  </Text>
-                </TouchableOpacity>
-              </View>
+                    {checkboxPromo ? (
+                      <MaterialCommunityIcons
+                        name="square-circle"
+                        color={colors.MAIN}
+                        size={height / 45}
+                      />
+                    ) : (
+                      <FontAwesome name="square-o" size={height / 45} />
+                    )}
 
-              <View
+                    <Text
+                      style={{
+                        fontFamily: "GlacialIndifference-Regular",
+                        fontSize: height / 58,
+                        marginStart: height / 60,
+                      }}
+                    >
+                      With Edit
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+              ) : null}
+
+              {/* <View
                 style={{
                   paddingHorizontal: height / 25,
                   flexDirection: "row",
@@ -1694,14 +1927,14 @@ export default function SpecificList(props) {
                   color={"black"}
                   size={height / 50}
                 />
-              </View>
+              </View> */}
             </RBSheet>
 
             <RBSheet
               ref={refRBSheetBackgrounds}
               closeOnDragDown={true}
               closeOnPressMask={true}
-              height={height / 2}
+              height={height / 1.8}
               customStyles={{
                 wrapper: {
                   backgroundColor: "rgba(0, 0, 0, 0.5)",
@@ -1711,6 +1944,28 @@ export default function SpecificList(props) {
                 },
               }}
             >
+              <TouchableOpacity
+                style={{
+                  position: "absolute",
+                  top: height / 90,
+                  right: height / 25,
+                }}
+                onPress={() => [
+                  refRBSheetBackgrounds.current.close(),
+                  //props.navigation.navigate("AddressBook"),
+                ]}
+              >
+                <Text
+                  style={{
+                    fontFamily: "Mediums-Font",
+                    fontSize: height / 80,
+                    color: colors.MAIN,
+                    textAlign: "center",
+                  }}
+                >
+                  CANCEL
+                </Text>
+              </TouchableOpacity>
               <View style={{ paddingHorizontal: height / 40 }}>
                 <Text
                   style={{
@@ -1877,6 +2132,29 @@ export default function SpecificList(props) {
                   ></View>
                 </View>
               </View>
+
+              <TouchableOpacity
+                style={{
+                  alignSelf: "flex-end",
+                  marginEnd: height / 30,
+                  marginTop: height / 30,
+                }}
+                onPress={() => [
+                  refRBSheetBackgrounds.current.close(),
+                  //props.navigation.navigate("AddressBook"),
+                ]}
+              >
+                <Text
+                  style={{
+                    fontFamily: "Mediums-Font",
+                    fontSize: height / 60,
+                    color: colors.MAIN,
+                    textAlign: "center",
+                  }}
+                >
+                  UPDATE
+                </Text>
+              </TouchableOpacity>
             </RBSheet>
           </View>
 
@@ -1957,7 +2235,7 @@ export default function SpecificList(props) {
                 </Text>
               </TouchableOpacity>
               <TouchableOpacity
-                onPress={() => props.navigation.navigate("Wishlist")}
+                onPress={() => props.navigation.navigate("ViewLists")}
                 style={styles.dockIconStyle}
               ></TouchableOpacity>
               <TouchableOpacity

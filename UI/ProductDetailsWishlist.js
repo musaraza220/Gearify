@@ -2068,7 +2068,7 @@ export default function ProductDetailsWishlist(props) {
                 </Text>
               </TouchableOpacity>
               <TouchableOpacity
-                onPress={() => props.navigation.navigate("Wishlist")}
+                onPress={() => props.navigation.navigate("ViewLists")}
                 style={styles.dockIconStyle}
               ></TouchableOpacity>
               <TouchableOpacity
