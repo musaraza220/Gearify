@@ -40,7 +40,7 @@ import * as Font from "expo-font";
 import { loginAPI, PersonalAccountAPI } from "./APIs";
 WebBrowser.maybeCompleteAuthSession();
 
-export default function ViewLists(props) {
+export default function SharedWithYou(props) {
   const refRBSheetViewInst = useRef();
 
   const [email, setEmail] = React.useState("");
@@ -176,18 +176,18 @@ export default function ViewLists(props) {
                       name="sort"
                       color={"black"}
                       size={height / 50}
-                      style={{ marginEnd: 15 }}
+                      style={{ marginEnd: 1 }}
                     />
-                    <TouchableOpacity onPress={() => setDeletePress(true)}>
+                    {/* <TouchableOpacity onPress={() => setDeletePress(true)}>
                       <MaterialCommunityIcons
                         name="delete"
                         color={"red"}
                         size={height / 50}
                         style={{ marginEnd: 15 }}
                       />
-                    </TouchableOpacity>
+                    </TouchableOpacity> */}
 
-                    <TouchableOpacity
+                    {/* <TouchableOpacity
                       onPress={() => refRBSheetViewInst.current.open()}
                     >
                       <MaterialCommunityIcons
@@ -195,7 +195,7 @@ export default function ViewLists(props) {
                         color={"black"}
                         size={height / 50}
                       />
-                    </TouchableOpacity>
+                    </TouchableOpacity> */}
                   </View>
                 </View>
               </View>
@@ -209,36 +209,8 @@ export default function ViewLists(props) {
                 }}
               >
                 <TouchableOpacity
-                  style={{ marginTop: height / 60, marginEnd: height / 60 }}
-                >
-                  <ImageBackground
-                    source={require("../assets/button.png")}
-                    style={{
-                      width: height / 8,
-                      height: height / 23,
-                      overflow: "hidden",
-                      borderRadius: 3,
-                      alignItems: "center",
-                      justifyContent: "center",
-                    }}
-                  >
-                    <Text
-                      style={{
-                        fontFamily: "Mediums-Font",
-                        fontSize: height / 50,
-                        textAlign: "center",
-                        color: "white",
-                        marginVertical: 2,
-                      }}
-                    >
-                      Your Lists
-                    </Text>
-                  </ImageBackground>
-                </TouchableOpacity>
-
-                <TouchableOpacity
                   style={{ marginTop: height / 60 }}
-                  onPress={() => props.navigation.navigate("SharedWithYou")}
+                  onPress={() => props.navigation.goBack()}
                 >
                   <View
                     style={{
@@ -261,9 +233,36 @@ export default function ViewLists(props) {
                         marginVertical: 2,
                       }}
                     >
-                      Shared with you
+                      Your List
                     </Text>
                   </View>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={{ marginTop: height / 60, marginStart: height / 60 }}
+                >
+                  <ImageBackground
+                    source={require("../assets/button.png")}
+                    style={{
+                      width: height / 8,
+                      height: height / 23,
+                      overflow: "hidden",
+                      borderRadius: 3,
+                      alignItems: "center",
+                      justifyContent: "center",
+                    }}
+                  >
+                    <Text
+                      style={{
+                        fontFamily: "Mediums-Font",
+                        fontSize: height / 54,
+                        textAlign: "center",
+                        color: "white",
+                        marginVertical: 2,
+                      }}
+                    >
+                      Shared With You
+                    </Text>
+                  </ImageBackground>
                 </TouchableOpacity>
               </View>
 
@@ -363,7 +362,9 @@ export default function ViewLists(props) {
                     </TouchableOpacity>
                   ) : null}
                   <TouchableOpacity
-                    onPress={() => props.navigation.navigate("SpecificList")}
+                    onPress={() =>
+                      props.navigation.navigate("SpecificListShared")
+                    }
                     style={{
                       marginTop: 3,
                       flexDirection: "row",
@@ -390,15 +391,7 @@ export default function ViewLists(props) {
                         <Text
                           style={[styles.textSize, { fontSize: height / 70 }]}
                         >
-                          Default
-                        </Text>
-                        <Text
-                          style={[
-                            styles.textSize,
-                            { fontSize: height / 70, marginStart: height / 50 },
-                          ]}
-                        >
-                          Private
+                          Shared
                         </Text>
                       </View>
                     </View>
@@ -464,7 +457,7 @@ export default function ViewLists(props) {
                         <Text
                           style={[styles.textSize, { fontSize: height / 70 }]}
                         >
-                          Private
+                          Shared
                         </Text>
                       </View>
                     </View>
@@ -530,7 +523,7 @@ export default function ViewLists(props) {
                         <Text
                           style={[styles.textSize, { fontSize: height / 70 }]}
                         >
-                          Private
+                          Shared
                         </Text>
                       </View>
                     </View>
@@ -596,7 +589,7 @@ export default function ViewLists(props) {
                         <Text
                           style={[styles.textSize, { fontSize: height / 70 }]}
                         >
-                          Private
+                          Shared
                         </Text>
                       </View>
                     </View>
@@ -662,7 +655,7 @@ export default function ViewLists(props) {
                         <Text
                           style={[styles.textSize, { fontSize: height / 70 }]}
                         >
-                          Private
+                          Shared
                         </Text>
                       </View>
                     </View>

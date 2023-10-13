@@ -70,6 +70,8 @@ import AddInListSearch from "./UI/AddInListSearch";
 import WishlistAddProducts from "./UI/WishlistAddProducts";
 import WishlistProductDetails from "./UI/WishlistProductDetails";
 import Pooled from "./UI/Pooled";
+import SharedWithYou from "./UI/SharedWithYou";
+import SpecificListShared from "./UI/SpecificListShared";
 
 // const Tab = createMaterialBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -232,6 +234,16 @@ export default function App() {
           <Stack.Screen
             name="WishlistProductDetails"
             component={WishlistProductDetails}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="SpecificListShared"
+            component={SpecificListShared}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="SharedWithYou"
+            component={SharedWithYou}
             options={{ headerShown: false }}
           />
           <Stack.Screen

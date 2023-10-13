@@ -107,23 +107,17 @@ export default function AddInListSearch(props) {
                   }}
                 >
                   <View style={{ flexDirection: "row", alignItems: "center" }}>
-                    <MaterialIcons
-                      name="location-pin"
-                      color={"white"}
-                      size={height / 55}
-                    />
-                    <Text
-                      style={[
-                        styles.textSize,
-                        {
-                          color: "white",
-                          fontSize: height / 55,
-                          fontFamily: "Futura-CondensedMedium",
-                        },
-                      ]}
-                    >
-                      {` `}SASKATOON
-                    </Text>
+                    <TouchableOpacity onPress={() => props.navigation.goBack()}>
+                      <Image
+                        source={require("../assets/backwhite.png")}
+                        style={{
+                          resizeMode: "contain",
+                          height: height / 42,
+                          width: width / 19,
+                          marginStart: 2,
+                        }}
+                      />
+                    </TouchableOpacity>
                   </View>
                   <View>
                     <MaterialCommunityIcons

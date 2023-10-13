@@ -1177,8 +1177,8 @@ export default function ShoppingList(props) {
                 borderRadius: 5,
 
                 backgroundColor: theme.colors.background,
-                marginTop: height / -2.8,
-                marginStart: height / 4,
+                marginTop: height / -2.1,
+                marginStart: height / 5,
               }}
             >
               <View style={{ marginBottom: 10 }}>
@@ -1193,9 +1193,10 @@ export default function ShoppingList(props) {
                     style={{
                       fontFamily: "GlacialIndifference-Bold",
                       fontSize: height / 75,
+                      width: height / 20,
                     }}
                   >
-                    {`      `}FREQUENCY {`    `}
+                    {`      `}EDIT {`    `}
                   </Text>
                   <MaterialCommunityIcons name="close" />
                 </TouchableOpacity>
@@ -1210,9 +1211,8 @@ export default function ShoppingList(props) {
               >
                 <TouchableOpacity
                   onPress={() => [
-                    // setEditShow(false),
-                    // setFType('DAILY'),
-                    // refRBSheetViewName.current.open(),
+                    setEditShow(false),
+                    refRBSheetViewName.current.open(),
                   ]}
                 >
                   <Text
@@ -1221,7 +1221,7 @@ export default function ShoppingList(props) {
                       fontSize: height / 75,
                     }}
                   >
-                    Custom {`    `}
+                    Change Name {`    `}
                   </Text>
                 </TouchableOpacity>
                 {/* <MaterialCommunityIcons
@@ -1241,8 +1241,7 @@ export default function ShoppingList(props) {
                 <TouchableOpacity
                   onPress={() => [
                     setEditShow(false),
-                    setFType("DAILY"),
-                    refRBSheetFrequency.current.open(),
+                    refRBSheetBackgrounds.current.open(),
                   ]}
                 >
                   <Text
@@ -1251,80 +1250,7 @@ export default function ShoppingList(props) {
                       fontSize: height / 75,
                     }}
                   >
-                    Daily {`    `}
-                  </Text>
-                </TouchableOpacity>
-              </View>
-              <View
-                style={{
-                  marginStart: height / 60,
-                  marginEnd: height / 15,
-                  marginTop: 10,
-                }}
-              >
-                <TouchableOpacity
-                  onPress={() => [
-                    setEditShow(false),
-                    setFType("WEEKLY"),
-                    refRBSheetFrequency.current.open(),
-                  ]}
-                >
-                  <Text
-                    style={{
-                      fontFamily: "Mediums-Font",
-                      fontSize: height / 75,
-                    }}
-                  >
-                    Weekly {`    `}
-                  </Text>
-                </TouchableOpacity>
-              </View>
-
-              <View
-                style={{
-                  marginStart: height / 60,
-                  marginEnd: height / 15,
-                  marginTop: 10,
-                }}
-              >
-                <TouchableOpacity
-                  onPress={() => [
-                    setEditShow(false),
-                    setFType("MONTHLY"),
-                    refRBSheetFrequency.current.open(),
-                  ]}
-                >
-                  <Text
-                    style={{
-                      fontFamily: "Mediums-Font",
-                      fontSize: height / 75,
-                    }}
-                  >
-                    Monthly {`    `}
-                  </Text>
-                </TouchableOpacity>
-              </View>
-              <View
-                style={{
-                  marginStart: height / 60,
-                  marginEnd: height / 15,
-                  marginTop: 10,
-                }}
-              >
-                <TouchableOpacity
-                  onPress={() => [
-                    setEditShow(false),
-                    setFType("ANNUALLY"),
-                    refRBSheetFrequency.current.open(),
-                  ]}
-                >
-                  <Text
-                    style={{
-                      fontFamily: "Mediums-Font",
-                      fontSize: height / 75,
-                    }}
-                  >
-                    Annually {`    `}
+                    Change Background {`    `}
                   </Text>
                 </TouchableOpacity>
               </View>
@@ -1350,7 +1276,6 @@ export default function ShoppingList(props) {
                 </TouchableOpacity>
               </View>
             </Overlay>
-
             <Overlay
               visible={stopShow}
               overlayStyle={{

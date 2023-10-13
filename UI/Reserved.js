@@ -513,7 +513,7 @@ export default function Reserved(props) {
                               paddingVertical: height / 300,
                             }}
                           >
-                            Place Order
+                            Buy Now
                           </Text>
                         </ImageBackground>
                       </TouchableOpacity>
